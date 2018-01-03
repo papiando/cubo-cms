@@ -15,6 +15,8 @@ define('CATEGORY_UNDEFINED',1);
 define('COLLECTION_ANY',0);
 define('COLLECTION_UNDEFINED',1);
 define('GLOBAL_SETTING',1);
+define('GROUP_ANY',0);
+define('GROUP_UNDEFINED',1);
 define('LANGUAGE_ANY',0);
 define('LANGUAGE_UNDEFINED',1);
 define('OPTION_ALL',2);
