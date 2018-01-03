@@ -5,6 +5,7 @@ namespace Cubo;
 define('DS',DIRECTORY_SEPARATOR);
 define('__ROOT__',dirname(__FILE__));
 define('__CUBO__',__NAMESPACE__);
+define('__BASE__',sprintf("%s://%s",isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] != 'off' ? 'https' : 'http',$_SERVER['HTTP_HOST']));
 
 define('ACCESS_PUBLIC',1);
 define('ACCESS_REGISTERED',2);

@@ -54,7 +54,7 @@ class Application {
 		// Set params
 		if(!isset(self::$_params))
 			self::$_params = new \stdClass();
-		self::$_params->base_url = sprintf("%s://%s",isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] != 'off' ? 'https' : 'http',$_SERVER['HTTP_HOST']);
+		self::$_params->base_url = __BASE__;
 		self::$_params->generator = "Cubo CMS by Papiando";
 		self::$_params->language = self::$_router->getLanguage();
 		self::$_params->provider_name = "Papiando Riba Internet";
