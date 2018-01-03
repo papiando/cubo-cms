@@ -12,7 +12,7 @@ class View {
 	protected $_class;
 	
 	public function getAttribute($attribute) {
-		return $this->_attributes->$attribute;
+		return (isset($this->_attributes->$attribute) ? $this->_attributes->$attribute : null);
 	}
 	
 	public function getPath() {

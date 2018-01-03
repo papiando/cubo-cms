@@ -25,6 +25,7 @@ class Controller {
 			$this->_data = $this->_model->get(self::getParam('name'));
 		else
 			$this->_data = $this->_model->get(Configuration::getDefault(self::getParam('controller')));
+		if(isset($this->_data->{'@attributes'})) $this->_attributes = json_decode($this->_data->{'@attributes'});
 	}
 	
 	// Admin view: list
