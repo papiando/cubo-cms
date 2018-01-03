@@ -23,7 +23,7 @@ class Template {
 			// Write output to buffer
 			include($this->_path);
 			// Replace content tag with HTML in buffered output
-			return preg_replace("/<cube:content\s*\/>/i",$html,ob_get_clean());
+			return preg_replace("/<cubo:content\s*\/>/i",$html,ob_get_clean());
 		} else {
 			throw new \Exception("Template file '{$this->_path}' does not exist");
 		}

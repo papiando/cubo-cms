@@ -34,7 +34,7 @@ class HeadPlugin extends Plugin {
 	
 	public static function run($html) {
 		if($html) {
-			return preg_replace_callback("/<cube:head\s*\/>/i",function($matches) { return self::getMetadata().self::getTemplates().self::getScripts(); },$html);
+			return preg_replace_callback("/<cubo:head\s*\/>/i",function($matches) { return self::getMetadata().self::getTemplates().self::getScripts(); },$html);
 		} else {
 			return $html;
 		}

@@ -69,7 +69,7 @@ class Application {
 		if($route == Configuration::get('admin_route') && !Session::exists('user')) {
 			Session::setMessage("This page requires login access");
 			Session::set('login_redirect',$uri);
-			Router::redirect('/user/login');
+			Router::redirect('/user?action=login');
 		}
 		// Preset controller's class and method
 		$class = __CUBO__.'\\'.ucfirst(self::$_router->getController()).'Controller';

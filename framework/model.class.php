@@ -18,9 +18,9 @@ class Model {
 		return (is_object($result) ? $result : null);
 	}
 	
-	public static function getList($columns = "*") {
+	public static function getList($columns = "*",$filter = "1",$order = "`title`") {
 		self::$_class = basename(str_replace('\\','/',get_called_class()));
-		Application::getDB()->select($columns)->from(strtolower(self::$_class));
+		Application::getDB()->select($columns)->from(strtolower(self::$_class))->where($filter)->order($order);
 		$result = Application::getDB()->load();
 		return (is_array($result) ? $result : null);
 	}

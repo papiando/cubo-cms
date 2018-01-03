@@ -2,7 +2,7 @@
 defined('__CUBO__') || new \Exception("No use starting this code without an include");
 
 $controller = Cubo\Application::getRouter()->getController();
-?><h1>Images</h1>
+?><h1>Article Categories</h1>
 <form id="filter-form" class="form">
 	<div class="form-row d-flex justify-content-between">
 		<div class="col-3">
@@ -17,8 +17,8 @@ $controller = Cubo\Application::getRouter()->getController();
 		</div>
 		<div class="col-3">
 			<?php
-				$filter = array('id'=>'filter-collection','label'=>'Collection','prefix'=>'','value'=>COLLECTION_ANY);
-				include($this->_sharedPath.'filter-collection.php'); ?>
+				$filter = array('id'=>'filter-category','label'=>'Category','prefix'=>'','value'=>CATEGORY_ANY);
+				include($this->_sharedPath.'filter-category.php'); ?>
 		</div>
 		<div class="col-3">
 			<?php
@@ -31,10 +31,9 @@ $controller = Cubo\Application::getRouter()->getController();
 <table class="table table-striped full-width table-hover">
 	<thead>
 		<tr>
-			<td class="align-middle"><strong>Image</strong></td>
 			<td class="align-middle"><strong>Title</strong></td>
 			<td class="align-middle"><strong>Status</strong></td>
-			<td class="align-middle"><strong>Collection</strong></td>
+			<td class="align-middle"><strong>Parent Category</strong></td>
 			<td class="align-middle"><strong>Language</strong></td>
 			<td class="text-right align-middle">
 				<a href="/admin/<?php echo $controller; ?>?action=add"><button class="btn btn-sm btn-success"><i class="fa fa-plus fa-fw"></i></button></a>
@@ -45,10 +44,9 @@ $controller = Cubo\Application::getRouter()->getController();
 <?php
 foreach($this->_data as $item) {
 ?>		<tr class="table-item d-none" data-item="<?php echo htmlentities(json_encode($item)); ?>" data-filter="none">
-			<td class="align-middle"><img class="img-thumbnail" src="/image?thumbnail&id=<?php echo $item->id; ?>&cache=no" /></td>
 			<td class="align-middle"><?php echo $item->title; ?></td>
 			<td class="align-middle"><?php include($this->_sharedPath.'show-status.php'); ?></td>
-			<td class="align-middle"><?php include($this->_sharedPath.'show-collection.php'); ?></td>
+			<td class="align-middle"><?php include($this->_sharedPath.'show-category.php'); ?></td>
 			<td class="align-middle"><?php include($this->_sharedPath.'show-language.php'); ?></td>
 			<td class="text-right align-middle">
 				<a href="/admin/<?php echo $controller; ?>?action=edit&id=<?php echo $item->id; ?>"><button class="btn btn-sm btn-primary"><i class="fa fa-pencil fa-fw"></i></button></a>
@@ -111,13 +109,13 @@ $(document).ready(function() {
 		});
 		$('#filter-info').html('Shown '+count+' out of '+total);
 	});
-	$('#filter-collection').on('change',function() {
-		var collection = parseInt($(this).val());
+	$('#filter-category').on('change',function() {
+		var category = parseInt($(this).val());
 		var count = 0;
 		var total = 0;
 		$('.table-item').each(function() {
 			var filter = parseInt($(this).attr('data-filter'));
-			if(collection == 0 || collection == $(this).data('item').collection) {
+			if(category == 0 || category == $(this).data('item').category) {
 				filter = filter & ~4;
 			} else {
 				filter = filter | 4;
@@ -158,7 +156,7 @@ $(document).ready(function() {
 	$('.table-item').each(function() {
 		//$('#filter-text').trigger('change');
 		$('#filter-status').trigger('change');
-		//$('#filter-collection').trigger('change');
+		//$('#filter-category').trigger('change');
 		//$('#filter-language').trigger('change');
 	});
 });

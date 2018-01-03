@@ -42,6 +42,7 @@ define('SHOW_MODIFIEDDATE',6);
 define('SHOW_PUBLISHEDDATE',7);
 define('STATUS_ANY',0);
 define('STATUS_PUBLISHED',1);
+define('STATUS_SYSTEM',0);
 define('STATUS_TRASHED',3);
 define('STATUS_UNPUBLISHED',2);
 define('USER_NOBODY',1);

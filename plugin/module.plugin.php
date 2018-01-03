@@ -34,7 +34,7 @@ class ModulePlugin extends Plugin {
 	
 	public static function run($html) {
 		if($html) {
-			return preg_replace_callback("/<cube:module\s+position\s*=\s*[\'\"]([^\'\"]+)[\'\"]\s*\/>/i",function($matches) { return self::getPosition($matches[1]); },$html);
+			return preg_replace_callback("/<cubo:module\s+position\s*=\s*[\'\"]([^\'\"]+)[\'\"]\s*\/>/i",function($matches) { return self::getPosition($matches[1]); },$html);
 		} else {
 			return $html;
 		}

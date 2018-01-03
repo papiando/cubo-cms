@@ -8,8 +8,9 @@ namespace Cubo;
 defined('__CUBO__') || new \Exception("No use starting a class without an include");
 
 class User extends Model {
-	public function getLogin($login) {
-		Application::getDB()->select("*")->from(strtolower($this->_class));
+	public static function getLogin($login) {
+		self::$_class = basename(get_called_class());
+		Application::getDB()->select("*")->from(strtolower(self::$_class));
 		if(strpos($login,'@')) {
 			Application::getDB()->where("`email`=:login");
 		} else {

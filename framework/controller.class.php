@@ -28,8 +28,8 @@ class Controller {
 	}
 	
 	// Admin view: list
-	public function admin_list($columns = "*") {
-		$this->_data = $this->_model->getList($columns);
+	public function admin_list($columns = "*",$filter = "1",$order = "`title`") {
+		$this->_data = $this->_model->getList($columns,$filter,$order);
 	}
 	
 	// Admin view: add
