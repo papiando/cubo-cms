@@ -1,0 +1,9 @@
+@import url('papiando.css') screen;
+
+body.has-fixed-nav {
+	padding-top: 4rem;
+}
+nav.fixed-top {
+	min-height: 4rem;
+}
+
