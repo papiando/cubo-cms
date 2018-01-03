@@ -37,7 +37,7 @@ class Controller {
 		if($_POST) {
 			if(isset($_FILES)) {
 				foreach($_FILES as $file=>$data) {
-					$_POST['@'.$file] = $data;
+					$_POST['$'.$file] = $data;
 				}
 			}
 			if($this->_model->save($_POST)) {
@@ -55,7 +55,7 @@ class Controller {
 		if($_POST) {
 			if(isset($_FILES)) {
 				foreach($_FILES as $file=>$data) {
-					$_POST['@'.$file] = $data;
+					$_POST['$'.$file] = $data;
 				}
 			}
 			if($this->_model->save($_POST,$_POST['id'])) {
@@ -67,7 +67,7 @@ class Controller {
 		}
 		if(isset($_GET['id'])) {
 			$this->_data = $this->_model->get($_GET['id']);
-			if(isset($this->_data->attributes)) $this->_data->_attributes = json_decode($this->_data->attributes);
+			if(isset($this->_data->{'@attributes'})) $this->_data->_attributes = json_decode($this->_data->{'@attributes'});
 		} else {
 			Session::setMessage("This item does not exist");
 			Router::redirect('/admin/'.strtolower($this->_class));

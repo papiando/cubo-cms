@@ -44,13 +44,13 @@ class Model {
 		$list = array();
 		$attributes = new \stdClass();
 		foreach($data as $property=>$value) {
-			if(substr($property,0,1) == '-' || substr($property,0,2) == '@-') {
+			if(substr($property,0,1) == '-' || substr($property,0,2) == '$-') {
 				// This field has not been changed, thus can be ignored
-			} elseif(substr($property,0,1) == ':') {
+			} elseif(substr($property,0,1) == '@') {
 				// This is an attribute, hence should be treated differently
 				$property = substr($property,1);
 				$attributes->$property = $value;
-			} elseif(substr($property,0,1) == '@') {
+			} elseif(substr($property,0,1) == '$') {
 				// This is a file, so handle differently
 				$property = substr($property,1);
 				$binary .= (empty($binary) ? "" : ",")."`{$property}`=0x".bin2hex(file_get_contents($value['tmp_name']));

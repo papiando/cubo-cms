@@ -162,34 +162,34 @@ defined('__CUBO__') || new \Exception("No use starting this code without an incl
 				<div class="col-6">
 					<div class="form-group">
 						<label for="show_title">Show title</label>
-						<select name=":show_title" id="show_title" class="form-control form-control-sm">
+						<select name="@show_title" id="show_title" class="form-control form-control-sm">
 							<?php $setting = 'show_title'; ?>
 							<?php include($this->_sharedPath.'select-showhide.php'); ?>
 						</select>
 					</div>
 					<div class="form-group">
 						<label for="show_author">Show author</label>
-						<select name=":show_author" id="show_author" class="form-control form-control-sm">
+						<select name="@show_author" id="show_author" class="form-control form-control-sm">
 							<?php include($this->_sharedPath.'select-showuser.php'); ?>
 						</select>
 					</div>
 					<div class="form-group">
 						<label for="show_category">Show category</label>
-						<select name=":show_category" id="show_category" class="form-control form-control-sm">
+						<select name="@show_category" id="show_category" class="form-control form-control-sm">
 							<?php $setting = 'show_category'; ?>
 							<?php include($this->_sharedPath.'select-showhide.php'); ?>
 						</select>
 					</div>
 					<div class="form-group">
 						<label for="show_tags">Show tags</label>
-						<select name=":show_tags" id="show_tags" class="form-control form-control-sm">
+						<select name="@show_tags" id="show_tags" class="form-control form-control-sm">
 							<?php $setting = 'show_tags'; ?>
 							<?php include($this->_sharedPath.'select-showhide.php'); ?>
 						</select>
 					</div>
 					<div class="form-group">
 						<label for="show_date">Show date</label>
-						<select name=":show_date" id="show_date" class="form-control form-control-sm">
+						<select name="@show_date" id="show_date" class="form-control form-control-sm">
 							<?php include($this->_sharedPath.'select-showdate.php'); ?>
 						</select>
 					</div>
@@ -197,33 +197,33 @@ defined('__CUBO__') || new \Exception("No use starting this code without an incl
 				<div class="col-6">
 					<div class="form-group">
 						<label for="show_image">Show image</label>
-						<select name=":show_image" id="show_image" class="form-control form-control-sm">
+						<select name="@show_image" id="show_image" class="form-control form-control-sm">
 							<?php $setting = 'show_image'; ?>
 							<?php include($this->_sharedPath.'select-showhide.php'); ?>
 						</select>
 					</div>
 					<div class="form-group">
 						<label for="position_image">Image position</label>
-						<select name=":position_image" id="position_image" class="form-control form-control-sm">
+						<select name="@position_image" id="position_image" class="form-control form-control-sm">
 							<?php include($this->_sharedPath.'select-positionimage.php'); ?>
 						</select>
 					</div>
 					<div class="form-group">
 						<label for="show_info">Show article info</label>
-						<select name=":show_info" id="show_info" class="form-control form-control-sm">
+						<select name="@show_info" id="show_info" class="form-control form-control-sm">
 							<?php $setting = 'show_info'; ?>
 							<?php include($this->_sharedPath.'select-showhide.php'); ?>
 						</select>
 					</div>
 					<div class="form-group">
 						<label for="position_info">Info position</label>
-						<select name=":position_info" id="position_info" class="form-control form-control-sm">
+						<select name="@position_info" id="position_info" class="form-control form-control-sm">
 							<?php include($this->_sharedPath.'select-positioninfo.php'); ?>
 						</select>
 					</div>
 					<div class="form-group">
 						<label for="show_readmore">Show read more</label>
-						<select name=":show_readmore" id="show_readmore" class="form-control form-control-sm">
+						<select name="@show_readmore" id="show_readmore" class="form-control form-control-sm">
 							<?php include($this->_sharedPath.'select-showreadmore.php'); ?>
 						</select>
 					</div>
