@@ -35,7 +35,7 @@
 			<cube:message />
 		</div>
 	</section>
-	<main id="main" class="container" role="main" itemProp="mainContentOfPage" itemscope itemtype="https://schema.org/webPageElement">
+	<main id="main" role="main" itemProp="mainContentOfPage" itemscope itemtype="https://schema.org/webPageElement">
 		<div class="container">
 			<cube:content />
 		</div>

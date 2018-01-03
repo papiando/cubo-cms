@@ -5,10 +5,15 @@ defined('__CUBO__') || new \Exception("No use starting a class without an includ
 
 class View {
 	protected $_data;
+	protected $_attributes;
 	protected $_path;
 	public $_sharedPath;
 	protected $_router;
 	protected $_class;
+	
+	public function getAttribute($attribute) {
+		return $this->_attributes->$attribute;
+	}
 	
 	public function getPath() {
 		if(!$this->_router) {
@@ -36,6 +41,7 @@ class View {
 	
 	public function render($data = array()) {
 		$this->_data = $data;
+		if(isset($data->{'@attributes'})) $this->_attributes = json_decode($data->{'@attributes'});
 		$sharedPath = $this->getSharedPath();
 		if(file_exists($this->getPath()) || file_exists($this->getDefaultPath())) {
 			// Start buffering output

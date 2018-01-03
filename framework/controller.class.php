@@ -8,6 +8,7 @@ class Controller {
 	protected $_language;
 	protected $_model;
 	protected $_params;
+	protected $_attributes;
 	protected $_class;
 	
 	// Standard view: list
@@ -67,7 +68,7 @@ class Controller {
 		}
 		if(isset($_GET['id'])) {
 			$this->_data = $this->_model->get($_GET['id']);
-			if(isset($this->_data->{'@attributes'})) $this->_data->_attributes = json_decode($this->_data->{'@attributes'});
+			if(isset($this->_data->{'@attributes'})) $this->_attributes = json_decode($this->_data->{'@attributes'});
 		} else {
 			Session::setMessage("This item does not exist");
 			Router::redirect('/admin/'.strtolower($this->_class));
