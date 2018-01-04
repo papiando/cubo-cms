@@ -71,6 +71,50 @@ $(document).ready(function() {
 		});
 		$('#filter-info').html('Shown '+count+' out of '+total);
 	});
+	$('#filter-group').on('change',function() {
+		var group = parseInt($(this).val());
+		var count = 0;
+		var total = 0;
+		$('.table-item').each(function() {
+			var filter = parseInt($(this).attr('data-filter'));
+			if(group == -1 || group == $(this).data('item').group) {
+				filter = filter & ~4;
+			} else {
+				filter = filter | 4;
+			}
+			$(this).attr('data-filter',filter);
+			if(filter) {
+				$(this).addClass('d-none');
+			} else {
+				$(this).removeClass('d-none');
+				count++;
+			}
+			total++;
+		});
+		$('#filter-info').html('Shown '+count+' out of '+total);
+	});
+	$('#filter-collection').on('change',function() {
+		var collection = parseInt($(this).val());
+		var count = 0;
+		var total = 0;
+		$('.table-item').each(function() {
+			var filter = parseInt($(this).attr('data-filter'));
+			if(collection == -1 || collection == $(this).data('item').collection) {
+				filter = filter & ~4;
+			} else {
+				filter = filter | 4;
+			}
+			$(this).attr('data-filter',filter);
+			if(filter) {
+				$(this).addClass('d-none');
+			} else {
+				$(this).removeClass('d-none');
+				count++;
+			}
+			total++;
+		});
+		$('#filter-info').html('Shown '+count+' out of '+total);
+	});
 	$('#filter-language').on('change',function() {
 		var language = parseInt($(this).val());
 		var count = 0;
@@ -97,6 +141,8 @@ $(document).ready(function() {
 		$('#filter-text').trigger('change');
 		$('#filter-status').trigger('change');
 		//$('#filter-category').trigger('change');
+		//$('#filter-group').trigger('change');
+		//$('#filter-collection').trigger('change');
 		//$('#filter-language').trigger('change');
 	});
 });

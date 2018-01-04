@@ -8,7 +8,7 @@ class ArticleCategoryController extends Controller {
 	
 	// Admin view: list
 	public function admin_list($columns = "*",$filter = "1",$order = "`title`") {
-		parent::admin_list($this->list_columns,"`status`>0",$order);
+		parent::admin_list($this->list_columns,"`access`>0",$order);
 	}
 }
 ?>

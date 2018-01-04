@@ -1,6 +1,5 @@
 <?php
 defined('__CUBO__') || new \Exception("No use starting this code without an include");
-
 $controller = Cubo\Application::getRouter()->getController();
 ?><h1>Article Categories</h1>
 <form id="filter-form" class="form">
