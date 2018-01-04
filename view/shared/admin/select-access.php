@@ -5,6 +5,7 @@ $items = array(
 	array('id'=>ACCESS_PUBLIC,'title'=>'Public'),
 	array('id'=>ACCESS_REGISTERED,'title'=>'Registered'),
 	array('id'=>ACCESS_GUEST,'title'=>'Guest')
+	array('id'=>ACCESS_PRIVATE,'title'=>'Private')
 	);
 foreach($items as $item) {
 	echo '<option value="'.$item['id'].'"'.($item['id'] == $current ? ' selected="true"' : '').'>'.$item['title'].'</option>';

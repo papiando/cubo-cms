@@ -13,7 +13,7 @@ class Controller {
 	
 	// Standard view: list
 	public function list() {
-		$this->_data = $this->_model->getList("*",Session::requiresAccess()." AND `status`=".STATUS_PUBLISHED);
+		$this->_data = $this->_model->getList("*",Session::requiresListAccess());
 	}
 	
 	// Standard view: view
@@ -25,7 +25,7 @@ class Controller {
 			$id = self::getParam('name');
 		else
 			$id = Configuration::getDefault(self::getParam('controller'));
-		$this->_data = $this->_model->get($id,"*",Session::requiresAccess()." AND `status`=".STATUS_PUBLISHED);
+		$this->_data = $this->_model->get($id,"*",Session::requiresViewAccess());
 		if(empty($this->_data)) {
 			throw new \Exception("Article cannot be viewed at current access levels");
 		}

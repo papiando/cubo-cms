@@ -62,9 +62,21 @@ class Session {
 	
 	public static function requiresAccess() {
 		if(self::isRegistered()) {
-			return "`access` IN (".ACCESS_PUBLIC.",".ACCESS_REGISTERED.")";
+			return "`access` IN (".ACCESS_PUBLIC.",".ACCESS_REGISTERED.",".ACCESS_PRIVATE.") AND `status`=".STATUS_PUBLISHED;
 		} else {
-			return "`access` IN (".ACCESS_PUBLIC.",".ACCESS_GUEST.")";
+			return "`access` IN (".ACCESS_PUBLIC.",".ACCESS_GUEST.",".ACCESS_PRIVATE.") AND `status`=".STATUS_PUBLISHED;
+		}
+	}
+	
+	public static function requiresViewAccess() {
+		return self::requiresAccess();
+	}
+	
+	public static function requiresListAccess() {
+		if(self::isRegistered()) {
+			return "`access` IN (".ACCESS_PUBLIC.",".ACCESS_REGISTERED.") AND `status`=".STATUS_PUBLISHED;
+		} else {
+			return "`access` IN (".ACCESS_PUBLIC.",".ACCESS_GUEST.") AND `status`=".STATUS_PUBLISHED;
 		}
 	}
 }
