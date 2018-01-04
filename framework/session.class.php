@@ -4,7 +4,6 @@ namespace Cubo;
 defined('__CUBO__') || new \Exception("No use starting a class without an include");
 
 class Session {
-	
 	public static function set($property,$value) {
 		$_SESSION[$property] = $value;
 	}
@@ -40,8 +39,33 @@ class Session {
 		return (isset($_SESSION['user']) ? $_SESSION['user']->id : 1);
 	}
 	
-	public static function isLoggedIn() {
+	public static function isRegistered() {
 		return self::exists('user');
+	}
+	
+	public static function isGuest() {
+		return !self::exists('user');
+	}
+	
+	public static function hasAccess($accessLevel) {
+		switch($accessLevel) {
+			case ACCESS_PUBLIC:
+				return true;
+			case ACCESS_REGISTERED:
+				return self::isRegistered();
+			case ACCESS_GUEST:
+				return self::isGuest();
+			default:
+				return false;
+		}
+	}
+	
+	public static function requiresAccess() {
+		if(self::isRegistered()) {
+			return "`access` IN (".ACCESS_PUBLIC.",".ACCESS_REGISTERED.")";
+		} else {
+			return "`access` IN (".ACCESS_PUBLIC.",".ACCESS_GUEST.")";
+		}
 	}
 }
 ?>

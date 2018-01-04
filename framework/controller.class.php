@@ -13,18 +13,22 @@ class Controller {
 	
 	// Standard view: list
 	public function list() {
-		$this->_data = $this->_model->getList();
+		$this->_data = $this->_model->getList("*",Session::requiresAccess()." AND `status`=".STATUS_PUBLISHED);
 	}
 	
 	// Standard view: view
 	public function view() {
 		// Generate output
 		if(self::getParam('id'))
-			$this->_data = $this->_model->get(self::getParam('id'));
+			$id = self::getParam('id');
 		elseif(self::getParam('name'))
-			$this->_data = $this->_model->get(self::getParam('name'));
+			$id = self::getParam('name');
 		else
-			$this->_data = $this->_model->get(Configuration::getDefault(self::getParam('controller')));
+			$id = Configuration::getDefault(self::getParam('controller'));
+		$this->_data = $this->_model->get($id,"*",Session::requiresAccess()." AND `status`=".STATUS_PUBLISHED);
+		if(empty($this->_data)) {
+			throw new \Exception("Article cannot be viewed at current access levels");
+		}
 		if(isset($this->_data->{'@attributes'})) $this->_attributes = json_decode($this->_data->{'@attributes'});
 	}
 	
