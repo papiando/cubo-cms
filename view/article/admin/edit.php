@@ -40,7 +40,7 @@ defined('__CUBO__') || new \Exception("No use starting this code without an incl
 			<div class="form-row">
 				<div class="col-8">
 					<div class="form-group">
-						<label for="html">Article content</label>
+						<label for="html">Article Content</label>
 						<textarea name="-html" id="html" class="form-control text-html" placeholder="Contents" rows="7" required><?php echo $this->_data->html; ?></textarea>
 					</div>
 				</div>
@@ -225,35 +225,4 @@ defined('__CUBO__') || new \Exception("No use starting this code without an incl
 		</div>
 	</div>
 </form>
-<script>
-function toSeoUrl(url) {
-	return url.normalize('NFD')
-		.replace(/[\u0300-\u036f]/g,'')
-		.replace(/\s+/g,'-')
-		.toLowerCase()
-		.replace(/&/g,'-and-')
-		.replace(/[^a-z0-9\-]/g,'')
-		.replace(/-+/g,'-')
-		.replace(/^-*/,'')
-		.replace(/-*$/,'');
-}
-$(document).ready(function() {
-	$('select[readonly] option:not(:selected)').attr('disabled',true);
-	$('#title').on('change',function() {
-		if($('#name').val()=='') {
-			$('#name').val(toSeoUrl($(this).val()));
-		}
-	});
-	$('#name').on('change',function() {
-		$(this).val(toSeoUrl($(this).val()));
-	});
-	$(':input:not(.changed)').on('change paste keyup',function() {
-		$('#submit').removeAttr('disabled');
-		$(this).addClass('changed');
-		var name = $(this).attr('name');
-		if(name.substr(0,1)=='-') {
-			$(this).attr('name',name.substr(1,name.length));
-		}
-	});
-});
-</script>
+<script src="/view/shared/js/editing.js"></script>

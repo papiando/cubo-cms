@@ -64,7 +64,7 @@ class Model {
 		}
 		if(!empty($attributes)) {
 			$attributes = json_encode($attributes);
-			$set .= (empty($set) ? "" : ",")."`attributes`=:attributes";
+			$set .= (empty($set) ? "" : ",")."`@attributes`=:attributes";
 			$list[":attributes"] = $attributes;
 		}
 		$published = isset($list[':status']) && $list[':status'] == STATUS_PUBLISHED;

@@ -1,6 +1,5 @@
 <?php
 defined('__CUBO__') || new \Exception("No use starting this code without an include");
-
 $controller = Cubo\Application::getRouter()->getController();
 ?><h1>Articles</h1>
 <form id="filter-form" class="form">
@@ -57,4 +56,4 @@ foreach($this->_data as $item) {
 }
 ?>	</tbody>
 </table>
-<script src="/view/shared/admin/filters.js"></script>
+<script src="/view/shared/js/filtering.js"></script>

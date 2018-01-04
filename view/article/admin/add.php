@@ -39,7 +39,7 @@ defined('__CUBO__') || new \Exception("No use starting this code without an incl
 			<div class="form-row">
 				<div class="col-8">
 					<div class="form-group">
-						<label for="html">Article content</label>
+						<label for="html">Article Content</label>
 						<textarea name="html" id="html" class="form-control" placeholder="Contents" rows="7" required></textarea>
 					</div>
 				</div>
@@ -70,21 +70,21 @@ defined('__CUBO__') || new \Exception("No use starting this code without an incl
 				<div class="col-6">
 					<div class="form-group">
 						<label for="description">Summary</label>
-						<textarea name="description" id="description" class="form-control" placeholder="Summary" rows="3"><?php echo $this->_data->description; ?></textarea>
+						<textarea name="description" id="description" class="form-control" placeholder="Summary" rows="3"></textarea>
 					</div>
 					<div class="form-group">
 						<?php
 							$id = 'image';
 							$label = 'Image';
 							$prefix = '-';
-							$value = $this->_data->image;
+							$value = null;
 							include($this->_sharedPath.'select-image.php'); ?>
 					</div>
 				</div>
 				<div class="col-6">
 					<div class="form-group">
 						<label for="tags">Tags</label>
-						<textarea name="tags" id="tags" class="form-control" placeholder="Tags" rows="3"><?php echo $this->_data->tags; ?></textarea>
+						<textarea name="tags" id="tags" class="form-control" placeholder="Tags" rows="3"></textarea>
 					</div>
 					<div class="form-group">
 						<label>Image Preview</label>
@@ -98,10 +98,6 @@ defined('__CUBO__') || new \Exception("No use starting this code without an incl
 		<div class="tab-pane" id="publishing-pane" role="tabpanel" aria-labelledby="publishing-tab">
 			<div class="form-row">
 				<div class="col-6">
-					<div class="form-group">
-						<label for="description">Summary</label>
-						<textarea name="description" id="descripton" class="form-control" placeholder="Summary" rows="3"></textarea>
-					</div>
 					<div class="form-group">
 						<label for="author">Author</label>
 						<select name="author" id="author" class="form-control form-control-sm">
@@ -132,10 +128,6 @@ defined('__CUBO__') || new \Exception("No use starting this code without an incl
 					</div>
 				</div>
 				<div class="col-6">
-					<div class="form-group">
-						<label for="tags">Tags</label>
-						<textarea name="tags" id="tags" class="form-control" placeholder="Tags" rows="3"></textarea>
-					</div>
 					<div class="form-group">
 						<label for="access">Access</label>
 						<select name="access" id="access" class="form-control form-control-sm">
@@ -232,35 +224,4 @@ defined('__CUBO__') || new \Exception("No use starting this code without an incl
 		</div>
 	</div>
 </form>
-<script>
-function toSeoUrl(url) {
-	return url.normalize('NFD')
-		.replace(/[\u0300-\u036f]/g,'')
-		.replace(/\s+/g,'-')
-		.toLowerCase()
-		.replace(/&/g,'-and-')
-		.replace(/[^a-z0-9\-]/g,'')
-		.replace(/-+/g,'-')
-		.replace(/^-*/,'')
-		.replace(/-*$/,'');
-}
-$(document).ready(function() {
-	$('select[readonly] option:not(:selected)').attr('disabled',true);
-	$('#title').on('change',function() {
-		if($('#name').val()=='') {
-			$('#name').val(toSeoUrl($(this).val()));
-		}
-	});
-	$('#name').on('change',function() {
-		$(this).val(toSeoUrl($(this).val()));
-	});
-	$(':input:not(.changed)').on('change paste keyup',function() {
-		$('#submit').removeAttr('disabled');
-		$(this).addClass('changed');
-		var name = $(this).attr('name');
-		if(name.substr(0,1)=='-') {
-			$(this).attr('name',name.substr(1,name.length));
-		}
-	});
-});
-</script>
+<script src="/view/shared/js/editing.js"></script>
