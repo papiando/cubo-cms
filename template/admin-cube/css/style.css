@@ -76,9 +76,11 @@ select.form-control-sm {
     content: '\25BC';
     font-size: .5rem;
     margin: 0 0 0 auto;
+	line-height: 1.4rem;
 }
 [data-toggle=collapse][aria-expanded=true]:after {
     content: '\25B2';
     font-size: .5rem;
     margin: 0 0 0 auto;
+	line-height: 1.4rem;
 }

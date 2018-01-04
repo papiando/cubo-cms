@@ -86,6 +86,10 @@ class Database {
 	}
 	
 	public function load($query = null,$list = null) {
+		if(is_array($query)) {
+			$list = $query;
+			$query = null;
+		}
 		$sth = self::$dbh->prepare(empty($query) ? $this->query() : $query);
 		$sth->execute($list);
 		$result = $sth->fetchAll(\PDO::FETCH_CLASS|\PDO::FETCH_PROPS_LATE,'\\'.__NAMESPACE__.'\\'.$this->_className);
@@ -94,6 +98,10 @@ class Database {
 	}
 	
 	public function loadObject($query = null,$list = null) {
+		if(is_array($query)) {
+			$list = $query;
+			$query = null;
+		}
 		$sth = self::$dbh->prepare(empty($query) ? $this->query() : $query);
 		$sth->execute($list);
 		$sth->setFetchMode(\PDO::FETCH_CLASS|\PDO::FETCH_PROPS_LATE,'\\'.__NAMESPACE__.'\\'.$this->_className);
@@ -103,6 +111,10 @@ class Database {
 	}
 	
 	public function loadItems($query = null,$list = null) {
+		if(is_array($query)) {
+			$list = $query;
+			$query = null;
+		}
 		$sth = self::$dbh->prepare(empty($query) ? $this->query() : $query);
 		$sth->execute($list);
 		$sth->setFetchMode(\PDO::FETCH_ASSOC);
@@ -112,6 +124,10 @@ class Database {
 	}
 	
 	public function loadItem($query = null,$list = null) {
+		if(is_array($query)) {
+			$list = $query;
+			$query = null;
+		}
 		$sth = self::$dbh->prepare(empty($query) ? $this->query() : $query);
 		$sth->execute($list);
 		$sth->setFetchMode(\PDO::FETCH_ASSOC);
@@ -121,6 +137,10 @@ class Database {
 	}
 	
 	public function execute($query = null,$list = null) {
+		if(is_array($query)) {
+			$list = $query;
+			$query = null;
+		}
 		$sth = self::$dbh->prepare(empty($query) ? $this->query() : $query);
 		$result = $sth->execute($list);
 		$this->_className = null;

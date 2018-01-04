@@ -5,7 +5,11 @@ defined('__CUBO__') || new \Exception("No use starting this code without an incl
 	<select id="<?php echo $filter['prefix'].$filter['id']; ?>" name="-<?php echo $filter['id']; ?>" class="form-control">
 		<option value="<?php echo GROUP_ANY; ?>"<?php echo ($filter['value'] == GROUP_ANY ? " selected" : ""); ?>>Any group</option>
 <?php
-$query = "SELECT `id`,`title` FROM `contactgroup` WHERE 1 ORDER BY `title`";
+if(isset($root) and $root) {
+	$query = "SELECT `id`,`title` FROM `contactgroup` WHERE `status`=".STATUS_PUBLISHED." ORDER BY `title`";
+} else {
+	$query = "SELECT `id`,`title` FROM `contactgroup` WHERE `status`=".STATUS_PUBLISHED." AND `access` ORDER BY `title`";
+}
 $items = Cubo\Application::getDB()->loadItems($query);
 foreach($items as $item) {
 	$item = (object)$item;

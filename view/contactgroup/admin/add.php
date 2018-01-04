@@ -1,5 +1,6 @@
 <?php
 defined('__CUBO__') || new \Exception("No use starting this code without an include");
+$root = true;
 ?><h1>Add Contact Group</h1>
 <form class="form-add" action="" method="post">
 	<div class="form-group">

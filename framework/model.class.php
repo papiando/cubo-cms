@@ -6,15 +6,15 @@ defined('__CUBO__') || new \Exception("No use starting a class without an includ
 class Model {
 	protected static $_class;
 	
-	public static function get($id,$columns = "*") {
+	public static function get($id,$columns = "*",$filter = "1") {
 		self::$_class = basename(str_replace('\\','/',get_called_class()));
 		Application::getDB()->select($columns)->from(strtolower(self::$_class));
 		if(is_numeric($id)) {
-			Application::getDB()->where("`id`='{$id}'");
+			Application::getDB()->where("`id`=:id AND {$filter}");
 		} else {
-			Application::getDB()->where("`name`='{$id}'");
+			Application::getDB()->where("`name`=:id AND {$filter}");
 		}
-		$result = Application::getDB()->loadObject();
+		$result = Application::getDB()->loadObject(array(':id'=>$id));
 		return (is_object($result) ? $result : null);
 	}
 	
@@ -25,16 +25,15 @@ class Model {
 		return (is_array($result) ? $result : null);
 	}
 	
-	public static function exists($id) {
+	public static function exists($id,$filter = "1") {
 		self::$_class = basename(str_replace('\\','/',get_called_class()));
-		$query = "SELECT `id` FROM `".strtolower(self::$_class)."`";
+		Application::getDB()->select($columns)->from(strtolower(self::$_class));
 		if(is_numeric($id)) {
-			$query .= " WHERE `id`=:id";
+			Application::getDB()->where("`id`=:id AND {$filter}");
 		} else {
-			$query .= " WHERE `name`=:id";
+			Application::getDB()->where("`name`=:id AND {$filter}");
 		}
-		$query .= " LIMIT 1";
-		$result = Application::getDB()->loadItem($query,array(':id'=>$id));
+		$result = Application::getDB()->loadItem(array(':id'=>$id));
 		return is_array($result);
 	}
 	
