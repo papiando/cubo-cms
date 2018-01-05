@@ -1,6 +1,6 @@
 <?php
 defined('__CUBO__') || new \Exception("No use starting this code without an include");
-?><h1>Add Article</h1>
+?><h1>Add Menu Option</h1>
 <form class="form-add" action="" method="post">
 	<div class="form-group">
 		<button class="btn btn-primary" id="submit" type="submit" disabled>Save</button>
@@ -25,10 +25,7 @@ defined('__CUBO__') || new \Exception("No use starting this code without an incl
 			<a class="nav-link active" id="content-tab" data-toggle="tab" href="#content-pane" role="tab" aria-controls="content-pane" aria-selected="true">Content</a>
 		</li>
 		<li class="nav-item">
-			<a class="nav-link" id="image-tab" data-toggle="tab" href="#image-pane" role="tab" aria-controls="image-pane" aria-selected="false">Image and Metadata</a>
-		</li>
-		<li class="nav-item">
-			<a class="nav-link" id="publishing-tab" data-toggle="tab" href="#publishing-pane" role="tab" aria-controls="publishing-pane" aria-selected="false">Publishing</a>
+			<a class="nav-link" id="link-tab" data-toggle="tab" href="#link-pane" role="tab" aria-controls="link-pane" aria-selected="false">Link</a>
 		</li>
 		<li class="nav-item">
 			<a class="nav-link" id="options-tab" data-toggle="tab" href="#options-pane" role="tab" aria-controls="options-pane" aria-selected="false">Options</a>
@@ -39,8 +36,8 @@ defined('__CUBO__') || new \Exception("No use starting this code without an incl
 			<div class="form-row">
 				<div class="col-8">
 					<div class="form-group">
-						<label for="html">Article Content</label>
-						<textarea name="html" id="html" class="form-control" placeholder="Contents" rows="7" required></textarea>
+						<label for="description">Summary</label>
+						<textarea name="description" id="description" class="form-control" placeholder="Summary" rows="7"></textarea>
 					</div>
 				</div>
 				<div class="col-4">
@@ -51,9 +48,15 @@ defined('__CUBO__') || new \Exception("No use starting this code without an incl
 						</select>
 					</div>
 					<div class="form-group">
-						<label for="category">Category</label>
-						<select name="category" id="category" class="form-control form-control-sm">
-							<?php include($this->_sharedPath.'select-category.php'); ?>
+						<label for="menu">Menu</label>
+						<select name="menu" id="menu" class="form-control form-control-sm">
+							<?php include($this->_sharedPath.'select-menu.php'); ?>
+						</select>
+					</div>
+					<div class="form-group">
+						<label for="option">Parent Option</label>
+						<select name="option" id="option" class="form-control form-control-sm">
+							<?php include($this->_sharedPath.'select-option.php'); ?>
 						</select>
 					</div>
 					<div class="form-group">
@@ -62,90 +65,26 @@ defined('__CUBO__') || new \Exception("No use starting this code without an incl
 							<?php include($this->_sharedPath.'select-language.php'); ?>
 						</select>
 					</div>
-				</div>
-			</div>
-		</div>
-		<div class="tab-pane fade" id="image-pane" role="tabpanel" aria-labelledby="image-tab">
-			<div class="form-row">
-				<div class="col-6">
-					<div class="form-group">
-						<label for="description">Summary</label>
-						<textarea name="description" id="description" class="form-control" placeholder="Summary" rows="3"></textarea>
-					</div>
-					<div class="form-group">
-						<?php
-							$id = 'image';
-							$label = 'Image';
-							$prefix = '-';
-							$value = null;
-							include($this->_sharedPath.'select-image.php'); ?>
-					</div>
-				</div>
-				<div class="col-6">
-					<div class="form-group">
-						<label for="tags">Tags</label>
-						<textarea name="tags" id="tags" class="form-control" placeholder="Tags" rows="3"></textarea>
-					</div>
-					<div class="form-group">
-						<label>Image Preview</label>
-						<figure>
-							<img id="image-preview" class="img-fluid img-thumbnail full-width" src="<?php echo $url; ?>" />
-						</figure>
-					</div>
-				</div>
-			</div>
-		</div>
-		<div class="tab-pane" id="publishing-pane" role="tabpanel" aria-labelledby="publishing-tab">
-			<div class="form-row">
-				<div class="col-6">
-					<div class="form-group">
-						<label for="author">Author</label>
-						<select name="author" id="author" class="form-control form-control-sm">
-							<?php $user = 'author'; ?>
-							<?php include($this->_sharedPath.'select-user.php'); ?>
-						</select>
-					</div>
-					<div class="form-group">
-						<label for="publisher">Publisher</label>
-						<select name="-publisher" id="publisher" class="form-control form-control-sm" readonly>
-							<?php $user = 'publisher'; ?>
-							<?php include($this->_sharedPath.'select-user.php'); ?>
-						</select>
-					</div>
-					<div class="form-group">
-						<label for="creator">Creator</label>
-						<select name="-creator" id="creator" class="form-control form-control-sm" readonly>
-							<?php $user = 'creator'; ?>
-							<?php include($this->_sharedPath.'select-user.php'); ?>
-						</select>
-					</div>
-					<div class="form-group">
-						<label for="editor">Editor</label>
-						<select name="-editor" id="editor" class="form-control form-control-sm" readonly>
-							<?php $user = 'editor'; ?>
-							<?php include($this->_sharedPath.'select-user.php'); ?>
-						</select>
-					</div>
-				</div>
-				<div class="col-6">
 					<div class="form-group">
 						<label for="access">Access</label>
 						<select name="access" id="access" class="form-control form-control-sm">
 							<?php include($this->_sharedPath.'select-access.php'); ?>
 						</select>
 					</div>
+				</div>
+			</div>
+		</div>
+		<div class="tab-pane fade" id="link-pane" role="tabpanel" aria-labelledby="link-tab">
+			<div class="form-row">
+				<div class="col-6">
 					<div class="form-group">
-						<label for="published">Published Date</label>
-						<input type="datetime-local" name="-published" id="published" class="form-control form-control-sm" readonly />
+						<label for="linktype">Link Type</label>
+						<select name="@linktype" id="linktype" class="form-control form-control-sm">
+							<?php include($this->_sharedPath.'select-linktype.php'); ?>
+						</select>
 					</div>
-					<div class="form-group">
-						<label for="created">Created Date</label>
-						<input type="datetime-local" name="-created" id="created" class="form-control form-control-sm" readonly />
-					</div>
-					<div class="form-group">
-						<label for="modified">Modified Date</label>
-						<input type="datetime-local" name="-modified" id="modified" class="form-control form-control-sm" readonly />
-					</div>
+				</div>
+				<div class="col-6">
 				</div>
 			</div>
 		</div>

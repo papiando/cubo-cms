@@ -33,8 +33,8 @@ defined('__CUBO__') || new \Exception("No use starting this code without an incl
 			<div class="form-row">
 				<div class="col-8">
 					<div class="form-group">
-						<label for="description">Menu Description</label>
-						<textarea name="description" id="description" class="form-control" placeholder="Description" rows="7"></textarea>
+						<label for="description">Summary</label>
+						<textarea name="description" id="description" class="form-control" placeholder="Summary" rows="7"></textarea>
 					</div>
 				</div>
 				<div class="col-4">
@@ -45,15 +45,15 @@ defined('__CUBO__') || new \Exception("No use starting this code without an incl
 						</select>
 					</div>
 					<div class="form-group">
-						<label for="access">Access</label>
-						<select name="access" id="access" class="form-control form-control-sm">
-							<?php include($this->_sharedPath.'select-access.php'); ?>
-						</select>
-					</div>
-					<div class="form-group">
 						<label for="language">Language</label>
 						<select name="language" id="language" class="form-control form-control-sm">
 							<?php include($this->_sharedPath.'select-language.php'); ?>
+						</select>
+					</div>
+					<div class="form-group">
+						<label for="access">Access</label>
+						<select name="access" id="access" class="form-control form-control-sm">
+							<?php include($this->_sharedPath.'select-access.php'); ?>
 						</select>
 					</div>
 				</div>

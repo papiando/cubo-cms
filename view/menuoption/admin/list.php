@@ -1,7 +1,7 @@
 <?php
 defined('__CUBO__') || new \Exception("No use starting this code without an include");
 $controller = Cubo\Application::getRouter()->getController();
-?><h1>Articles</h1>
+?><h1>Menu Options</h1>
 <form id="filter-form" class="form">
 	<div class="form-row d-flex justify-content-between">
 		<div class="col-3">
@@ -16,8 +16,8 @@ $controller = Cubo\Application::getRouter()->getController();
 		</div>
 		<div class="col-3">
 			<?php
-				$filter = array('id'=>'filter-category','label'=>'Category','prefix'=>'','value'=>CATEGORY_ANY);
-				include($this->_sharedPath.'filter-category.php'); ?>
+				$filter = array('id'=>'filter-option','label'=>'Parent Option','prefix'=>'','value'=>OPTION_ANY);
+				include($this->_sharedPath.'filter-option.php'); ?>
 		</div>
 		<div class="col-3">
 			<?php
@@ -32,7 +32,7 @@ $controller = Cubo\Application::getRouter()->getController();
 		<tr>
 			<td class="align-middle"><strong>Title</strong></td>
 			<td class="align-middle"><strong>Status</strong></td>
-			<td class="align-middle"><strong>Category</strong></td>
+			<td class="align-middle"><strong>Parent Option</strong></td>
 			<td class="align-middle"><strong>Language</strong></td>
 			<td class="text-right align-middle">
 				<a href="/admin/<?php echo $controller; ?>?action=add"><button class="btn btn-sm btn-success"><i class="fa fa-plus fa-fw"></i></button></a>
@@ -45,7 +45,7 @@ foreach($this->_data as $item) {
 ?>		<tr class="table-item d-none" data-item="<?php echo htmlentities(json_encode($item)); ?>" data-filter="none">
 			<td class="align-middle"><?php echo $item->title; ?></td>
 			<td class="align-middle"><?php include($this->_sharedPath.'show-status.php'); ?></td>
-			<td class="align-middle"><?php include($this->_sharedPath.'show-category.php'); ?></td>
+			<td class="align-middle"><?php include($this->_sharedPath.'show-option.php'); ?></td>
 			<td class="align-middle"><?php include($this->_sharedPath.'show-language.php'); ?></td>
 			<td class="text-right align-middle">
 				<a href="/admin/<?php echo $controller; ?>?action=edit&id=<?php echo $item->id; ?>"><button class="btn btn-sm btn-primary"><i class="fa fa-pencil fa-fw"></i></button></a>

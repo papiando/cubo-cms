@@ -115,6 +115,28 @@ $(document).ready(function() {
 		});
 		$('#filter-info').html('Shown '+count+' out of '+total);
 	});
+	$('#filter-option').on('change',function() {
+		var option = parseInt($(this).val());
+		var count = 0;
+		var total = 0;
+		$('.table-item').each(function() {
+			var filter = parseInt($(this).attr('data-filter'));
+			if(option == -1 || option == $(this).data('item').option) {
+				filter = filter & ~4;
+			} else {
+				filter = filter | 4;
+			}
+			$(this).attr('data-filter',filter);
+			if(filter) {
+				$(this).addClass('d-none');
+			} else {
+				$(this).removeClass('d-none');
+				count++;
+			}
+			total++;
+		});
+		$('#filter-info').html('Shown '+count+' out of '+total);
+	});
 	$('#filter-language').on('change',function() {
 		var language = parseInt($(this).val());
 		var count = 0;
@@ -165,6 +187,7 @@ $(document).ready(function() {
 		//$('#filter-category').trigger('change');
 		//$('#filter-group').trigger('change');
 		//$('#filter-collection').trigger('change');
+		//$('#filter-option').trigger('change');
 		//$('#filter-language').trigger('change');
 		//$('#filter-access').trigger('change');
 	});
