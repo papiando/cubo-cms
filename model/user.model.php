@@ -9,7 +9,7 @@ defined('__CUBO__') || new \Exception("No use starting a class without an includ
 
 class User extends Model {
 	public static function getLogin($login) {
-		self::$_class = basename(get_called_class());
+		self::$_class = basename(str_replace('\\','/',get_called_class()));
 		Application::getDB()->select("*")->from(strtolower(self::$_class));			// TODO: Might want to limit the number of fields returned
 		if(strpos($login,'@')) {
 			Application::getDB()->where("`email`=:login");
