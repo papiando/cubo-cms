@@ -3,6 +3,7 @@ namespace Cubo;
 
 defined('__CUBO__') || new \Exception("No use starting a class without an include");
 
+define('ACCESS_ANY',-1);
 define('ACCESS_SYSTEM',0);
 define('ACCESS_PUBLIC',1);
 define('ACCESS_REGISTERED',2);

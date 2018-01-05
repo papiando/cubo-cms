@@ -4,7 +4,7 @@ $current = (isset($this->_data->access) ? $this->_data->access : ACCESS_PUBLIC);
 $items = array(
 	array('id'=>ACCESS_PUBLIC,'title'=>'Public'),
 	array('id'=>ACCESS_REGISTERED,'title'=>'Registered'),
-	array('id'=>ACCESS_GUEST,'title'=>'Guest')
+	array('id'=>ACCESS_GUEST,'title'=>'Guest'),
 	array('id'=>ACCESS_PRIVATE,'title'=>'Private')
 	);
 foreach($items as $item) {

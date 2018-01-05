@@ -6,9 +6,11 @@
 	</div>
 	<div id="content-management" class="collapse<?php echo (isset($_SESSION['preferences']['content_management']) && $_SESSION['preferences']['content_management'] ? " show" : ""); ?>" role="listitem" aria-labelledby="content-management-heading">
 		<a class="list-group-item px-4 py-1 mb-0" role="listitem" href="/admin/article"><i class="fa fa-file-text fa-fw"></i> Articles</a>
-		<a class="list-group-item px-4 py-1 mb-0" role="listitem" href="/admin/articlecategory"><i class="fa fa-folder-open fa-fw"></i> Article Categories</a>
+		<a class="list-group-item px-4 py-1 mb-0" role="listitem" href="/admin/articlecategory"><i class="fa fa-file-text fa-fw"></i> Article Categories</a>
 		<a class="list-group-item px-4 py-1 mb-0" role="listitem" href="/admin/contact"><i class="fa fa-user fa-fw"></i> Contacts</a>
-		<a class="list-group-item px-4 py-1 mb-0" role="listitem" href="/admin/contactgroup"><i class="fa fa-group fa-fw"></i> Contact Groups</a>
+		<a class="list-group-item px-4 py-1 mb-0" role="listitem" href="/admin/contactgroup"><i class="fa fa-user fa-fw"></i> Contact Groups</a>
+		<a class="list-group-item px-4 py-1 mb-0" role="listitem" href="/admin/menu"><i class="fa fa-bars fa-fw"></i> Menus</a>
+		<a class="list-group-item px-4 py-1 mb-0" role="listitem" href="/admin/menuoption"><i class="fa fa-bars fa-fw"></i> Menu Options</a>
 	</div>
 </div>
 <div class="list-group">
@@ -19,7 +21,7 @@
 	</div>
 	<div id="media-management" class="collapse<?php echo (isset($_SESSION['preferences']['media_management']) && $_SESSION['preferences']['media_management'] ? " show" : ""); ?>" aria-labelledby="media-management-heading">
 		<a class="list-group-item px-4 py-1 mb-0" role="listitem" href="/admin/image"><i class="fa fa-picture-o fa-fw"></i> Images</a>
-		<a class="list-group-item px-4 py-1 mb-0" role="listitem" href="/admin/imagecollection"><i class="fa fa-book fa-fw"></i> Image Collections</a>
+		<a class="list-group-item px-4 py-1 mb-0" role="listitem" href="/admin/imagecollection"><i class="fa fa-picture-o fa-fw"></i> Image Collections</a>
 	</div>
 </div>
 <div class="list-group">
@@ -29,8 +31,8 @@
 		</a>
 	</div>
 	<div id="user-management" class="collapse<?php echo (isset($_SESSION['preferences']['user_management']) && $_SESSION['preferences']['user_management'] ? " show" : ""); ?>" aria-labelledby="user-management-heading">
-		<a class="list-group-item px-4 py-1 mb-0" role="listitem" href="/admin/user"><i class="fa fa-user fa-fw"></i> Users</a>
-		<a class="list-group-item px-4 py-1 mb-0" role="listitem" href="/admin/userrole"><i class="fa fa-group fa-fw"></i> User Roles</a>
+		<a class="list-group-item px-4 py-1 mb-0" role="listitem" href="/admin/user"><i class="fa fa-key fa-fw"></i> Users</a>
+		<a class="list-group-item px-4 py-1 mb-0" role="listitem" href="/admin/userrole"><i class="fa fa-key fa-fw"></i> User Roles</a>
 	</div>
 </div>
 <script>
