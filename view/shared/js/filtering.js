@@ -9,9 +9,9 @@ $(document).ready(function() {
 				filter = filter & ~1;
 			} else if(pattern.test($(this).data('item').description.normalize('NFD'))) {
 				filter = filter & ~1;
-			} else if(pattern.test($(this).data('item').tags.normalize('NFD'))) {
-				filter = filter & ~1;
 			} else if(pattern.test($(this).data('item').name.normalize('NFD'))) {
+				filter = filter & ~1;
+			} else if($(this).data('item').tags && pattern.test($(this).data('item').tags.normalize('NFD'))) {
 				filter = filter & ~1;
 			} else {
 				filter = filter | 1;

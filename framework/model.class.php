@@ -67,7 +67,7 @@ class Model {
 			$list[":attributes"] = $attributes;
 		}
 		$published = isset($list[':status']) && $list[':status'] == STATUS_PUBLISHED;
-		if($id) {
+		if(!is_null($id)) {
 			$query = "UPDATE `".strtolower(self::$_class)."` SET ".$set.(empty($binary) ? "" : (empty($set) ? "" : ",").$binary).",`modified`=NOW(),`editor`=".Session::getUserId().($published ? ",`published`=NOW(),`publisher`=".Session::getUserId() : "")." WHERE `id`={$id}";
 		} else {
 			$query = "INSERT INTO `".strtolower(self::$_class)."` SET ".$set.(empty($binary) ? "" : (empty($set) ? "" : ",").$binary).",`created`=NOW(),`creator`=".Session::getUserId().($published ? ",`published`=NOW(),`publisher`=".Session::getUserId() : "");

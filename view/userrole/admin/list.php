@@ -32,7 +32,7 @@ $controller = Cubo\Application::getRouter()->getController();
 <?php
 foreach($this->_data as $item) {
 ?>		<tr class="table-item d-none" data-item="<?php echo htmlentities(json_encode($item)); ?>" data-filter="none">
-			<td class="align-middle"><?php echo $item->title; ?></td>
+			<td class="align-middle"><span data-toggle="tooltip" data-placement="bottom" title="<?php echo $item->description; ?>"><?php echo $item->title; ?></span></td>
 			<td class="align-middle"><?php include($this->_sharedPath.'show-status.php'); ?></td>
 			<td class="text-right align-middle">
 				<a href="/admin/<?php echo $controller; ?>?action=edit&id=<?php echo $item->id; ?>"><button class="btn btn-sm btn-primary"><i class="fa fa-pencil fa-fw"></i></button></a>
@@ -44,3 +44,8 @@ foreach($this->_data as $item) {
 ?>	</tbody>
 </table>
 <script src="/view/shared/js/filtering.js"></script>
+<script>
+$(function () {
+  $('[data-toggle="tooltip"]').tooltip()
+})
+</script>
