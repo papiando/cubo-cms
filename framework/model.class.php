@@ -55,6 +55,10 @@ class Model {
 				$binary .= (empty($binary) ? "" : ",")."`{$property}`=0x".bin2hex(file_get_contents($value['tmp_name']));
 				$set .= (empty($set) ? "" : ",")."`mimetype`=:mimetype";
 				$list[":mimetype"] = $value['type'];
+			} elseif($property == 'password') {
+				// This is a password field, encrypt
+				$set .= (empty($set) ? "" : ",")."`{$property}`=:{$property}";
+				$list[":{$property}"] = crypt($value,'$2a$11$'.uniqid('',true).'$');
 			} elseif($property != 'id') {
 				// This is a changed field, but ignore the id
 				$set .= (empty($set) ? "" : ",")."`{$property}`=:{$property}";
