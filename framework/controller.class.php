@@ -3,7 +3,7 @@
  * @application    Cubo CMS
  * @type           Framework
  * @class          Controller
- *
+ * @version        1.0.0
  * @author         Dan Barto
  * @copyright      Copyright (C) 2017 - 2018 Papiando Riba Internet. All rights reserved.
  * @license        GNU General Public License version 3 or later; see LICENSE.md

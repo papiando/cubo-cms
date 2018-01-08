@@ -1,5 +1,8 @@
 <?php
+namespace Cubo;
+
 defined('__CUBO__') || new \Exception("No use starting this code without an include");
+
 ?><h1>Edit Article</h1>
 <form class="form-edit" action="" method="post">
 	<div class="form-group">
@@ -39,19 +42,38 @@ defined('__CUBO__') || new \Exception("No use starting this code without an incl
 					<textarea name="-html" id="html" class="form-control text-html" placeholder="Contents" rows="12" required><?php echo $this->_data->html; ?></textarea>
 				</div>
 				<div>
-					<?php echo Cubo\Form::select(array('name'=>'status','title'=>'Status','prefix'=>'-','value'=>$this->_data->status,'class'=>' form-control-sm','query'=>"SELECT `id`,`title` FROM `publishingstatus` ORDER BY `title`")); ?>
-					<div class="form-group">
-						<label for="category">Category</label>
-						<select name="-category" id="category" class="form-control form-control-sm">
-							<?php include($this->_sharedPath.'select-category.php'); ?>
-						</select>
-					</div>
-					<div class="form-group">
-						<label for="language">Language</label>
-						<select name="-language" id="language" class="form-control form-control-sm">
-							<?php include($this->_sharedPath.'select-language.php'); ?>
-						</select>
-					</div>
+					<?php echo Form::select(array(
+						'name'=>'status',
+						'title'=>'Status',
+						'prefix'=>'-',
+						'value'=>$this->_data->status,
+						'class'=>' form-control-sm',
+						'query'=>Form::query('publishingstatus',Session::requiresAccess()),
+						'readonly'=>ArticleController::cannotPublish($this->_data->author))); ?>
+					<?php echo Form::select(array(
+						'name'=>'category',
+						'title'=>'Category',
+						'prefix'=>'-',
+						'value'=>$this->_data->category,
+						'class'=>' form-control-sm',
+						'query'=>Form::query('articlecategory',Session::requiresAccess()),
+						'readonly'=>ArticleController::cannotEdit($this->_data->author))); ?>
+					<?php echo Form::select(array(
+						'name'=>'language',
+						'title'=>'Language',
+						'prefix'=>'-',
+						'value'=>$this->_data->language,
+						'class'=>' form-control-sm',
+						'query'=>Form::query('language',Session::requiresAccess()),
+						'readonly'=>ArticleController::cannotEdit($this->_data->author))); ?>
+					<?php echo Form::select(array(
+						'name'=>'access',
+						'title'=>'Access',
+						'prefix'=>'-',
+						'value'=>$this->_data->access,
+						'class'=>' form-control-sm',
+						'query'=>Form::query('accesslevel',Session::requiresAccess()),
+						'readonly'=>ArticleController::cannotEdit($this->_data->author))); ?>
 				</div>
 			</div>
 		</div>

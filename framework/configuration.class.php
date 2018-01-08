@@ -4,11 +4,11 @@ namespace Cubo;
 defined('__CUBO__') || new \Exception("No use starting a class without an include");
 
 define('ACCESS_ANY',-1);
-define('ACCESS_SYSTEM',0);
+define('ACCESS_GUEST',3);
+define('ACCESS_NONE',0);
+define('ACCESS_PRIVATE',4);
 define('ACCESS_PUBLIC',1);
 define('ACCESS_REGISTERED',2);
-define('ACCESS_GUEST',3);
-define('ACCESS_PRIVATE',2);
 define('CATEGORY_ANY',-1);
 define('CATEGORY_NONE',0);
 define('CATEGORY_UNDEFINED',1);
