@@ -148,13 +148,13 @@ class Controller {
 		}
 	}
 	
-	// Returns true if current user is the author or has permitted role to create an item
-	public static function canCreate($author) {
+	// Returns true if current user has permitted role to create an item
+	public static function canCreate() {
 		return in_array(Session::getRole(),self::$_authors) || Session::getUser() == $author;
 	}
 	
-	// Returns true if current user is not the author and does not have permitted role to create an item
-	public static function cannotCreate($author) {
+	// Returns true if current user does not have permitted role to create an item
+	public static function cannotCreate() {
 		return !self::canCreate($author);
 	}
 	
