@@ -69,8 +69,8 @@ define('STATUS_SYSTEM',0);
 define('STATUS_TRASHED',3);
 define('STATUS_UNPUBLISHED',2);
 define('USER_ANY',-1);
-define('USER_NOBODY',1);
-define('USER_SYSTEM',2);
+define('USER_NOBODY',0);
+define('USER_SYSTEM',1);
 
 class Configuration {
 	protected static $_settings = null;

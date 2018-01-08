@@ -1,19 +1,30 @@
 <?php
+/**
+ * @application    Cubo CMS
+ * @type           Framework
+ * @class          Controller
+ *
+ * @author         Dan Barto
+ * @copyright      Copyright (C) 2017 - 2018 Papiando Riba Internet. All rights reserved.
+ * @license        GNU General Public License version 3 or later; see LICENSE.md
+ */
 namespace Cubo;
 
 defined('__CUBO__') || new \Exception("No use starting a class without an include");
 
 class Controller {
+	protected $_attributes;
+	protected $_class;
 	protected $_data;
 	protected $_language;
 	protected $_model;
 	protected $_params;
-	protected $_attributes;
-	protected $_class;
-	protected $_authors = array(ROLE_AUTHOR,ROLE_EDITOR,ROLE_PUBLISHER,ROLE_MANAGER,ROLE_ADMINISTRATOR);
-	protected $_editors = array(ROLE_EDITOR,ROLE_PUBLISHER,ROLE_MANAGER,ROLE_ADMINISTRATOR);
-	protected $_publishers = array(ROLE_PUBLISHER,ROLE_MANAGER,ROLE_ADMINISTRATOR);
-	protected $_managers = array(ROLE_MANAGER,ROLE_ADMINISTRATOR);
+	
+	// Default access levels
+	protected static $_authors = array(ROLE_AUTHOR,ROLE_EDITOR,ROLE_PUBLISHER,ROLE_MANAGER,ROLE_ADMINISTRATOR);
+	protected static $_editors = array(ROLE_EDITOR,ROLE_PUBLISHER,ROLE_MANAGER,ROLE_ADMINISTRATOR);
+	protected static $_publishers = array(ROLE_PUBLISHER,ROLE_MANAGER,ROLE_ADMINISTRATOR);
+	protected static $_managers = array(ROLE_MANAGER,ROLE_ADMINISTRATOR);
 	
 	// Standard view: list
 	public function list() {
@@ -137,28 +148,34 @@ class Controller {
 		}
 	}
 	
-	public function canCreate() {
-		return in_array(Session::getRole(),$this->_authors);
+	// Returns true if current user is the author or has permitted role to create an item
+	public static function canCreate($author) {
+		return in_array(Session::getRole(),self::$_authors) || Session::getUser() == $author;
 	}
 	
-	public function cannotCreate() {
-		return !$this->canCreate();
+	// Returns true if current user is not the author and does not have permitted role to create an item
+	public static function cannotCreate($author) {
+		return !self::canCreate($author);
 	}
 	
-	public function canEdit() {
-		return in_array(Session::getRole(),$this->_editors);
+	// Returns true if current user is the author or has permitted role to edit an item
+	public static function canEdit($author) {
+		return in_array(Session::getRole(),self::$_editors) || Session::getUser() == $author;
 	}
 	
-	public function cannotEdit() {
-		return !$this->canEdit();
+	// Returns true if current user is not the author and does not have permitted role to edit an item
+	public static function cannotEdit($author) {
+		return !self::canEdit($author);
 	}
 	
-	public function canPublish() {
-		return in_array(Session::getRole(),$this->_publishers);
+	// Returns true if current user is the author or has permitted role to publish an item
+	public static function canPublish($author) {
+		return in_array(Session::getRole(),self::$_publishers) || Session::getUser() == $author;
 	}
 	
-	public function cannotPublish() {
-		return !$this->canPublish();
+	// Returns true if current user is not the author and does not have permitted role to publish an item
+	public static function cannotPublish($author) {
+		return !self::canPublish($author);
 	}
 	
 	public function __construct($data = array()) {

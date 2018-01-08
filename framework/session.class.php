@@ -35,10 +35,12 @@ class Session {
 		return isset($_SESSION['message']);
 	}
 	
-	public static function getUserId() {
-		return (isset($_SESSION['user']) ? $_SESSION['user']->id : 1);
+	// Returns the user id of the currently logged in user, or NOBODY if not logged in
+	public static function getUser() {
+		return (isset($_SESSION['user']) ? $_SESSION['user']->id : USER_NOBODY);
 	}
 	
+	// Returns the role id of the currently logged in user, or GUEST if not logged in
 	public static function getRole() {
 		return (isset($_SESSION['user']) ? $_SESSION['user']->role : ROLE_GUEST);
 	}
