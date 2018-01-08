@@ -74,12 +74,17 @@ class Model {
 		if(!is_null($id)) {
 			$query = "UPDATE `".strtolower(self::$_class)."` SET ".$set.(empty($binary) ? "" : (empty($set) ? "" : ",").$binary).",`modified`=NOW(),`editor`=".Session::getUserId().($published ? ",`published`=NOW(),`publisher`=".Session::getUserId() : "")." WHERE `id`={$id}";
 		} else {
-			$query = "INSERT INTO `".strtolower(self::$_class)."` SET ".$set.(empty($binary) ? "" : (empty($set) ? "" : ",").$binary).",`created`=NOW(),`creator`=".Session::getUserId().($published ? ",`published`=NOW(),`publisher`=".Session::getUserId() : "");
+			$query = "INSERT INTO `".strtolower(self::$_class)."` SET ".$set.(empty($binary) ? "" : (empty($set) ? "" : ",").$binary).",`created`=NOW(),`author`=".Session::getUserId().($published ? ",`published`=NOW(),`publisher`=".Session::getUserId() : "");
 		}
 		return Application::getDB()->execute($query,$list);
 	}
 	
 	public function delete($id) {
+		$query = "UPDATE `".strtolower(self::$_class)."` SET `status`='".STATUS_TRASHED."',`modified`=NOW(),`editor`=".Session::getUserId()." WHERE `id`={$id}";
+		return Application::getDB()->execute($query);
+	}
+	
+	public function trash($id) {
 		$query = "UPDATE `".strtolower(self::$_class)."` SET `status`='".STATUS_TRASHED."',`modified`=NOW(),`editor`=".Session::getUserId()." WHERE `id`={$id}";
 		return Application::getDB()->execute($query);
 	}
