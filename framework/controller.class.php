@@ -10,6 +10,10 @@ class Controller {
 	protected $_params;
 	protected $_attributes;
 	protected $_class;
+	protected $_authors = array(ROLE_AUTHOR,ROLE_EDITOR,ROLE_PUBLISHER,ROLE_MANAGER,ROLE_ADMINISTRATOR);
+	protected $_editors = array(ROLE_EDITOR,ROLE_PUBLISHER,ROLE_MANAGER,ROLE_ADMINISTRATOR);
+	protected $_publishers = array(ROLE_PUBLISHER,ROLE_MANAGER,ROLE_ADMINISTRATOR);
+	protected $_managers = array(ROLE_MANAGER,ROLE_ADMINISTRATOR);
 	
 	// Standard view: list
 	public function list() {
@@ -37,8 +41,8 @@ class Controller {
 		$this->_data = $this->_model->getList($columns,$filter,$order);
 	}
 	
-	// Admin view: add
-	public function admin_add() {
+	// Admin view: create
+	public function admin_create() {
 		// Save posted data
 		if($_POST) {
 			if(isset($_FILES)) {
@@ -47,12 +51,17 @@ class Controller {
 				}
 			}
 			if($this->_model->save($_POST)) {
-				Session::setMessage("Item was saved");
+				Session::setMessage("Item was created");
 			} else {
-				Session::setMessage("Failed to save item");
+				Session::setMessage("Failed to create item");
 			}
 			Router::redirect('/admin/'.strtolower($this->_class));
 		}
+	}
+	
+	// Admin view: add
+	public function admin_add() {
+		admin_create();
 	}
 	
 	// Admin view: edit
@@ -65,9 +74,9 @@ class Controller {
 				}
 			}
 			if($this->_model->save($_POST,$_POST['id'])) {
-				Session::setMessage("Item was saved");
+				Session::setMessage("Item was edited");
 			} else {
-				Session::setMessage("Failed to save item");
+				Session::setMessage("Failed to edit item");
 			}
 			Router::redirect('/admin/'.strtolower($this->_class));
 		}
@@ -80,19 +89,24 @@ class Controller {
 		}
 	}
 	
-	// Admin view: delete
-	public function admin_delete() {
+	// Admin view: trash
+	public function admin_trash() {
 		// Remove object
 		if(isset($_GET['id'])) {
 			if($this->_model->delete($_GET['id'])) {
-				Session::setMessage("Item was deleted");
+				Session::setMessage("Item was trashed");
 			} else {
-				Session::setMessage("Failed to delete item");
+				Session::setMessage("Failed to trash item");
 			}
 		} else {
 			Session::setMessage("This item does not exist");
 		}
 		Router::redirect('/admin/'.strtolower($this->_class));
+	}
+	
+	// Admin view: delete
+	public function admin_delete() {
+		admin_trash();
 	}
 	
 	public function getData() {
@@ -121,6 +135,30 @@ class Controller {
 		} else {
 			return $this->getDefault($param);
 		}
+	}
+	
+	public function canCreate() {
+		return in_array(Session::getRole(),$this->_authors);
+	}
+	
+	public function cannotCreate() {
+		return !$this->canCreate();
+	}
+	
+	public function canEdit() {
+		return in_array(Session::getRole(),$this->_editors);
+	}
+	
+	public function cannotEdit() {
+		return !$this->canEdit();
+	}
+	
+	public function canPublish() {
+		return in_array(Session::getRole(),$this->_publishers);
+	}
+	
+	public function cannotPublish() {
+		return !$this->canPublish();
 	}
 	
 	public function __construct($data = array()) {

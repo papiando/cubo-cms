@@ -5,6 +5,7 @@ defined('__CUBO__') || new \Exception("No use starting a class without an includ
 
 class Application {
 	protected static $_router;
+	protected static $_controller;
 	protected static $_defaults;
 	protected static $_data;
 	protected static $_params;
@@ -18,6 +19,10 @@ class Application {
 	
 	public static function getRouter() {
 		return self::$_router;
+	}
+	
+	public static function getController() {
+		return self::$_controller;
 	}
 	
 	public static function get($property,$default = null) {
@@ -75,16 +80,16 @@ class Application {
 		$class = __CUBO__.'\\'.ucfirst(self::$_router->getController()).'Controller';
 		$method = str_replace(DS,'_',strtolower(self::$_router->getMethod().self::$_router->getAction()));
 		// Call the controller's method
-		$controller = new $class();
+		self::$_controller = new $class();
 		if(method_exists($class,$method)) {
-			$controller->$method();
-			self::$_data = $controller->getData();
+			self::$_controller->$method();
+			self::$_data = self::$_controller->getData();
 			$view = new View();
-			if($controller == 'Image' && $method == 'view') {
-				$view->renderImage($controller->getData());
+			if(self::$_router->getController() == 'image' && $method == 'view') {
+				$view->renderImage(self::$_controller->getData());
 				return;
 			} else {
-				$html = $view->render($controller->getData());
+				$html = $view->render(self::$_controller->getData());
 			}
 		} else {
 			throw new \Exception("Class '{$class}' does not have the method '{$method}' defined");

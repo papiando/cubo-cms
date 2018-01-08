@@ -39,6 +39,10 @@ class Session {
 		return (isset($_SESSION['user']) ? $_SESSION['user']->id : 1);
 	}
 	
+	public static function getRole() {
+		return (isset($_SESSION['user']) ? $_SESSION['user']->role : ROLE_GUEST);
+	}
+	
 	public static function isRegistered() {
 		return self::exists('user');
 	}
