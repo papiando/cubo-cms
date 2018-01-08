@@ -6,19 +6,15 @@ defined('__CUBO__') || new \Exception("No use starting this code without an incl
 		<button class="btn btn-primary" id="submit" type="submit" disabled>Save</button>
 		<a href="/admin/<?php echo strtolower($this->_class); ?>" class="btn btn-warning" id="cancel">Cancel</a>
 	</div>
-	<div class="form-row">
+	<div class="grid-columns">
 		<input type="hidden" name="id" value="<?php echo $this->_data->id; ?>" />
-		<div class="col-8">
-			<div class="form-group">
-				<label for="title">Title</label>
-				<input type="text" name="-title" id="title" value="<?php echo $this->_data->title; ?>" class="form-control" placeholder="Title" required autofocus />
-			</div>
+		<div class="form-group grid-column-2">
+			<label for="title">Title</label>
+			<input type="text" name="-title" id="title" value="<?php echo $this->_data->title; ?>" class="form-control" placeholder="Title" required autofocus />
 		</div>
-		<div class="col-4">
-			<div class="form-group">
-				<label for="name">Alias</label>
-				<input type="text" name="-name" id="name" value="<?php echo $this->_data->name; ?>" class="form-control" placeholder="Alias" required />
-			</div>
+		<div class="form-group">
+			<label for="name">Alias</label>
+			<input type="text" name="-name" id="name" value="<?php echo $this->_data->name; ?>" class="form-control" placeholder="Alias" required />
 		</div>
 	</div>
 	<ul class="nav nav-tabs" id="tabs" role="tablist">
@@ -37,20 +33,15 @@ defined('__CUBO__') || new \Exception("No use starting this code without an incl
 	</ul>
 	<div class="tab-content">
 		<div class="tab-pane fade show active" id="content-pane" role="tabpanel" aria-labelledby="content-tab">
-			<div class="form-row">
-				<div class="col-8">
-					<div class="form-group">
-						<label for="html">Article Content</label>
-						<textarea name="-html" id="html" class="form-control text-html" placeholder="Contents" rows="7" required><?php echo $this->_data->html; ?></textarea>
-					</div>
+			<div class="grid-columns">
+				<div class="form-group grid-column-2">
+					<label for="html">Article Content</label>
+					<textarea name="-html" id="html" class="form-control text-html" placeholder="Contents" rows="12" required><?php echo $this->_data->html; ?></textarea>
 				</div>
-				<div class="col-4">
-					<div class="form-group">
-						<label for="status">Status</label>
-						<select name="-status" id="status" class="form-control form-control-sm">
-							<?php include($this->_sharedPath.'select-status.php'); ?>
-						</select>
-					</div>
+				<div>
+					<?php
+						$select = array('name'=>'status','title'=>'Status','prefix'=>'-','default'=>STATUS_TRASHED,'class'=>' form-control-sm','query'=>"SELECT `id`,`title` FROM `publishingstatus` ORDER BY `title`");
+						include($this->_sharedPath.'select.php'); ?>
 					<div class="form-group">
 						<label for="category">Category</label>
 						<select name="-category" id="category" class="form-control form-control-sm">

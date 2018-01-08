@@ -33,14 +33,9 @@
 	</header>
 	<main id="main">
 		<div class="container">
-			<div class="row">
-				<menu id="side-menu" class="col-3" role="nav">
-					<?php include('menu.php'); ?>
-				</menu>
-				<section id="main-content" class="col-9" role="main">
-					<cubo:content />
-				</section>
-			</div>
+			<section id="main-content" role="main">
+				<cubo:content />
+			</section>
 		</div>
 	</main>
 	<section id="message">
