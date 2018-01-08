@@ -5,6 +5,7 @@ defined('__CUBO__') || new \Exception("No use starting a class without an includ
 
 class Addon {
 	protected static $zip;
+	protected static $tempPath;
 	
 	public static function loadXML($xml) {
 		return $xml;
@@ -39,10 +40,10 @@ class Addon {
 		return false;
 	}
 	
-	public static function copyFile($source,$target,$root = '') {
+	public static function copyFile($source,$target,$base = '') {
 		$sourceData = self::$zip->statName($source);
 		if($sourceData === false)
-			$sourceData = self::$zip->statName($root.'/'.$source);
+			$sourceData = self::$zip->statName($base.$source);
 		if($sourceData === false) {
 			throw new \Exception("Could not locate file '{$source}'");
 		} else {
@@ -50,10 +51,10 @@ class Addon {
 		}
 	}
 	
-	public static function copyFolder($source,$target,$root = '') {
+	public static function copyFolder($source,$target,$base = '') {
 		$sourceData = self::$zip->statName($source.'/');
 		if($sourceData === false)
-			$sourceData = self::$zip->statName($root.'/'.$source.'/');
+			$sourceData = self::$zip->statName($base.$source.'/');
 		if($sourceData === false) {
 			throw new \Exception("Could not locate folder '{$source}'");
 		} else {
@@ -65,33 +66,55 @@ class Addon {
 		}
 	}
 	
+	public static function download($path) {
+		$success = false;
+		$sourceFile = fopen($path,'rb');
+		if($sourceFile) {
+			self::$tempPath = ini_get('upload_tmp_dir').DS.basename($path);
+			$targetFile = fopen(self::$tempPath,'wb');
+			if($targetFile) {
+				while(!feof($sourceFile))
+					fwrite($targetFile,fread($sourceFile,8192),8192);
+				$success = true;
+				fclose($targetFile);
+			}
+			fclose($sourceFile);
+		}
+		return $success ? self::$tempPath : $success;
+	}
+	
 	public static function install($path) {
-		if($descriptor = self::loadDescriptor($path)) {
-		} else {
+		$descriptor = self::loadDescriptor($path);
+		if(!$descriptor) {
 			throw new \Exception("Could not load descriptor");
 		}
-		$install = $descriptor->install;
-		$root = (isset($descriptor->name) ? (string)$descriptor->name : '');
-		$target = (isset($install->Attributes()['type']) ? $install->Attributes()['type'] : '');
+		$zipPath = (string)$descriptor->install;
+		// Download only if ZIP file is URL
+		if(filter_var($zipPath,FILTER_VALIDATE_URL))
+			$zipPath = self::download($zipPath);
 		self::$zip = new \ZipArchive();
-		if(self::$zip->open((string)$install) === false) {
-			throw new \Exception("Add-on archive could not be opened");
+		if(self::$zip->open($zipPath) === false) {
+			throw new \Exception("Could not load open ZIP archive");
 		}
 		$files = $descriptor->files;
+		$target = (isset($descriptor->install->Attributes()['type']) ? $descriptor->install->Attributes()['type'] : '');
+		$baseFolder = self::$zip->getNameIndex(0);
+		$baseFolder = current(explode('/',$baseFolder)).'/';
+		// Copy each file
 		foreach($files->file as $file) {
 			$fileName = (string)$file;
 			if(isset($file->Attributes()['target'])) {
-				self::copyFile($fileName,$file->Attributes()['target'],$root);
+				self::copyFile($fileName,$file->Attributes()['target'],$baseFolder);
 			} else {
-				self::copyFile($fileName,$target,$root);
+				self::copyFile($fileName,$target,$baseFolder);
 			}
 		}
 		foreach($files->folder as $folder) {
 			$folderName = (string)$folder;
 			if(isset($folder->Attributes()['target'])) {
-				self::copyFolder($folderName,$folder->Attributes()['target'],$root);
+				self::copyFolder($folderName,$folder->Attributes()['target'],$baseFolder);
 			} else {
-				self::copyFolder($folderName,$target,$root);
+				self::copyFolder($folderName,$target,$baseFolder);
 			}
 		}
 	}
