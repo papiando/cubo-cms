@@ -27,6 +27,7 @@ define('LINKTYPE_COLLECTION',6);
 define('LINKTYPE_CONTACT',3);
 define('LINKTYPE_GROUP',4);
 define('LINKTYPE_IMAGE',5);
+define('LINKTYPE_NONE',0);
 define('LINKTYPE_SEPARATOR',9);
 define('LINKTYPE_URL',8);
 define('LINKTYPE_USER',7);

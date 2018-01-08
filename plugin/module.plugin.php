@@ -7,7 +7,7 @@ namespace Cubo;
 
 defined('__CUBO__') || new \Exception("No use starting a class without an include");
 
-class ModulePlugin extends Plugin {
+class ModulePlugin extends Addon {
 	public static function getPosition($position) {
 		$position = Application::getDB()->loadItem("SELECT `name`,`title`,`module`,`params` FROM `position` WHERE `position`=:position AND `enabled` LIMIT 1",array(':position'=>$position));
 		if($position) {

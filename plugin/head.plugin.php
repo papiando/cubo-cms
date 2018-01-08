@@ -7,7 +7,7 @@ namespace Cubo;
 
 defined('__CUBO__') || new \Exception("No use starting a class without an include");
 
-class HeadPlugin extends Plugin {
+class HeadPlugin extends Addon {
 	public static function getMetadata() {
 		$html = '<title itemprop="name headline">'.Application::get('title',Application::getParam('site_name')).'</title>'.PHP_EOL."\t";
 		$html .= '<base itemprop="url" href="'.Application::getParam('base_url').'" />'.PHP_EOL."\t";

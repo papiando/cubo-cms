@@ -84,6 +84,17 @@ defined('__CUBO__') || new \Exception("No use starting this code without an incl
 							<?php include($this->_sharedPath.'select-linktype.php'); ?>
 						</select>
 					</div>
+					<div id="linktype-1" class="form-group d-none">
+						<label for="article">Article</label>
+						<select name="@article" id="article" class="form-control form-control-sm">
+						<?php
+							$id = 'article';
+							$label = 'Article';
+							$prefix = '-';
+							$value = $this->_data->image;
+							include($this->_sharedPath.'select-article.php'); ?>
+						</select>
+					</div>
 				</div>
 				<div class="col-6">
 					<div class="form-group">

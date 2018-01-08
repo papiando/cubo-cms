@@ -1,7 +1,8 @@
 <?php
 defined('__CUBO__') || new \Exception("No use starting this code without an include");
-$current = (isset($this->_attributes->linktype) ? $this->_attributes->linktype : LINKTYPE_ARTICLE);
+$current = (isset($this->_attributes->linktype) ? $this->_attributes->linktype : LINKTYPE_NONE);
 $items = array(
+	array('id'=>LINKTYPE_NONE,'title'=>'Select link type'),
 	array('id'=>LINKTYPE_ARTICLE,'title'=>'Single article'),
 	array('id'=>LINKTYPE_CATEGORY,'title'=>'List of articles'),
 	array('id'=>LINKTYPE_CONTACT,'title'=>'Single contact'),
