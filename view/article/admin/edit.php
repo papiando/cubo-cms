@@ -39,9 +39,7 @@ defined('__CUBO__') || new \Exception("No use starting this code without an incl
 					<textarea name="-html" id="html" class="form-control text-html" placeholder="Contents" rows="12" required><?php echo $this->_data->html; ?></textarea>
 				</div>
 				<div>
-					<?php
-						$select = array('name'=>'status','title'=>'Status','prefix'=>'-','default'=>STATUS_TRASHED,'class'=>' form-control-sm','query'=>"SELECT `id`,`title` FROM `publishingstatus` ORDER BY `title`");
-						include($this->_sharedPath.'select.php'); ?>
+					<?php echo Cubo\Form::select(array('name'=>'status','title'=>'Status','prefix'=>'-','value'=>$this->_data->status,'class'=>' form-control-sm','query'=>"SELECT `id`,`title` FROM `publishingstatus` ORDER BY `title`")); ?>
 					<div class="form-group">
 						<label for="category">Category</label>
 						<select name="-category" id="category" class="form-control form-control-sm">
