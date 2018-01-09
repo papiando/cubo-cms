@@ -1,23 +1,22 @@
 <?php
+namespace Cubo;
+
 defined('__CUBO__') || new \Exception("No use starting this code without an include");
-?><h1>Add Article</h1>
+
+?><h1>Create Article</h1>
 <form class="form-add" action="" method="post">
 	<div class="form-group">
 		<button class="btn btn-primary" id="submit" type="submit" disabled>Save</button>
 		<a href="/admin/<?php echo strtolower($this->_class); ?>" class="btn btn-warning" id="cancel">Cancel</a>
 	</div>
-	<div class="form-row">
-		<div class="col-8">
-			<div class="form-group">
-				<label for="title">Title</label>
-				<input type="text" name="title" id="title" class="form-control" placeholder="Title" required autofocus />
-			</div>
+	<div class="grid-columns">
+		<div class="form-group grid-column-2">
+			<label for="title">Title</label>
+			<input type="text" name="title" id="title" class="form-control" placeholder="Title" required autofocus />
 		</div>
-		<div class="col-4">
-			<div class="form-group">
-				<label for="name">Alias</label>
-				<input type="text" name="name" id="name" class="form-control" placeholder="Auto-generated from title" required />
-			</div>
+		<div class="form-group">
+			<label for="name">Alias</label>
+			<input type="text" name="name" id="name" class="form-control" placeholder="Alias" required />
 		</div>
 	</div>
 	<ul class="nav nav-tabs" id="tabs" role="tablist">
@@ -36,38 +35,43 @@ defined('__CUBO__') || new \Exception("No use starting this code without an incl
 	</ul>
 	<div class="tab-content">
 		<div class="tab-pane fade show active" id="content-pane" role="tabpanel" aria-labelledby="content-tab">
-			<div class="form-row">
-				<div class="col-8">
-					<div class="form-group">
-						<label for="html">Article Content</label>
-						<textarea name="html" id="html" class="form-control" placeholder="Contents" rows="7" required></textarea>
-					</div>
+			<div class="grid-columns">
+				<div class="form-group grid-column-2">
+					<label for="html">Article Content</label>
+					<textarea name="html" id="html" class="form-control text-html" placeholder="Contents" rows="12" required></textarea>
 				</div>
-				<div class="col-4">
-					<div class="form-group">
-						<label for="status">Status</label>
-						<select name="status" id="status" class="form-control form-control-sm">
-							<?php include($this->_sharedPath.'select-status.php'); ?>
-						</select>
-					</div>
-					<div class="form-group">
-						<label for="category">Category</label>
-						<select name="category" id="category" class="form-control form-control-sm">
-							<?php include($this->_sharedPath.'select-category.php'); ?>
-						</select>
-					</div>
-					<div class="form-group">
-						<label for="language">Language</label>
-						<select name="language" id="language" class="form-control form-control-sm">
-							<?php include($this->_sharedPath.'select-language.php'); ?>
-						</select>
-					</div>
+				<div>
+					<?php echo Form::select(array(
+						'name'=>'status',
+						'title'=>'Status',
+						'default'=>(ArticleController::canPublish() ? STATUS_PUBLISHED : STATUS_UNPUBLISHED),
+						'class'=>' form-control-sm',
+						'query'=>Form::query('publishingstatus',Session::requiresAccess()),
+						'readonly'=>ArticleController::cannotPublish())); ?>
+					<?php echo Form::select(array(
+						'name'=>'category',
+						'title'=>'Category',
+						'default'=>CATEGORY_UNDEFINED,
+						'class'=>' form-control-sm',
+						'query'=>Form::query('articlecategory',Session::requiresAccess()))); ?>
+					<?php echo Form::select(array(
+						'name'=>'language',
+						'title'=>'Language',
+						'default'=>LANGUAGE_UNDEFINED,
+						'class'=>' form-control-sm',
+						'query'=>Form::query('language',Session::requiresAccess()))); ?>
+					<?php echo Form::select(array(
+						'name'=>'access',
+						'title'=>'Access',
+						'default'=>ACCESS_PUBLIC,
+						'class'=>' form-control-sm',
+						'query'=>Form::query('accesslevel',Session::requiresAccess()))); ?>
 				</div>
 			</div>
 		</div>
 		<div class="tab-pane fade" id="image-pane" role="tabpanel" aria-labelledby="image-tab">
-			<div class="form-row">
-				<div class="col-6">
+			<div class="grid-columns">
+				<div>
 					<div class="form-group">
 						<label for="description">Summary</label>
 						<textarea name="description" id="description" class="form-control" placeholder="Summary" rows="3"></textarea>
@@ -81,7 +85,7 @@ defined('__CUBO__') || new \Exception("No use starting this code without an incl
 							include($this->_sharedPath.'select-image.php'); ?>
 					</div>
 				</div>
-				<div class="col-6">
+				<div>
 					<div class="form-group">
 						<label for="tags">Tags</label>
 						<textarea name="tags" id="tags" class="form-control" placeholder="Tags" rows="3"></textarea>
@@ -96,9 +100,30 @@ defined('__CUBO__') || new \Exception("No use starting this code without an incl
 			</div>
 		</div>
 		<div class="tab-pane" id="publishing-pane" role="tabpanel" aria-labelledby="publishing-tab">
-			<div class="form-row">
-				<div class="col-6">
-					<div class="form-group">
+			<div class="grid-columns">
+				<div>
+					<?php echo Form::select(array(
+						'name'=>'author',
+						'title'=>'Author',
+						'default'=>Session::getUser(),
+						'class'=>' form-control-sm',
+						'query'=>Form::query('user',Session::requiresAccess()),
+						'readonly'=>true)); ?>
+					<?php echo Form::select(array(
+						'name'=>'editor',
+						'title'=>'Editor',
+						'default'=>USER_NOBODY,
+						'class'=>' form-control-sm',
+						'query'=>Form::query('user',Session::requiresAccess()),
+						'readonly'=>true)); ?>
+					<?php echo Form::select(array(
+						'name'=>'publisher',
+						'title'=>'Publisher',
+						'default'=>USER_NOBODY,
+						'class'=>' form-control-sm',
+						'query'=>Form::query('user',Session::requiresAccess()),
+						'readonly'=>true)); ?>
+
 						<label for="author">Author</label>
 						<select name="author" id="author" class="form-control form-control-sm">
 							<?php $user = 'author'; ?>
@@ -127,17 +152,7 @@ defined('__CUBO__') || new \Exception("No use starting this code without an incl
 						</select>
 					</div>
 				</div>
-				<div class="col-6">
-					<div class="form-group">
-						<label for="access">Access</label>
-						<select name="access" id="access" class="form-control form-control-sm">
-							<?php include($this->_sharedPath.'select-access.php'); ?>
-						</select>
-					</div>
-					<div class="form-group">
-						<label for="published">Published Date</label>
-						<input type="datetime-local" name="-published" id="published" class="form-control form-control-sm" readonly />
-					</div>
+				<div>
 					<div class="form-group">
 						<label for="created">Created Date</label>
 						<input type="datetime-local" name="-created" id="created" class="form-control form-control-sm" readonly />
@@ -146,12 +161,16 @@ defined('__CUBO__') || new \Exception("No use starting this code without an incl
 						<label for="modified">Modified Date</label>
 						<input type="datetime-local" name="-modified" id="modified" class="form-control form-control-sm" readonly />
 					</div>
+					<div class="form-group">
+						<label for="published">Published Date</label>
+						<input type="datetime-local" name="-published" id="published" class="form-control form-control-sm" readonly />
+					</div>
 				</div>
 			</div>
 		</div>
 		<div class="tab-pane" id="options-pane" role="tabpanel" aria-labelledby="options-tab">
-			<div class="form-row">
-				<div class="col-6">
+			<div class="grid-columns">
+				<div>
 					<div class="form-group">
 						<label for="show_title">Show title</label>
 						<select name="@show_title" id="show_title" class="form-control form-control-sm">
@@ -186,7 +205,7 @@ defined('__CUBO__') || new \Exception("No use starting this code without an incl
 						</select>
 					</div>
 				</div>
-				<div class="col-6">
+				<div>
 					<div class="form-group">
 						<label for="show_image">Show image</label>
 						<select name="@show_image" id="show_image" class="form-control form-control-sm">

@@ -6,8 +6,8 @@ defined('__CUBO__') || new \Exception("No use starting this code without an incl
 ?><h1>Edit Article</h1>
 <form class="form-edit" action="" method="post">
 	<div class="form-group">
-		<button class="btn btn-primary" id="submit" type="submit" disabled>Save</button>
-		<a href="/admin/<?php echo strtolower($this->_class); ?>" class="btn btn-warning" id="cancel">Cancel</a>
+		<button class="btn btn-success" id="submit" type="submit" disabled><i class="fa fa-check"></i> Save</button>
+		<a href="/admin/<?php echo strtolower($this->_class); ?>" class="btn btn-danger" id="cancel"><i class="fa fa-times"></i> Cancel</a>
 	</div>
 	<div class="grid-columns">
 		<input type="hidden" name="id" value="<?php echo $this->_data->id; ?>" />
@@ -49,7 +49,7 @@ defined('__CUBO__') || new \Exception("No use starting this code without an incl
 						'value'=>$this->_data->status,
 						'class'=>' form-control-sm',
 						'query'=>Form::query('publishingstatus',Session::requiresAccess()),
-						'readonly'=>ArticleController::cannotPublish($this->_data->author))); ?>
+						'readonly'=>ArticleController::cannotPublish())); ?>
 					<?php echo Form::select(array(
 						'name'=>'category',
 						'title'=>'Category',
@@ -78,8 +78,8 @@ defined('__CUBO__') || new \Exception("No use starting this code without an incl
 			</div>
 		</div>
 		<div class="tab-pane fade" id="image-pane" role="tabpanel" aria-labelledby="image-tab">
-			<div class="form-row">
-				<div class="col-6">
+			<div class="grid-columns">
+				<div>
 					<div class="form-group">
 						<label for="description">Summary</label>
 						<textarea name="-description" id="description" class="form-control" placeholder="Summary" rows="3"><?php echo $this->_data->description; ?></textarea>
@@ -93,7 +93,7 @@ defined('__CUBO__') || new \Exception("No use starting this code without an incl
 							include($this->_sharedPath.'select-image.php'); ?>
 					</div>
 				</div>
-				<div class="col-6">
+				<div>
 					<div class="form-group">
 						<label for="tags">Tags</label>
 						<textarea name="-tags" id="tags" class="form-control" placeholder="Tags" rows="3"><?php echo $this->_data->tags; ?></textarea>
@@ -108,48 +108,34 @@ defined('__CUBO__') || new \Exception("No use starting this code without an incl
 			</div>
 		</div>
 		<div class="tab-pane" id="publishing-pane" role="tabpanel" aria-labelledby="publishing-tab">
-			<div class="form-row">
-				<div class="col-6">
-					<div class="form-group">
-						<label for="author">Author</label>
-						<select name="-author" id="author" class="form-control form-control-sm">
-							<?php $user = 'author'; ?>
-							<?php include($this->_sharedPath.'select-user.php'); ?>
-						</select>
-					</div>
-					<div class="form-group">
-						<label for="publisher">Publisher</label>
-						<select name="-publisher" id="publisher" class="form-control form-control-sm" readonly>
-							<?php $user = 'publisher'; ?>
-							<?php include($this->_sharedPath.'select-user.php'); ?>
-						</select>
-					</div>
-					<div class="form-group">
-						<label for="creator">Creator</label>
-						<select name="-creator" id="creator" class="form-control form-control-sm" readonly>
-							<?php $user = 'creator'; ?>
-							<?php include($this->_sharedPath.'select-user.php'); ?>
-						</select>
-					</div>
-					<div class="form-group">
-						<label for="editor">Editor</label>
-						<select name="-editor" id="editor" class="form-control form-control-sm" readonly>
-							<?php $user = 'editor'; ?>
-							<?php include($this->_sharedPath.'select-user.php'); ?>
-						</select>
-					</div>
+			<div class="grid-columns">
+				<div>
+					<?php echo Form::select(array(
+						'name'=>'author',
+						'title'=>'Author',
+						'prefix'=>'-',
+						'value'=>$this->_data->author,
+						'class'=>' form-control-sm',
+						'query'=>Form::query('user',Session::requiresAccess()),
+						'readonly'=>ArticleController::cannotEdit($this->_data->author))); ?>
+					<?php echo Form::select(array(
+						'name'=>'editor',
+						'title'=>'Editor',
+						'prefix'=>'-',
+						'value'=>Session::getUser(),
+						'class'=>' form-control-sm',
+						'query'=>Form::query('user',Session::requiresAccess()),
+						'readonly'=>true)); ?>
+					<?php echo Form::select(array(
+						'name'=>'publisher',
+						'title'=>'Publisher',
+						'prefix'=>'-',
+						'value'=>$this->_data->publisher,
+						'class'=>' form-control-sm',
+						'query'=>Form::query('user',Session::requiresAccess()),
+						'readonly'=>true)); ?>
 				</div>
-				<div class="col-6">
-					<div class="form-group">
-						<label for="access">Access</label>
-						<select name="-access" id="access" class="form-control form-control-sm">
-							<?php include($this->_sharedPath.'select-access.php'); ?>
-						</select>
-					</div>
-					<div class="form-group">
-						<label for="published">Published Date</label>
-						<input type="datetime-local" name="-published" id="published" value="<?php echo str_replace(' ','T',$this->_data->published); ?>" class="form-control form-control-sm" readonly />
-					</div>
+				<div>
 					<div class="form-group">
 						<label for="created">Created Date</label>
 						<input type="datetime-local" name="-created" id="created" value="<?php echo str_replace(' ','T',$this->_data->created); ?>" class="form-control form-control-sm" readonly />
@@ -158,12 +144,16 @@ defined('__CUBO__') || new \Exception("No use starting this code without an incl
 						<label for="modified">Modified Date</label>
 						<input type="datetime-local" name="-modified" id="modified" value="<?php echo str_replace(' ','T',$this->_data->modified); ?>" class="form-control form-control-sm" readonly />
 					</div>
+					<div class="form-group">
+						<label for="published">Published Date</label>
+						<input type="datetime-local" name="-published" id="published" value="<?php echo str_replace(' ','T',$this->_data->published); ?>" class="form-control form-control-sm" readonly />
+					</div>
 				</div>
 			</div>
 		</div>
 		<div class="tab-pane" id="options-pane" role="tabpanel" aria-labelledby="options-tab">
-			<div class="form-row">
-				<div class="col-6">
+			<div class="grid-columns">
+				<div>
 					<div class="form-group">
 						<label for="show_title">Show title</label>
 						<select name="@show_title" id="show_title" class="form-control form-control-sm">
@@ -198,7 +188,7 @@ defined('__CUBO__') || new \Exception("No use starting this code without an incl
 						</select>
 					</div>
 				</div>
-				<div class="col-6">
+				<div>
 					<div class="form-group">
 						<label for="show_image">Show image</label>
 						<select name="@show_image" id="show_image" class="form-control form-control-sm">

@@ -22,7 +22,7 @@ Configuration::setDefault('admin-list-action','index');
 Configuration::setDefault('admin-controller','article');
 Configuration::setDefault('admin-language','en');
 Configuration::setDefault('admin-route','index');
-Configuration::setDefault('admin-template','admin-cube');
+Configuration::setDefault('admin-template','admin-cubo');
 
 Configuration::set('site_name','This site');
 Configuration::set('admin_route','admin');

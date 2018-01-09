@@ -159,23 +159,33 @@ class Controller {
 	}
 	
 	// Returns true if current user is the author or has permitted role to edit an item
-	public static function canEdit($author) {
+	public static function canEdit($author = 0) {
 		return in_array(Session::getRole(),self::$_editors) || Session::getUser() == $author;
 	}
 	
 	// Returns true if current user is not the author and does not have permitted role to edit an item
-	public static function cannotEdit($author) {
+	public static function cannotEdit($author = 0) {
 		return !self::canEdit($author);
 	}
 	
 	// Returns true if current user is the author or has permitted role to publish an item
-	public static function canPublish($author) {
+	public static function canPublish() {
 		return in_array(Session::getRole(),self::$_publishers) || Session::getUser() == $author;
 	}
 	
 	// Returns true if current user is not the author and does not have permitted role to publish an item
-	public static function cannotPublish($author) {
-		return !self::canPublish($author);
+	public static function cannotPublish() {
+		return !self::canPublish();
+	}
+	
+	// Returns true if current user is the author or has permitted role to publish an item
+	public static function canManage() {
+		return in_array(Session::getRole(),self::$_publishers) || Session::getUser() == $author;
+	}
+	
+	// Returns true if current user is not the author and does not have permitted role to publish an item
+	public static function cannotManage() {
+		return !self::canManage();
 	}
 	
 	public function __construct($data = array()) {
