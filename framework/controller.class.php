@@ -4,6 +4,7 @@
  * @type           Framework
  * @class          Controller
  * @version        1.0.0
+ * @date           2018-01-09
  * @author         Dan Barto
  * @copyright      Copyright (C) 2017 - 2018 Papiando Riba Internet. All rights reserved.
  * @license        GNU General Public License version 3 or later; see LICENSE.md

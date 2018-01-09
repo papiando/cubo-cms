@@ -72,7 +72,7 @@ class Application {
 		// Retrieve layout
 		$route = self::$_router->getRoute();
 		if($route == Configuration::get('admin_route') && !Session::exists('user')) {
-			Session::setMessage("This page requires login access");
+			Session::setMessage(array('alert'=>'info','icon'=>'exclamation','text'=>"This page requires login access"));
 			Session::set('login_redirect',$uri);
 			Router::redirect('/user?action=login');
 		}
@@ -98,7 +98,7 @@ class Application {
 		$template = new Template();
 		$html = $template->render($html);
 		// Run plugins
-		$plugins = self::$_database->loadItems("SELECT * FROM `plugin` WHERE `enabled`");
+		$plugins = self::$_database->loadItems("SELECT * FROM `plugin` WHERE `status`='".STATUS_PUBLISHED."'");
 		foreach($plugins as $plugin) {
 			$class = __CUBO__.'\\'.ucfirst($plugin['name']).'Plugin';
 			$html = $class::run($html);

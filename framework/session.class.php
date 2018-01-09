@@ -1,4 +1,14 @@
 <?php
+/**
+ * @application    Cubo CMS
+ * @type           Framework
+ * @class          Session
+ * @version        1.0.0
+ * @date           2018-01-09
+ * @author         Dan Barto
+ * @copyright      Copyright (C) 2017 - 2018 Papiando Riba Internet. All rights reserved.
+ * @license        GNU General Public License version 3 or later; see LICENSE.md
+ */
 namespace Cubo;
 
 defined('__CUBO__') || new \Exception("No use starting a class without an include");
@@ -9,7 +19,7 @@ class Session {
 	}
 	
 	public static function get($property) {
-		return isset($_SESSION[$property]) ? $_SESSION[$property] : null;
+		return $_SESSION[$property] ?? null;
 	}
 	
 	public static function exists($property) {
@@ -21,18 +31,19 @@ class Session {
 			unset($_SESSION[$property]);
 	}
 	
-	public static function getMessage() {
-		$message = $_SESSION['message'];
-		unset($_SESSION['message']);
-		return $message;
+	public static function getMessages() {
+		$messages = $_SESSION['messages'] ?? [];
+		unset($_SESSION['messages']);
+		return $messages;
 	}
 	
 	public static function setMessage($message) {
-		$_SESSION['message'] = $message;
+		if(!isset($_SESSION['messages'])) $_SESSION['messages'] = [];
+		$_SESSION['messages'][] = $message;
 	}
 	
 	public static function hasMessage() {
-		return isset($_SESSION['message']);
+		return isset($_SESSION['messages']) && count($_SESSION['messages']);
 	}
 	
 	// Returns the user id of the currently logged in user, or NOBODY if not logged in

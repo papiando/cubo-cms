@@ -9,7 +9,7 @@ class ContactController extends Controller {
 		parent::view();
 		if($_POST) {
 			if($this->_model->saveMessage($_POST)) {
-				Session::setMessage("Your message was received successfully");
+				Session::setMessage(array('alert'=>'success','icon'=>'check','text'=>"Your message was received successfully"));
 			}
 		}
 	}

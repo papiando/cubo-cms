@@ -11,25 +11,26 @@ class UserController extends Controller {
 			if($user && $user->enabled) {
 				if(hash_equals($user->password,crypt($_POST['password'],$user->password))) {
 					if($user->blocked) {
-						Session::setMessage("User is blocked");
+						Session::setMessage(array('alert'=>'warning','icon'=>'exclamation','text'=>"User is blocked"));
 					} elseif($user->verified) {
 						Session::set('user',$user);
-						Session::setMessage("User has logged in successfully");
+						Session::setMessage(array('alert'=>'success','icon'=>'check','text'=>"User has logged in successfully"));
 						$redirect = Session::get('login_redirect');
 						Router::redirect(Session::get('login_redirect'));
 					} else {
-						Session::setMessage("User is not yet confirmed");
+						Session::setMessage(array('alert'=>'warning','icon'=>'exclamation','text'=>"User is not yet confirmed"));
 					}
 				} else {
-					Session::setMessage("Invalid login name or password");
+					Session::setMessage(array('alert'=>'danger','icon'=>'ban','text'=>"Invalid login name or password"));
 				}
 			} else {
-				Session::setMessage("Invalid login name or password");
+				Session::setMessage(array('alert'=>'danger','icon'=>'ban','text'=>"Invalid login name or password"));
 			}	
 		}
 	}
 	
 	public function logout() {
+		Session::setMessage(array('alert'=>'info','icon'=>'exclamation','text'=>"User has logged out"));
 		Session::delete('user');
 		Router::redirect('/');
 	}
