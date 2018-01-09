@@ -105,7 +105,7 @@ class Controller {
 	public function admin_trash() {
 		// Remove object
 		if(isset($_GET['id'])) {
-			if($this->_model->delete($_GET['id'])) {
+			if($this->_model->trash($_GET['id'])) {
 				Session::setMessage("Item was trashed");
 			} else {
 				Session::setMessage("Failed to trash item");
