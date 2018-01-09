@@ -150,7 +150,7 @@ class Controller {
 	
 	// Returns true if current user has permitted role to create an item
 	public static function canCreate() {
-		return in_array(Session::getRole(),self::$_authors) || Session::getUser() == $author;
+		return in_array(Session::getRole(),self::$_authors);
 	}
 	
 	// Returns true if current user does not have permitted role to create an item
@@ -170,7 +170,7 @@ class Controller {
 	
 	// Returns true if current user is the author or has permitted role to publish an item
 	public static function canPublish() {
-		return in_array(Session::getRole(),self::$_publishers) || Session::getUser() == $author;
+		return in_array(Session::getRole(),self::$_publishers);
 	}
 	
 	// Returns true if current user is not the author and does not have permitted role to publish an item
@@ -180,7 +180,7 @@ class Controller {
 	
 	// Returns true if current user is the author or has permitted role to publish an item
 	public static function canManage() {
-		return in_array(Session::getRole(),self::$_publishers) || Session::getUser() == $author;
+		return in_array(Session::getRole(),self::$_publishers);
 	}
 	
 	// Returns true if current user is not the author and does not have permitted role to publish an item
