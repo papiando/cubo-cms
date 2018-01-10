@@ -15,7 +15,7 @@ if($image) {
 ?><label for="<?php echo $id; ?>"><?php echo $label; ?></label>
 <div class="input-group">
 	<input name="<?php echo $prefix.$id; ?>" id="<?php echo $id; ?>" type="hidden" value="<?php echo $value; ?>" />
-	<input name="-<?php echo $id; ?>-placeholder" type="text" class="form-control" value="<?php echo $filename; ?>" readonly />
+	<input name="-<?php echo $id; ?>-placeholder" type="text" class="form-control" value="<?php echo $filename; ?>" readonly tabindex="-1" />
 	<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#select-image"><i class="fa fa-search"></i></button>
 </div>
 <div class="modal fade" id="select-image">

@@ -1,4 +1,14 @@
 <?php
+/**
+ * @application    Cubo CMS
+ * @type           View
+ * @class          ArticleView
+ * @version        1.0.0
+ * @date           2018-01-09
+ * @author         Dan Barto
+ * @copyright      Copyright (C) 2017 - 2018 Papiando Riba Internet. All rights reserved.
+ * @license        GNU General Public License version 3 or later; see LICENSE.md
+ */
 namespace Cubo;
 
 defined('__CUBO__') || new \Exception("No use starting this code without an include");
@@ -30,7 +40,7 @@ defined('__CUBO__') || new \Exception("No use starting this code without an incl
 			<a class="nav-link" id="publishing-tab" data-toggle="tab" href="#publishing-pane" role="tab" aria-controls="publishing-pane" aria-selected="false">Publishing</a>
 		</li>
 		<li class="nav-item">
-			<a class="nav-link" id="options-tab" data-toggle="tab" href="#options-pane" role="tab" aria-controls="options-pane" aria-selected="false">Options</a>
+			<a class="nav-link" id="options-tab" data-toggle="tab" href="#options-pane" role="tab" aria-controls="options-pane" aria-selected="false">View Options</a>
 		</li>
 	</ul>
 	<div class="tab-content">
@@ -105,6 +115,7 @@ defined('__CUBO__') || new \Exception("No use starting this code without an incl
 					<?php echo Form::select(array(
 						'name'=>'author',
 						'title'=>'Author',
+						'prefix'=>'-',
 						'default'=>Session::getUser(),
 						'class'=>' form-control-sm',
 						'query'=>Form::query('user',Session::requiresAccess()),
@@ -112,6 +123,7 @@ defined('__CUBO__') || new \Exception("No use starting this code without an incl
 					<?php echo Form::select(array(
 						'name'=>'editor',
 						'title'=>'Editor',
+						'prefix'=>'-',
 						'default'=>USER_NOBODY,
 						'class'=>' form-control-sm',
 						'query'=>Form::query('user',Session::requiresAccess()),
@@ -119,38 +131,11 @@ defined('__CUBO__') || new \Exception("No use starting this code without an incl
 					<?php echo Form::select(array(
 						'name'=>'publisher',
 						'title'=>'Publisher',
+						'prefix'=>'-',
 						'default'=>USER_NOBODY,
 						'class'=>' form-control-sm',
 						'query'=>Form::query('user',Session::requiresAccess()),
 						'readonly'=>true)); ?>
-
-						<label for="author">Author</label>
-						<select name="author" id="author" class="form-control form-control-sm">
-							<?php $user = 'author'; ?>
-							<?php include($this->_sharedPath.'select-user.php'); ?>
-						</select>
-					</div>
-					<div class="form-group">
-						<label for="publisher">Publisher</label>
-						<select name="-publisher" id="publisher" class="form-control form-control-sm" readonly>
-							<?php $user = 'publisher'; ?>
-							<?php include($this->_sharedPath.'select-user.php'); ?>
-						</select>
-					</div>
-					<div class="form-group">
-						<label for="creator">Creator</label>
-						<select name="-creator" id="creator" class="form-control form-control-sm" readonly>
-							<?php $user = 'creator'; ?>
-							<?php include($this->_sharedPath.'select-user.php'); ?>
-						</select>
-					</div>
-					<div class="form-group">
-						<label for="editor">Editor</label>
-						<select name="-editor" id="editor" class="form-control form-control-sm" readonly>
-							<?php $user = 'editor'; ?>
-							<?php include($this->_sharedPath.'select-user.php'); ?>
-						</select>
-					</div>
 				</div>
 				<div>
 					<div class="form-group">
@@ -171,73 +156,111 @@ defined('__CUBO__') || new \Exception("No use starting this code without an incl
 		<div class="tab-pane" id="options-pane" role="tabpanel" aria-labelledby="options-tab">
 			<div class="grid-columns">
 				<div>
-					<div class="form-group">
-						<label for="show_title">Show title</label>
-						<select name="@show_title" id="show_title" class="form-control form-control-sm">
-							<?php $setting = 'show_title'; ?>
-							<?php include($this->_sharedPath.'select-showhide.php'); ?>
-						</select>
-					</div>
-					<div class="form-group">
-						<label for="show_author">Show author</label>
-						<select name="@show_author" id="show_author" class="form-control form-control-sm">
-							<?php include($this->_sharedPath.'select-showuser.php'); ?>
-						</select>
-					</div>
-					<div class="form-group">
-						<label for="show_category">Show category</label>
-						<select name="@show_category" id="show_category" class="form-control form-control-sm">
-							<?php $setting = 'show_category'; ?>
-							<?php include($this->_sharedPath.'select-showhide.php'); ?>
-						</select>
-					</div>
-					<div class="form-group">
-						<label for="show_tags">Show tags</label>
-						<select name="@show_tags" id="show_tags" class="form-control form-control-sm">
-							<?php $setting = 'show_tags'; ?>
-							<?php include($this->_sharedPath.'select-showhide.php'); ?>
-						</select>
-					</div>
-					<div class="form-group">
-						<label for="show_date">Show date</label>
-						<select name="@show_date" id="show_date" class="form-control form-control-sm">
-							<?php include($this->_sharedPath.'select-showdate.php'); ?>
-						</select>
-					</div>
+					<?php $options = array(
+						array('id'=>SETTING_GLOBAL,'title'=>'Global setting'),
+						array('id'=>SETTING_SHOW,'title'=>'Show'),
+						array('id'=>SETTING_HIDE,'title'=>'Hide')); ?>
+					<?php echo Form::select(array(
+						'name'=>'show_title',
+						'title'=>'Show title',
+						'prefix'=>'@',
+						'default'=>SETTING_GLOBAL,
+						'class'=>' form-control-sm',
+						'list'=>$options)); ?>
+					<?php $options_author = array(
+						array('id'=>SETTING_GLOBAL,'title'=>'Global setting'),
+						array('id'=>SETTING_AUTHOR,'title'=>'Show author'),
+						array('id'=>SETTING_EDITOR,'title'=>'Show editor'),
+						array('id'=>SETTING_PUBLISHER,'title'=>'Show publisher'),
+						array('id'=>SETTING_HIDE,'title'=>'Hide')); ?>
+					<?php echo Form::select(array(
+						'name'=>'show_author',
+						'title'=>'Show author',
+						'prefix'=>'@',
+						'default'=>SETTING_GLOBAL,
+						'class'=>' form-control-sm',
+						'list'=>$options_author)); ?>
+					<?php echo Form::select(array(
+						'name'=>'show_category',
+						'title'=>'Show category',
+						'prefix'=>'@',
+						'default'=>SETTING_GLOBAL,
+						'class'=>' form-control-sm',
+						'list'=>$options)); ?>
+					<?php echo Form::select(array(
+						'name'=>'show_tags',
+						'title'=>'Show tags',
+						'prefix'=>'@',
+						'default'=>SETTING_GLOBAL,
+						'class'=>' form-control-sm',
+						'list'=>$options)); ?>
+					<?php $options_date = array(
+						array('id'=>SETTING_GLOBAL,'title'=>'Global setting'),
+						array('id'=>SETTING_CREATEDDATE,'title'=>'Show created date'),
+						array('id'=>SETTING_MODIFIEDDATE,'title'=>'Show modified date'),
+						array('id'=>SETTING_PUBLISHEDDATE,'title'=>'Show published date'),
+						array('id'=>SETTING_HIDE,'title'=>'Hide')); ?>
+					<?php echo Form::select(array(
+						'name'=>'show_date',
+						'title'=>'Show date',
+						'prefix'=>'@',
+						'default'=>SETTING_GLOBAL,
+						'class'=>' form-control-sm',
+						'list'=>$options_date)); ?>
 				</div>
 				<div>
-					<div class="form-group">
-						<label for="show_image">Show image</label>
-						<select name="@show_image" id="show_image" class="form-control form-control-sm">
-							<?php $setting = 'show_image'; ?>
-							<?php include($this->_sharedPath.'select-showhide.php'); ?>
-						</select>
-					</div>
-					<div class="form-group">
-						<label for="position_image">Image position</label>
-						<select name="@position_image" id="position_image" class="form-control form-control-sm">
-							<?php include($this->_sharedPath.'select-positionimage.php'); ?>
-						</select>
-					</div>
-					<div class="form-group">
-						<label for="show_info">Show article info</label>
-						<select name="@show_info" id="show_info" class="form-control form-control-sm">
-							<?php $setting = 'show_info'; ?>
-							<?php include($this->_sharedPath.'select-showhide.php'); ?>
-						</select>
-					</div>
-					<div class="form-group">
-						<label for="position_info">Info position</label>
-						<select name="@position_info" id="position_info" class="form-control form-control-sm">
-							<?php include($this->_sharedPath.'select-positioninfo.php'); ?>
-						</select>
-					</div>
-					<div class="form-group">
-						<label for="show_readmore">Show read more</label>
-						<select name="@show_readmore" id="show_readmore" class="form-control form-control-sm">
-							<?php include($this->_sharedPath.'select-showreadmore.php'); ?>
-						</select>
-					</div>
+					<?php echo Form::select(array(
+						'name'=>'show_image',
+						'title'=>'Show image',
+						'prefix'=>'@',
+						'default'=>SETTING_GLOBAL,
+						'class'=>' form-control-sm',
+						'list'=>$options)); ?>
+					<?php $options_position = array(
+						array('id'=>SETTING_GLOBAL,'title'=>'Global setting'),
+						array('id'=>SETTING_ABOVETITLE,'title'=>'Above title'),
+						array('id'=>SETTING_BELOWTITLE,'title'=>'Below title'),
+						array('id'=>SETTING_FLOATLEFT,'title'=>'Float left'),
+						array('id'=>SETTING_FLOATRIGHT,'title'=>'Float right')); ?>
+					<?php echo Form::select(array(
+						'name'=>'position_image',
+						'title'=>'Image position',
+						'prefix'=>'@',
+						'default'=>SETTING_GLOBAL,
+						'class'=>' form-control-sm',
+						'list'=>$options_position)); ?>
+					<?php echo Form::select(array(
+						'name'=>'show_info',
+						'title'=>'Show info',
+						'prefix'=>'@',
+						'default'=>SETTING_GLOBAL,
+						'class'=>' form-control-sm',
+						'list'=>$options)); ?>
+					<?php $options_position = array(
+						array('id'=>SETTING_GLOBAL,'title'=>'Global setting'),
+						array('id'=>SETTING_ABOVECONTENT,'title'=>'Above content'),
+						array('id'=>SETTING_ABOVETITLE,'title'=>'Above title'),
+						array('id'=>SETTING_BELOWTITLE,'title'=>'Below title'),
+						array('id'=>SETTING_BELOWCONTENT,'title'=>'Below content')); ?>
+					<?php echo Form::select(array(
+						'name'=>'position_info',
+						'title'=>'Info position',
+						'prefix'=>'@',
+						'default'=>SETTING_GLOBAL,
+						'class'=>' form-control-sm',
+						'list'=>$options_position)); ?>
+					<?php $options_readmore = array(
+						array('id'=>SETTING_GLOBAL,'title'=>'Global setting'),
+						array('id'=>SETTING_PARAGRAPH,'title'=>'After first paragraph'),
+						array('id'=>SETTING_TENLINES,'title'=>'After ten lines'),
+						array('id'=>SETTING_HIDE,'title'=>'Hide')); ?>
+					<?php echo Form::select(array(
+						'name'=>'show_readmore',
+						'title'=>'Show read more',
+						'prefix'=>'@',
+						'default'=>SETTING_GLOBAL,
+						'class'=>' form-control-sm',
+						'list'=>$options_readmore)); ?>
 				</div>
 			</div>
 		</div>

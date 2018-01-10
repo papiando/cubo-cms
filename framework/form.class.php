@@ -22,8 +22,13 @@ class Form {
 		if(is_array($params)) $params = (object)$params;
 		$html = '<div class="form-group">';
 		$html .= '<label for="'.$params->name.'">'.$params->title.'</label>';
-		$html .= '<select id="'.$params->name.'" name="'.($params->prefix ?? '').$params->name.'" class="form-control'.($params->class ?? '').'"'.(isset($params->readonly) && $params->readonly ? ' readonly' : '').'>';
-		$items = Application::getDB()->loadItems($params->query);
+		$html .= '<select id="'.$params->name.'" name="'.($params->prefix ?? '').$params->name.'" class="form-control'.($params->class ?? '').'"'.(isset($params->readonly) && $params->readonly ? ' readonly tabindex="-1"' : '').'>';
+		if(isset($params->query))
+			$items = Application::getDB()->loadItems($params->query);
+		elseif(isset($params->list))
+			$items = $params->list;
+		else
+			$items = [];
 		foreach($items as $item) {
 			$item = (object)$item;
 			$html .= '<option value="'.$item->id.'"'.($item->id == ($params->value ?? $params->default) ? ' selected' : '').'>'.$item->title.'</option>';

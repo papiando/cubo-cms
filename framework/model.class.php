@@ -82,9 +82,9 @@ class Model {
 		}
 		$published = isset($list[':status']) && $list[':status'] == STATUS_PUBLISHED;
 		if(!is_null($id)) {
-			$query = "UPDATE `".strtolower(self::$_class)."` SET ".$set.(empty($binary) ? "" : (empty($set) ? "" : ",").$binary).",`modified`=NOW(),`editor`=".Session::getUserId().($published ? ",`published`=NOW(),`publisher`=".Session::getUser() : "")." WHERE `id`={$id}";
+			$query = "UPDATE `".strtolower(self::$_class)."` SET ".$set.(empty($binary) ? "" : (empty($set) ? "" : ",").$binary).",`modified`=NOW(),`editor`=".Session::getUser().($published ? ",`published`=NOW(),`publisher`=".Session::getUser() : "")." WHERE `id`={$id}";
 		} else {
-			$query = "INSERT INTO `".strtolower(self::$_class)."` SET ".$set.(empty($binary) ? "" : (empty($set) ? "" : ",").$binary).",`created`=NOW(),`author`=".Session::getUserId().($published ? ",`published`=NOW(),`publisher`=".Session::getUser() : "");
+			$query = "INSERT INTO `".strtolower(self::$_class)."` SET ".$set.(empty($binary) ? "" : (empty($set) ? "" : ",").$binary).",`created`=NOW(),`author`=".Session::getUser().($published ? ",`published`=NOW(),`publisher`=".Session::getUser() : "");
 		}
 		return Application::getDB()->execute($query,$list);
 	}
