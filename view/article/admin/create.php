@@ -16,8 +16,8 @@ defined('__CUBO__') || new \Exception("No use starting this code without an incl
 ?><h1>Create Article</h1>
 <form class="form-add" action="" method="post">
 	<div class="form-group">
-		<button class="btn btn-primary" id="submit" type="submit" disabled>Save</button>
-		<a href="/admin/<?php echo strtolower($this->_class); ?>" class="btn btn-warning" id="cancel">Cancel</a>
+		<button class="btn btn-success" id="submit" type="submit" disabled>Save</button>
+		<a href="/admin/<?php echo strtolower($this->_class); ?>" class="btn btn-danger" id="cancel">Cancel</a>
 	</div>
 	<div class="grid-columns">
 		<div class="form-group grid-column-2">

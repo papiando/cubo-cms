@@ -79,9 +79,9 @@ class Session {
 	
 	public static function requiresAccess() {
 		if(self::isRegistered()) {
-			return "`access` IN (".ACCESS_PUBLIC.",".ACCESS_REGISTERED.",".ACCESS_PRIVATE.")";
+			return "`status`='".STATUS_PUBLISHED."' AND `access` IN (".ACCESS_PUBLIC.",".ACCESS_REGISTERED.",".ACCESS_PRIVATE.")";
 		} else {
-			return "`access` IN (".ACCESS_PUBLIC.",".ACCESS_GUEST.",".ACCESS_PRIVATE.")";
+			return "`status`='".STATUS_PUBLISHED."' AND `access` IN (".ACCESS_PUBLIC.",".ACCESS_GUEST.",".ACCESS_PRIVATE.")";
 		}
 	}
 	

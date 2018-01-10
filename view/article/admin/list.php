@@ -20,15 +20,38 @@ $controller = Application::getRouter()->getController();
 		<?php
 			$filter = array('id'=>'filter-text','label'=>'Search','prefix'=>'','value'=>'');
 			include($this->_sharedPath.'filter-text.php'); ?>
-		<?php
-			$filter = array('id'=>'filter-status','label'=>'Status','prefix'=>'','value'=>STATUS_PUBLISHED);
-			include($this->_sharedPath.'filter-status.php'); ?>
-		<?php
-			$filter = array('id'=>'filter-category','label'=>'Category','prefix'=>'','value'=>CATEGORY_ANY);
-			include($this->_sharedPath.'filter-category.php'); ?>
-		<?php
-			$filter = array('id'=>'filter-language','label'=>'Language','prefix'=>'','value'=>LANGUAGE_ANY);
-			include($this->_sharedPath.'filter-language.php'); ?>
+		<?php $any = array(
+			array('id'=>STATUS_ANY,'title'=>'Any status')); ?>
+		<?php echo Form::select(array(
+			'name'=>'filter-status',
+			'title'=>'Status',
+			'value'=>STATUS_PUBLISHED,
+			'list'=>$any,
+			'query'=>Form::query('publishingstatus',Session::requiresAccess()))); ?>
+		<?php $any = array(
+			array('id'=>CATEGORY_ANY,'title'=>'Any category')); ?>
+		<?php echo Form::select(array(
+			'name'=>'filter-category',
+			'title'=>'Category',
+			'value'=>CATEGORY_ANY,
+			'list'=>$any,
+			'query'=>Form::query('articlecategory',Session::requiresAccess()))); ?>
+		<?php $any = array(
+			array('id'=>LANGUAGE_ANY,'title'=>'Any language')); ?>
+		<?php echo Form::select(array(
+			'name'=>'filter-language',
+			'title'=>'Language',
+			'value'=>LANGUAGE_ANY,
+			'list'=>$any,
+			'query'=>Form::query('language',Session::requiresAccess()))); ?>
+		<?php $any = array(
+			array('id'=>ACCESS_ANY,'title'=>'Any access level')); ?>
+		<?php echo Form::select(array(
+			'name'=>'filter-access',
+			'title'=>'Access level',
+			'value'=>ACCESS_ANY,
+			'list'=>$any,
+			'query'=>Form::query('accesslevel',Session::requiresAccess()))); ?>
 	</div>
 </form>
 <p id="filter-info"></p>
