@@ -4,7 +4,12 @@ namespace Cubo;
 defined('__CUBO__') || new \Exception("No use starting a class without an include");
 
 class ImageController extends Controller {
-	private $list_columns = "`id`,`name`,`collection`,`description`,`language`,`status`,`tags`,`title`";
+	private $list_columns = "`id`,`name`,`access`,`author`,`collection`,`description`,`language`,`status`,`tags`,`title`";
+	
+	// Admin view: list
+	public function admin_list($columns = "*",$filter = "1",$order = "`title`") {
+		parent::admin_list($this->list_columns,$filter,$order);
+	}
 	
 	// Standard view: view
 	public function view() {
@@ -20,11 +25,6 @@ class ImageController extends Controller {
 			throw new \Exception("Article cannot be viewed at current access levels");
 		}
 		if(isset($this->_data->{'@attributes'})) $this->_attributes = json_decode($this->_data->{'@attributes'});
-	}
-	
-	// Admin view: list
-	public function admin_list($columns = "*",$filter = "1",$order = "`title`") {
-		parent::admin_list($this->list_columns,$filter,$order);
 	}
 }
 ?>

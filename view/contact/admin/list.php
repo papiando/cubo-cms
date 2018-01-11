@@ -2,10 +2,10 @@
 /**
  * @application    Cubo CMS
  * @type           View
- * @controller     Image
+ * @controller     Contact
  * @method         List
  * @version        1.0.0
- * @date           2018-01-09
+ * @date           2018-01-11
  * @author         Dan Barto
  * @copyright      Copyright (C) 2017 - 2018 Papiando Riba Internet. All rights reserved.
  * @license        GNU General Public License version 3 or later; see LICENSE.md
@@ -15,7 +15,7 @@ namespace Cubo;
 defined('__CUBO__') || new \Exception("No use starting this code without an include");
 
 $controller = Application::getRouter()->getController();
-?><h1>Articles</h1>
+?><h1>Contacts</h1>
 <form id="filter-form" class="form">
 	<div class="grid-columns">
 		<?php
@@ -30,13 +30,13 @@ $controller = Application::getRouter()->getController();
 			'list'=>$any,
 			'query'=>Form::query('publishingstatus',Session::requiresAccess()))); ?>
 		<?php $any = array(
-			array('id'=>COLLECTION_ANY,'title'=>'Any collection')); ?>
+			array('id'=>GROUP_ANY,'title'=>'Any group')); ?>
 		<?php echo Form::select(array(
-			'name'=>'filter-collection',
-			'title'=>'Collection',
-			'value'=>COLLECTION_ANY,
+			'name'=>'filter-group',
+			'title'=>'Group',
+			'value'=>GROUP_ANY,
 			'list'=>$any,
-			'query'=>Form::query('imagecollection',Session::requiresAccess()))); ?>
+			'query'=>Form::query('contactgroup',Session::requiresAccess()))); ?>
 		<?php $any = array(
 			array('id'=>LANGUAGE_ANY,'title'=>'Any language')); ?>
 		<?php echo Form::select(array(
@@ -58,26 +58,26 @@ $controller = Application::getRouter()->getController();
 <p id="filter-info"></p>
 <div class="grid-rows">
 	<div class="grid-columns row-header">
-		<div class="align-middle"><strong>Image</strong></div>
+		<div class="align-middle"><strong>Title</strong></div>
 		<div class="align-middle"><strong>Status</strong></div>
-		<div class="align-middle"><strong>Collection</strong></div>
+		<div class="align-middle"><strong>Group</strong></div>
 		<div class="align-middle"><strong>Language</strong></div>
 		<div class="align-middle"><strong>Access Level</strong></div>
 		<div class="text-right align-middle">
-			<a href="/admin/<?php echo $controller; ?>?action=create" class="btn btn-sm btn-success<?php echo (ImageController::canCreate() ? '' : ' disabled'); ?>" tabindex="-1"><i class="fa fa-plus fa-fw"></i></a>
+			<a href="/admin/<?php echo $controller; ?>?action=create" class="btn btn-sm btn-success<?php echo (ContactController::canCreate() ? '' : ' disabled'); ?>" tabindex="-1"><i class="fa fa-plus fa-fw"></i></a>
 		</div>
 	</div>
 <?php
 foreach($this->_data as $item) {
 ?>	<div class="table-item d-none grid-columns row-body" data-item="<?php echo htmlentities(json_encode($item)); ?>" data-filter="none">
-		<td class="align-middle"><img class="img-thumbnail" src="/image?thumbnail&id=<?php echo $item->id; ?>&cache=no" /></td>
+		<div class="align-middle"><?php echo $item->title; ?></div>
 		<div class="align-middle"><?php include($this->_sharedPath.'show-status.php'); ?></div>
-		<div class="align-middle"><?php include($this->_sharedPath.'show-collection.php'); ?></div>
+		<div class="align-middle"><?php include($this->_sharedPath.'show-group.php'); ?></div>
 		<div class="align-middle"><?php include($this->_sharedPath.'show-language.php'); ?></div>
 		<div class="align-middle"><?php include($this->_sharedPath.'show-access.php'); ?></div>
 		<div class="text-right align-middle">
-			<a href="/admin/<?php echo $controller; ?>?action=edit&id=<?php echo $item->id; ?>" class="btn btn-sm btn-warning<?php echo (ImageController::canEdit($item->author) ? '' : ' disabled'); ?>" tabindex="-1"><i class="fa fa-pencil fa-fw"></i></a>
-			<a href="/admin/<?php echo $controller; ?>?action=trash&id=<?php echo $item->id; ?>" class="btn btn-sm btn-danger<?php echo (ImageController::canPublish() ? '' : ' disabled'); ?>" tabindex="-1"><i class="fa fa-trash fa-fw"></i></a>
+			<a href="/admin/<?php echo $controller; ?>?action=edit&id=<?php echo $item->id; ?>" class="btn btn-sm btn-warning<?php echo (ContactController::canEdit($item->author) ? '' : ' disabled'); ?>" tabindex="-1"><i class="fa fa-pencil fa-fw"></i></a>
+			<a href="/admin/<?php echo $controller; ?>?action=trash&id=<?php echo $item->id; ?>" class="btn btn-sm btn-danger<?php echo (ContactController::canPublish() ? '' : ' disabled'); ?>" tabindex="-1"><i class="fa fa-trash fa-fw"></i></a>
 		</div>
 	</div>
 <?php
