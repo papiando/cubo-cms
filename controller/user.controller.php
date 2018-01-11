@@ -1,9 +1,25 @@
 <?php
+/**
+ * @application    Cubo CMS
+ * @type           Controller
+ * @class          UserController
+ * @version        1.0.0
+ * @date           2018-01-11
+ * @author         Dan Barto
+ * @copyright      Copyright (C) 2017 - 2018 Papiando Riba Internet. All rights reserved.
+ * @license        GNU General Public License version 3 or later; see LICENSE.md
+ */
 namespace Cubo;
 
 defined('__CUBO__') || new \Exception("No use starting a class without an include");
 
 class UserController extends Controller {
+	private $list_columns = "`id`,`name`,`access`,`author`,`description`,`role`,`status`,`title`";
+	
+	// Admin view: list
+	public function admin_list($columns = "*",$filter = "1",$order = "`title`") {
+		parent::admin_list($this->list_columns,$filter,$order);
+	}
 	
 	public function login() {
 		if($_POST && isset($_POST['login']) && isset($_POST['password'])) {
