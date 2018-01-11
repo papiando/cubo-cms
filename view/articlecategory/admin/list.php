@@ -1,60 +1,85 @@
 <?php
+/**
+ * @application    Cubo CMS
+ * @type           View
+ * @class          ArticleCategoryView
+ * @version        1.0.0
+ * @date           2018-01-10
+ * @author         Dan Barto
+ * @copyright      Copyright (C) 2017 - 2018 Papiando Riba Internet. All rights reserved.
+ * @license        GNU General Public License version 3 or later; see LICENSE.md
+ */
+namespace Cubo;
+
 defined('__CUBO__') || new \Exception("No use starting this code without an include");
+
 $root = true;
-$controller = Cubo\Application::getRouter()->getController();
+$controller = Application::getRouter()->getController();
 ?><h1>Article Categories</h1>
 <form id="filter-form" class="form">
-	<div class="form-row d-flex justify-content-between">
-		<div class="col-3">
-			<?php
-				$filter = array('id'=>'filter-text','label'=>'Search','prefix'=>'','value'=>'');
-				include($this->_sharedPath.'filter-text.php'); ?>
-		</div>
-		<div class="col-3">
-			<?php
-				$filter = array('id'=>'filter-status','label'=>'Status','prefix'=>'','value'=>STATUS_PUBLISHED);
-				include($this->_sharedPath.'filter-status.php'); ?>
-		</div>
-		<div class="col-3">
-			<?php
-				$filter = array('id'=>'filter-category','label'=>'Parent Category','prefix'=>'','value'=>CATEGORY_ANY);
-				include($this->_sharedPath.'filter-category.php'); ?>
-		</div>
-		<div class="col-3">
-			<?php
-				$filter = array('id'=>'filter-language','label'=>'Language','prefix'=>'','value'=>LANGUAGE_ANY);
-				include($this->_sharedPath.'filter-language.php'); ?>
-		</div>
+	<div class="grid-columns">
+		<?php
+			$filter = array('id'=>'filter-text','label'=>'Search','prefix'=>'','value'=>'');
+			include($this->_sharedPath.'filter-text.php'); ?>
+		<?php $any = array(
+			array('id'=>STATUS_ANY,'title'=>'Any status')); ?>
+		<?php echo Form::select(array(
+			'name'=>'filter-status',
+			'title'=>'Status',
+			'value'=>STATUS_PUBLISHED,
+			'list'=>$any,
+			'query'=>Form::query('publishingstatus',Session::requiresAccess()))); ?>
+		<?php $any = array(
+			array('id'=>CATEGORY_ANY,'title'=>'Any category'),
+			array('id'=>CATEGORY_NONE,'title'=>'No category')); ?>
+		<?php echo Form::select(array(
+			'name'=>'filter-category',
+			'title'=>'Parent category',
+			'value'=>CATEGORY_ANY,
+			'list'=>$any,
+			'query'=>Form::query('articlecategory',Session::requiresAccess()))); ?>
+		<?php $any = array(
+			array('id'=>LANGUAGE_ANY,'title'=>'Any language')); ?>
+		<?php echo Form::select(array(
+			'name'=>'filter-language',
+			'title'=>'Language',
+			'value'=>LANGUAGE_ANY,
+			'list'=>$any,
+			'query'=>Form::query('language',Session::requiresAccess()))); ?>
+		<?php $any = array(
+			array('id'=>ACCESS_ANY,'title'=>'Any access level')); ?>
+		<?php echo Form::select(array(
+			'name'=>'filter-access',
+			'title'=>'Access level',
+			'value'=>ACCESS_ANY,
+			'list'=>$any,
+			'query'=>Form::query('accesslevel',Session::requiresAccess()))); ?>
 	</div>
 </form>
 <p id="filter-info"></p>
-<table class="table table-striped full-width table-hover">
-	<thead>
-		<tr>
-			<td class="align-middle"><strong>Title</strong></td>
-			<td class="align-middle"><strong>Status</strong></td>
-			<td class="align-middle"><strong>Parent Category</strong></td>
-			<td class="align-middle"><strong>Language</strong></td>
-			<td class="text-right align-middle">
-				<a href="/admin/<?php echo $controller; ?>?action=add"><button class="btn btn-sm btn-success"><i class="fa fa-plus fa-fw"></i></button></a>
-			</td>
-		</tr>
-	</thead>
-	<tbody>
+<div class="grid-rows">
+	<div class="grid-columns row-header">
+		<div class="align-middle"><strong>Title</strong></div>
+		<div class="align-middle"><strong>Status</strong></div>
+		<div class="align-middle"><strong>Parent category</strong></div>
+		<div class="align-middle"><strong>Language</strong></div>
+		<div class="text-right align-middle">
+			<a href="/admin/<?php echo $controller; ?>?action=create" class="btn btn-sm btn-success<?php echo (ArticleController::canCreate() ? '' : ' disabled'); ?>" tabindex="-1"><i class="fa fa-plus fa-fw"></i></a>
+		</div>
+	</div>
 <?php
 foreach($this->_data as $item) {
-?>		<tr class="table-item d-none" data-item="<?php echo htmlentities(json_encode($item)); ?>" data-filter="none">
-			<td class="align-middle"><?php echo $item->title; ?></td>
-			<td class="align-middle"><?php include($this->_sharedPath.'show-status.php'); ?></td>
-			<td class="align-middle"><?php include($this->_sharedPath.'show-category.php'); ?></td>
-			<td class="align-middle"><?php include($this->_sharedPath.'show-language.php'); ?></td>
-			<td class="text-right align-middle">
-				<a href="/admin/<?php echo $controller; ?>?action=edit&id=<?php echo $item->id; ?>"><button class="btn btn-sm btn-primary"><i class="fa fa-pencil fa-fw"></i></button></a>
-				<a href="/admin/<?php echo $controller; ?>?action=delete&id=<?php echo $item->id; ?>"><button class="btn btn-sm btn-danger"><i class="fa fa-trash fa-fw"></i></button></a>
-			</td>
-		</tr>
+?>	<div class="table-item d-none grid-columns row-body" data-item="<?php echo htmlentities(json_encode($item)); ?>" data-filter="none">
+		<div class="align-middle"><?php echo $item->title; ?></div>
+		<div class="align-middle"><?php include($this->_sharedPath.'show-status.php'); ?></div>
+		<div class="align-middle"><?php include($this->_sharedPath.'show-category.php'); ?></div>
+		<div class="align-middle"><?php include($this->_sharedPath.'show-language.php'); ?></div>
+		<div class="text-right align-middle">
+			<a href="/admin/<?php echo $controller; ?>?action=edit&id=<?php echo $item->id; ?>" class="btn btn-sm btn-warning<?php echo (ArticleController::canEdit($item->author) ? '' : ' disabled'); ?>" tabindex="-1"><i class="fa fa-pencil fa-fw"></i></a>
+			<a href="/admin/<?php echo $controller; ?>?action=trash&id=<?php echo $item->id; ?>" class="btn btn-sm btn-danger<?php echo (ArticleController::canPublish() ? '' : ' disabled'); ?>" tabindex="-1"><i class="fa fa-trash fa-fw"></i></a>
+		</div>
+	</div>
 <?php
 }
-?>	</tbody>
-</table>
+?></div>
 <script src="/view/shared/js/filtering.js"></script>

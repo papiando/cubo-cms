@@ -14,10 +14,10 @@ namespace Cubo;
 defined('__CUBO__') || new \Exception("No use starting this code without an include");
 
 ?><h1>Create Article</h1>
-<form class="form-add" action="" method="post">
+<form class="form-create" action="" method="post">
 	<div class="form-group">
-		<button class="btn btn-success" id="submit" type="submit" disabled>Save</button>
-		<a href="/admin/<?php echo strtolower($this->_class); ?>" class="btn btn-danger" id="cancel">Cancel</a>
+		<button class="btn btn-success" id="submit" type="submit" disabled><i class="fa fa-check"></i> Save</button>
+		<a href="/admin/<?php echo strtolower($this->_class); ?>" class="btn btn-danger" id="cancel"><i class="fa fa-times"></i> Cancel</a>
 	</div>
 	<div class="grid-columns">
 		<div class="form-group grid-column-2">
