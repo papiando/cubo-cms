@@ -38,14 +38,6 @@ $controller = Application::getRouter()->getController();
 			'list'=>$any,
 			'query'=>Form::query('userrrole',Session::requiresAccess()))); ?>
 		<?php $any = array(
-			array('id'=>LANGUAGE_ANY,'title'=>'Any language')); ?>
-		<?php echo Form::select(array(
-			'name'=>'filter-language',
-			'title'=>'Language',
-			'value'=>LANGUAGE_ANY,
-			'list'=>$any,
-			'query'=>Form::query('language',Session::requiresAccess()))); ?>
-		<?php $any = array(
 			array('id'=>ACCESS_ANY,'title'=>'Any access level')); ?>
 		<?php echo Form::select(array(
 			'name'=>'filter-access',
@@ -61,7 +53,6 @@ $controller = Application::getRouter()->getController();
 		<div class="align-middle"><strong>Title</strong></div>
 		<div class="align-middle"><strong>Status</strong></div>
 		<div class="align-middle"><strong>Role</strong></div>
-		<div class="align-middle"><strong>Language</strong></div>
 		<div class="align-middle"><strong>Access Level</strong></div>
 		<div class="text-right align-middle">
 			<a href="/admin/<?php echo $controller; ?>?action=create" class="btn btn-sm btn-success<?php echo (UserController::canCreate() ? '' : ' disabled'); ?>" tabindex="-1"><i class="fa fa-plus fa-fw"></i></a>
@@ -73,7 +64,6 @@ foreach($this->_data as $item) {
 		<div class="align-middle"><?php echo $item->title; ?></div>
 		<div class="align-middle"><?php include($this->_sharedPath.'show-status.php'); ?></div>
 		<div class="align-middle"><?php include($this->_sharedPath.'show-role.php'); ?></div>
-		<div class="align-middle"><?php include($this->_sharedPath.'show-language.php'); ?></div>
 		<div class="align-middle"><?php include($this->_sharedPath.'show-access.php'); ?></div>
 		<div class="text-right align-middle">
 			<a href="/admin/<?php echo $controller; ?>?action=edit&id=<?php echo $item->id; ?>" class="btn btn-sm btn-warning<?php echo (UserController::canEdit($item->author) ? '' : ' disabled'); ?>" tabindex="-1"><i class="fa fa-pencil fa-fw"></i></a>

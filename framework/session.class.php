@@ -77,6 +77,10 @@ class Session {
 		}
 	}
 	
+	public static function isAccessible($includeNone = false) {
+		return "`status`=".STATUS_PUBLISHED." AND `access`<>".ACCESS_NONE.($includeNone ? " OR `id`=0" : "");
+	}
+	
 	public static function requiresAccess() {
 		if(self::isRegistered()) {
 			return "`status`='".STATUS_PUBLISHED."' AND `access` IN (".ACCESS_PUBLIC.",".ACCESS_REGISTERED.",".ACCESS_PRIVATE.")";

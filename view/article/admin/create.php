@@ -118,7 +118,7 @@ defined('__CUBO__') || new \Exception("No use starting this code without an incl
 						'prefix'=>'-',
 						'default'=>Session::getUser(),
 						'class'=>' form-control-sm',
-						'query'=>Form::query('user',Session::requiresAccess()),
+						'query'=>Form::query('user',Session::isAccessible()),
 						'readonly'=>true)); ?>
 					<?php echo Form::select(array(
 						'name'=>'editor',
@@ -126,7 +126,7 @@ defined('__CUBO__') || new \Exception("No use starting this code without an incl
 						'prefix'=>'-',
 						'default'=>USER_NOBODY,
 						'class'=>' form-control-sm',
-						'query'=>Form::query('user',Session::requiresAccess()),
+						'query'=>Form::query('user',Session::isAccessible(true)),
 						'readonly'=>true)); ?>
 					<?php echo Form::select(array(
 						'name'=>'publisher',
@@ -134,7 +134,7 @@ defined('__CUBO__') || new \Exception("No use starting this code without an incl
 						'prefix'=>'-',
 						'default'=>USER_NOBODY,
 						'class'=>' form-control-sm',
-						'query'=>Form::query('user',Session::requiresAccess()),
+						'query'=>Form::query('user',Session::isAccessible(true)),
 						'readonly'=>true)); ?>
 				</div>
 				<div>

@@ -119,7 +119,7 @@ $root = true;
 						'prefix'=>'-',
 						'default'=>Session::getUser(),
 						'class'=>' form-control-sm',
-						'query'=>Form::query('user',Session::requiresAccess()),
+						'query'=>Form::query('user',Session::isAccessible()),
 						'readonly'=>true)); ?>
 					<?php echo Form::select(array(
 						'name'=>'editor',
@@ -127,7 +127,7 @@ $root = true;
 						'prefix'=>'-',
 						'default'=>USER_NOBODY,
 						'class'=>' form-control-sm',
-						'query'=>Form::query('user',Session::requiresAccess()),
+						'query'=>Form::query('user',Session::isAccessible(true)),
 						'readonly'=>true)); ?>
 					<?php echo Form::select(array(
 						'name'=>'publisher',
@@ -135,7 +135,7 @@ $root = true;
 						'prefix'=>'-',
 						'default'=>USER_NOBODY,
 						'class'=>' form-control-sm',
-						'query'=>Form::query('user',Session::requiresAccess()),
+						'query'=>Form::query('user',Session::isAccessible(true)),
 						'readonly'=>true)); ?>
 				</div>
 				<div>

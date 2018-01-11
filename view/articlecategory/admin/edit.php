@@ -127,7 +127,7 @@ $root = true;
 						'prefix'=>'-',
 						'value'=>$this->_data->author,
 						'class'=>' form-control-sm',
-						'query'=>Form::query('user',Session::requiresAccess()),
+						'query'=>Form::query('user',Session::isAccessible()),
 						'readonly'=>ArticleController::cannotEdit($this->_data->author))); ?>
 					<?php echo Form::select(array(
 						'name'=>'editor',
@@ -135,15 +135,15 @@ $root = true;
 						'prefix'=>'-',
 						'value'=>Session::getUser(),
 						'class'=>' form-control-sm',
-						'query'=>Form::query('user',Session::requiresAccess()),
+						'query'=>Form::query('user',Session::isAccessible(true)),
 						'readonly'=>true)); ?>
 					<?php echo Form::select(array(
 						'name'=>'publisher',
 						'title'=>'Publisher',
 						'prefix'=>'-',
-						'value'=>$this->_data->publisher,
+						'value'=>$this->_data->publisher ?? USER_NOBODY,
 						'class'=>' form-control-sm',
-						'query'=>Form::query('user',Session::requiresAccess()),
+						'query'=>Form::query('user',Session::isAccessible(true)),
 						'readonly'=>true)); ?>
 				</div>
 				<div>

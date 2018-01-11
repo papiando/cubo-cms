@@ -12,7 +12,6 @@
 namespace Cubo;
 
 defined('__CUBO__') || new \Exception("No use starting this code without an include");
-
 ?><h1>Edit Article</h1>
 <form class="form-edit" action="" method="post">
 	<div class="form-group">
@@ -126,7 +125,7 @@ defined('__CUBO__') || new \Exception("No use starting this code without an incl
 						'prefix'=>'-',
 						'value'=>$this->_data->author,
 						'class'=>' form-control-sm',
-						'query'=>Form::query('user',Session::requiresAccess()),
+						'query'=>Form::query('user',Session::isAccessible()),
 						'readonly'=>ArticleController::cannotEdit($this->_data->author))); ?>
 					<?php echo Form::select(array(
 						'name'=>'editor',
@@ -134,15 +133,15 @@ defined('__CUBO__') || new \Exception("No use starting this code without an incl
 						'prefix'=>'-',
 						'value'=>Session::getUser(),
 						'class'=>' form-control-sm',
-						'query'=>Form::query('user',Session::requiresAccess()),
+						'query'=>Form::query('user',Session::isAccessible(true)),
 						'readonly'=>true)); ?>
 					<?php echo Form::select(array(
 						'name'=>'publisher',
 						'title'=>'Publisher',
 						'prefix'=>'-',
-						'value'=>$this->_data->publisher,
+						'value'=>$this->_data->publisher ?? USER_NOBODY,
 						'class'=>' form-control-sm',
-						'query'=>Form::query('user',Session::requiresAccess()),
+						'query'=>Form::query('user',Session::isAccessible(true)),
 						'readonly'=>true)); ?>
 				</div>
 				<div>

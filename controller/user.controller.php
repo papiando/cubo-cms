@@ -17,7 +17,7 @@ class UserController extends Controller {
 	private $list_columns = "`id`,`name`,`access`,`author`,`description`,`role`,`status`,`title`";
 	
 	// Admin view: list
-	public function admin_list($columns = "*",$filter = "1",$order = "`title`") {
+	public function admin_list($columns = "*",$filter = "`access`<>'".ACCESS_NONE."'",$order = "`title`") {
 		parent::admin_list($this->list_columns,$filter,$order);
 	}
 	
