@@ -28,7 +28,7 @@ $controller = Application::getRouter()->getController();
 			'title'=>'Status',
 			'value'=>STATUS_PUBLISHED,
 			'list'=>$any,
-			'query'=>Form::query('publishingstatus',Session::requiresAccess()))); ?>
+			'query'=>Form::query('publishingstatus',Session::isAccessible()))); ?>
 		<?php $any = array(
 			array('id'=>CATEGORY_ANY,'title'=>'Any category')); ?>
 		<?php echo Form::select(array(
@@ -36,7 +36,7 @@ $controller = Application::getRouter()->getController();
 			'title'=>'Category',
 			'value'=>CATEGORY_ANY,
 			'list'=>$any,
-			'query'=>Form::query('articlecategory',Session::requiresAccess()))); ?>
+			'query'=>Form::query('articlecategory',Session::isAccessible()))); ?>
 		<?php $any = array(
 			array('id'=>LANGUAGE_ANY,'title'=>'Any language')); ?>
 		<?php echo Form::select(array(
@@ -44,7 +44,7 @@ $controller = Application::getRouter()->getController();
 			'title'=>'Language',
 			'value'=>LANGUAGE_ANY,
 			'list'=>$any,
-			'query'=>Form::query('language',Session::requiresAccess()))); ?>
+			'query'=>Form::query('language',Session::isAccessible()))); ?>
 		<?php $any = array(
 			array('id'=>ACCESS_ANY,'title'=>'Any access level')); ?>
 		<?php echo Form::select(array(
@@ -52,7 +52,7 @@ $controller = Application::getRouter()->getController();
 			'title'=>'Access level',
 			'value'=>ACCESS_ANY,
 			'list'=>$any,
-			'query'=>Form::query('accesslevel',Session::requiresAccess()))); ?>
+			'query'=>Form::query('accesslevel',Session::isAccessible()))); ?>
 	</div>
 </form>
 <p id="filter-info"></p>

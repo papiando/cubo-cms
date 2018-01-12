@@ -2,9 +2,10 @@
 /**
  * @application    Cubo CMS
  * @type           View
- * @class          ArticleView
+ * @controller     Article
+ * @method         Create
  * @version        1.0.0
- * @date           2018-01-09
+ * @date           2018-01-11
  * @author         Dan Barto
  * @copyright      Copyright (C) 2017 - 2018 Papiando Riba Internet. All rights reserved.
  * @license        GNU General Public License version 3 or later; see LICENSE.md
@@ -56,26 +57,26 @@ defined('__CUBO__') || new \Exception("No use starting this code without an incl
 						'title'=>'Status',
 						'default'=>(ArticleController::canPublish() ? STATUS_PUBLISHED : STATUS_UNPUBLISHED),
 						'class'=>' form-control-sm',
-						'query'=>Form::query('publishingstatus',Session::requiresAccess()),
+						'query'=>Form::query('publishingstatus',Session::isAccessible()),
 						'readonly'=>ArticleController::cannotPublish())); ?>
 					<?php echo Form::select(array(
 						'name'=>'category',
 						'title'=>'Category',
 						'default'=>CATEGORY_UNDEFINED,
 						'class'=>' form-control-sm',
-						'query'=>Form::query('articlecategory',Session::requiresAccess()))); ?>
+						'query'=>Form::query('articlecategory',Session::isAccessible()))); ?>
 					<?php echo Form::select(array(
 						'name'=>'language',
 						'title'=>'Language',
 						'default'=>LANGUAGE_UNDEFINED,
 						'class'=>' form-control-sm',
-						'query'=>Form::query('language',Session::requiresAccess()))); ?>
+						'query'=>Form::query('language',Session::isAccessible()))); ?>
 					<?php echo Form::select(array(
 						'name'=>'access',
 						'title'=>'Access',
 						'default'=>ACCESS_PUBLIC,
 						'class'=>' form-control-sm',
-						'query'=>Form::query('accesslevel',Session::requiresAccess()))); ?>
+						'query'=>Form::query('accesslevel',Session::isAccessible()))); ?>
 				</div>
 			</div>
 		</div>

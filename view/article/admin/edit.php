@@ -2,9 +2,10 @@
 /**
  * @application    Cubo CMS
  * @type           View
- * @class          ArticleView
+ * @controller     Article
+ * @method         Edit
  * @version        1.0.0
- * @date           2018-01-09
+ * @date           2018-01-11
  * @author         Dan Barto
  * @copyright      Copyright (C) 2017 - 2018 Papiando Riba Internet. All rights reserved.
  * @license        GNU General Public License version 3 or later; see LICENSE.md
@@ -57,7 +58,7 @@ defined('__CUBO__') || new \Exception("No use starting this code without an incl
 						'prefix'=>'-',
 						'value'=>$this->_data->status,
 						'class'=>' form-control-sm',
-						'query'=>Form::query('publishingstatus',Session::requiresAccess()),
+						'query'=>Form::query('publishingstatus',Session::isAccessible()),
 						'readonly'=>ArticleController::cannotPublish())); ?>
 					<?php echo Form::select(array(
 						'name'=>'category',
@@ -65,7 +66,7 @@ defined('__CUBO__') || new \Exception("No use starting this code without an incl
 						'prefix'=>'-',
 						'value'=>$this->_data->category,
 						'class'=>' form-control-sm',
-						'query'=>Form::query('articlecategory',Session::requiresAccess()),
+						'query'=>Form::query('articlecategory',Session::isAccessible()),
 						'readonly'=>ArticleController::cannotEdit($this->_data->author))); ?>
 					<?php echo Form::select(array(
 						'name'=>'language',
@@ -73,7 +74,7 @@ defined('__CUBO__') || new \Exception("No use starting this code without an incl
 						'prefix'=>'-',
 						'value'=>$this->_data->language,
 						'class'=>' form-control-sm',
-						'query'=>Form::query('language',Session::requiresAccess()),
+						'query'=>Form::query('language',Session::isAccessible()),
 						'readonly'=>ArticleController::cannotEdit($this->_data->author))); ?>
 					<?php echo Form::select(array(
 						'name'=>'access',
@@ -81,7 +82,7 @@ defined('__CUBO__') || new \Exception("No use starting this code without an incl
 						'prefix'=>'-',
 						'value'=>$this->_data->access,
 						'class'=>' form-control-sm',
-						'query'=>Form::query('accesslevel',Session::requiresAccess()),
+						'query'=>Form::query('accesslevel',Session::isAccessible()),
 						'readonly'=>ArticleController::cannotEdit($this->_data->author))); ?>
 				</div>
 			</div>

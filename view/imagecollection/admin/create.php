@@ -2,8 +2,8 @@
 /**
  * @application    Cubo CMS
  * @type           View
- * @controller     Image
- * @method         Edit
+ * @controller     ImageCollection
+ * @method         Create
  * @version        1.0.0
  * @date           2018-01-11
  * @author         Dan Barto
@@ -13,21 +13,22 @@
 namespace Cubo;
 
 defined('__CUBO__') || new \Exception("No use starting this code without an include");
-?><h1>Edit Image</h1>
-<form class="form-edit" action="" method="post" enctype="multipart/form-data">
+
+$root = true;
+?><h1>Create Image Collection</h1>
+<form class="form-create" action="" method="post">
 	<div class="form-group">
 		<button class="btn btn-success" id="submit" type="submit" disabled><i class="fa fa-check"></i> Save</button>
 		<a href="/admin/<?php echo strtolower($this->_class); ?>" class="btn btn-danger" id="cancel"><i class="fa fa-times"></i> Cancel</a>
 	</div>
 	<div class="grid-columns">
-		<input type="hidden" name="id" value="<?php echo $this->_data->id; ?>" />
 		<div class="form-group grid-column-2">
 			<label for="title">Title</label>
-			<input type="text" name="-title" id="title" value="<?php echo $this->_data->title; ?>" class="form-control" placeholder="Title" required autofocus />
+			<input type="text" name="title" id="title" class="form-control" placeholder="Title" required autofocus />
 		</div>
 		<div class="form-group">
 			<label for="name">Alias</label>
-			<input type="text" name="-name" id="name" value="<?php echo $this->_data->name; ?>" class="form-control" placeholder="Alias" required />
+			<input type="text" name="name" id="name" class="form-control" placeholder="Alias" required />
 		</div>
 	</div>
 	<ul class="nav nav-tabs" id="tabs" role="tablist">
@@ -35,7 +36,7 @@ defined('__CUBO__') || new \Exception("No use starting this code without an incl
 			<a class="nav-link active" id="content-tab" data-toggle="tab" href="#content-pane" role="tab" aria-controls="content-pane" aria-selected="true">Content</a>
 		</li>
 		<li class="nav-item">
-			<a class="nav-link" id="metadata-tab" data-toggle="tab" href="#metadata-pane" role="tab" aria-controls="metadata-pane" aria-selected="false">Metadata</a>
+			<a class="nav-link" id="image-tab" data-toggle="tab" href="#image-pane" role="tab" aria-controls="image-pane" aria-selected="false">Image and Metadata</a>
 		</li>
 		<li class="nav-item">
 			<a class="nav-link" id="publishing-tab" data-toggle="tab" href="#publishing-pane" role="tab" aria-controls="publishing-pane" aria-selected="false">Publishing</a>
@@ -47,69 +48,65 @@ defined('__CUBO__') || new \Exception("No use starting this code without an incl
 	<div class="tab-content">
 		<div class="tab-pane fade show active" id="content-pane" role="tabpanel" aria-labelledby="content-tab">
 			<div class="grid-columns">
-				<div>
-					<div class="form-group">
-						<label for="file">Upload image</label>
-						<label class="custom-file">
-							<input type="file" name="-lob" id="file" class="custom-file-input" accept="image/*" />
-							<span class="custom-file-control"></span>
-						</label>
-					</div>
-				</div>
-				<div>
-					<div class="form-group">
-						<label for="thumbnail">Image</label>
-						<div class="img-placeholder"><img class="img-fluid" src="/image/<?php echo $this->_data->name; ?>?date=<?php echo date(DATE_ATOM); ?>" /></div>
-					</div>
+				<div class="form-group grid-column-2">
+					<label for="html">Image Collection Content</label>
+					<textarea name="html" id="html" class="form-control text-html" placeholder="Contents" rows="12" required></textarea>
 				</div>
 				<div>
 					<?php echo Form::select(array(
 						'name'=>'status',
 						'title'=>'Status',
-						'prefix'=>'-',
-						'value'=>$this->_data->status,
+						'default'=>(ImageCollectionController::canPublish() ? STATUS_PUBLISHED : STATUS_UNPUBLISHED),
 						'class'=>' form-control-sm',
 						'query'=>Form::query('publishingstatus',Session::isAccessible()),
-						'readonly'=>ImageController::cannotPublish())); ?>
+						'readonly'=>ImageCollectionController::cannotPublish())); ?>
 					<?php echo Form::select(array(
 						'name'=>'collection',
-						'title'=>'Collection',
-						'prefix'=>'-',
-						'value'=>$this->_data->collection,
+						'title'=>'Parent collection',
+						'default'=>COLLECTION_UNDEFINED,
 						'class'=>' form-control-sm',
-						'query'=>Form::query('imagecollection',Session::isAccessible()),
-						'readonly'=>ImageController::cannotEdit($this->_data->author))); ?>
+						'query'=>Form::query('imagecollection',Session::isAccessible(true)))); ?>
 					<?php echo Form::select(array(
 						'name'=>'language',
 						'title'=>'Language',
-						'prefix'=>'-',
-						'value'=>$this->_data->language,
+						'default'=>LANGUAGE_UNDEFINED,
 						'class'=>' form-control-sm',
-						'query'=>Form::query('language',Session::isAccessible()),
-						'readonly'=>ImageController::cannotEdit($this->_data->author))); ?>
+						'query'=>Form::query('language',Session::isAccessible()))); ?>
 					<?php echo Form::select(array(
 						'name'=>'access',
 						'title'=>'Access',
-						'prefix'=>'-',
-						'value'=>$this->_data->access,
+						'default'=>ACCESS_PUBLIC,
 						'class'=>' form-control-sm',
-						'query'=>Form::query('accesslevel',Session::isAccessible()),
-						'readonly'=>ImageController::cannotEdit($this->_data->author))); ?>
+						'query'=>Form::query('accesslevel',Session::isAccessible()))); ?>
 				</div>
 			</div>
 		</div>
-		<div class="tab-pane fade" id="metadata-pane" role="tabpanel" aria-labelledby="metadata-tab">
+		<div class="tab-pane fade" id="image-pane" role="tabpanel" aria-labelledby="image-tab">
 			<div class="grid-columns">
 				<div>
 					<div class="form-group">
 						<label for="description">Summary</label>
-						<textarea name="-description" id="description" class="form-control" placeholder="Summary" rows="3"><?php echo $this->_data->description; ?></textarea>
+						<textarea name="description" id="description" class="form-control" placeholder="Summary" rows="3"></textarea>
+					</div>
+					<div class="form-group">
+						<?php
+							$id = 'image';
+							$label = 'Image';
+							$prefix = '-';
+							$value = null;
+							include($this->_sharedPath.'select-image.php'); ?>
 					</div>
 				</div>
 				<div>
 					<div class="form-group">
 						<label for="tags">Tags</label>
-						<textarea name="-tags" id="tags" class="form-control" placeholder="Tags" rows="3"><?php echo $this->_data->tags; ?></textarea>
+						<textarea name="tags" id="tags" class="form-control" placeholder="Tags" rows="3"></textarea>
+					</div>
+					<div class="form-group">
+						<label>Image Preview</label>
+						<figure>
+							<img id="image-preview" class="img-fluid img-thumbnail full-width" src="<?php echo $url; ?>" />
+						</figure>
 					</div>
 				</div>
 			</div>
@@ -121,15 +118,15 @@ defined('__CUBO__') || new \Exception("No use starting this code without an incl
 						'name'=>'author',
 						'title'=>'Author',
 						'prefix'=>'-',
-						'value'=>$this->_data->author,
+						'default'=>Session::getUser(),
 						'class'=>' form-control-sm',
 						'query'=>Form::query('user',Session::isAccessible()),
-						'readonly'=>ImageController::cannotEdit($this->_data->author))); ?>
+						'readonly'=>true)); ?>
 					<?php echo Form::select(array(
 						'name'=>'editor',
 						'title'=>'Editor',
 						'prefix'=>'-',
-						'value'=>Session::getUser(),
+						'default'=>USER_NOBODY,
 						'class'=>' form-control-sm',
 						'query'=>Form::query('user',Session::isAccessible(true)),
 						'readonly'=>true)); ?>
@@ -137,7 +134,7 @@ defined('__CUBO__') || new \Exception("No use starting this code without an incl
 						'name'=>'publisher',
 						'title'=>'Publisher',
 						'prefix'=>'-',
-						'value'=>$this->_data->publisher ?? USER_NOBODY,
+						'default'=>USER_NOBODY,
 						'class'=>' form-control-sm',
 						'query'=>Form::query('user',Session::isAccessible(true)),
 						'readonly'=>true)); ?>
@@ -145,15 +142,15 @@ defined('__CUBO__') || new \Exception("No use starting this code without an incl
 				<div>
 					<div class="form-group">
 						<label for="created">Created Date</label>
-						<input type="datetime-local" name="-created" id="created" value="<?php echo str_replace(' ','T',$this->_data->created); ?>" class="form-control form-control-sm" readonly />
+						<input type="datetime-local" name="-created" id="created" class="form-control form-control-sm" readonly />
 					</div>
 					<div class="form-group">
 						<label for="modified">Modified Date</label>
-						<input type="datetime-local" name="-modified" id="modified" value="<?php echo str_replace(' ','T',$this->_data->modified); ?>" class="form-control form-control-sm" readonly />
+						<input type="datetime-local" name="-modified" id="modified" class="form-control form-control-sm" readonly />
 					</div>
 					<div class="form-group">
 						<label for="published">Published Date</label>
-						<input type="datetime-local" name="-published" id="published" value="<?php echo str_replace(' ','T',$this->_data->published); ?>" class="form-control form-control-sm" readonly />
+						<input type="datetime-local" name="-published" id="published" class="form-control form-control-sm" readonly />
 					</div>
 				</div>
 			</div>

@@ -2,9 +2,10 @@
 /**
  * @application    Cubo CMS
  * @type           View
- * @class          ArticleCategoryView
+ * @controller     ArticleCategory
+ * @method         Edit
  * @version        1.0.0
- * @date           2018-01-10
+ * @date           2018-01-11
  * @author         Dan Barto
  * @copyright      Copyright (C) 2017 - 2018 Papiando Riba Internet. All rights reserved.
  * @license        GNU General Public License version 3 or later; see LICENSE.md
@@ -59,32 +60,32 @@ $root = true;
 						'prefix'=>'-',
 						'value'=>$this->_data->status,
 						'class'=>' form-control-sm',
-						'query'=>Form::query('publishingstatus',Session::requiresAccess()),
-						'readonly'=>ArticleController::cannotPublish())); ?>
+						'query'=>Form::query('publishingstatus',Session::isAccessible()),
+						'readonly'=>ArticleCategoryController::cannotPublish())); ?>
 					<?php echo Form::select(array(
 						'name'=>'category',
 						'title'=>'Parent category',
 						'prefix'=>'-',
 						'value'=>$this->_data->category,
 						'class'=>' form-control-sm',
-						'query'=>Form::query('articlecategory',Session::requiresAccess()),
-						'readonly'=>ArticleController::cannotEdit($this->_data->author))); ?>
+						'query'=>Form::query('articlecategory',Session::isAccessible(true,$this->_data->id)),
+						'readonly'=>ArticleCategoryController::cannotEdit($this->_data->author))); ?>
 					<?php echo Form::select(array(
 						'name'=>'language',
 						'title'=>'Language',
 						'prefix'=>'-',
 						'value'=>$this->_data->language,
 						'class'=>' form-control-sm',
-						'query'=>Form::query('language',Session::requiresAccess()),
-						'readonly'=>ArticleController::cannotEdit($this->_data->author))); ?>
+						'query'=>Form::query('language',Session::isAccessible()),
+						'readonly'=>ArticleCategoryController::cannotEdit($this->_data->author))); ?>
 					<?php echo Form::select(array(
 						'name'=>'access',
 						'title'=>'Access',
 						'prefix'=>'-',
 						'value'=>$this->_data->access,
 						'class'=>' form-control-sm',
-						'query'=>Form::query('accesslevel',Session::requiresAccess()),
-						'readonly'=>ArticleController::cannotEdit($this->_data->author))); ?>
+						'query'=>Form::query('accesslevel',Session::isAccessible()),
+						'readonly'=>ArticleCategoryController::cannotEdit($this->_data->author))); ?>
 				</div>
 			</div>
 		</div>
@@ -128,7 +129,7 @@ $root = true;
 						'value'=>$this->_data->author,
 						'class'=>' form-control-sm',
 						'query'=>Form::query('user',Session::isAccessible()),
-						'readonly'=>ArticleController::cannotEdit($this->_data->author))); ?>
+						'readonly'=>ArticleCategoryController::cannotEdit($this->_data->author))); ?>
 					<?php echo Form::select(array(
 						'name'=>'editor',
 						'title'=>'Editor',

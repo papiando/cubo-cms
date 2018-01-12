@@ -10,7 +10,7 @@ if($image) {
 	$url = '/image?id='.$value.'&cache=no';
 } else {
 	$filename = 'No image';
-	$url = '/vendor/cube/no-image.png';
+	$url = '/vendor/cubo-cms/no-image.png';
 }
 ?><label for="<?php echo $id; ?>"><?php echo $label; ?></label>
 <div class="input-group">

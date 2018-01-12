@@ -77,16 +77,8 @@ class Session {
 		}
 	}
 	
-	public static function isAccessible($includeNone = false) {
-		return "`status`=".STATUS_PUBLISHED." AND `access`<>".ACCESS_NONE.($includeNone ? " OR `id`=0" : "");
-	}
-	
-	public static function requiresAccess() {
-		if(self::isRegistered()) {
-			return "`status`='".STATUS_PUBLISHED."' AND `access` IN (".ACCESS_PUBLIC.",".ACCESS_REGISTERED.",".ACCESS_PRIVATE.")";
-		} else {
-			return "`status`='".STATUS_PUBLISHED."' AND `access` IN (".ACCESS_PUBLIC.",".ACCESS_GUEST.",".ACCESS_PRIVATE.")";
-		}
+	public static function isAccessible($includeNone = false,$excludeSelf = false) {
+		return "`status`=".STATUS_PUBLISHED.($excludeSelf ? " AND `id`<>".$excludeSelf : "").($includeNone ? " OR `access`=".ACCESS_NONE : " AND `access`<>".ACCESS_NONE);
 	}
 	
 	public static function requiresViewAccess() {

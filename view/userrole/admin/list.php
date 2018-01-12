@@ -28,7 +28,7 @@ $controller = Application::getRouter()->getController();
 			'title'=>'Status',
 			'value'=>STATUS_PUBLISHED,
 			'list'=>$any,
-			'query'=>Form::query('publishingstatus',Session::requiresAccess()))); ?>
+			'query'=>Form::query('publishingstatus',Session::isAccessible()))); ?>
 		<?php $any = array(
 			array('id'=>ACCESS_ANY,'title'=>'Any access level')); ?>
 		<?php echo Form::select(array(
@@ -36,7 +36,7 @@ $controller = Application::getRouter()->getController();
 			'title'=>'Access level',
 			'value'=>ACCESS_ANY,
 			'list'=>$any,
-			'query'=>Form::query('accesslevel',Session::requiresAccess()))); ?>
+			'query'=>Form::query('accesslevel',Session::isAccessible()))); ?>
 	</div>
 </form>
 <p id="filter-info"></p>

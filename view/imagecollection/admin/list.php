@@ -28,7 +28,7 @@ $controller = Application::getRouter()->getController();
 			'title'=>'Status',
 			'value'=>STATUS_PUBLISHED,
 			'list'=>$any,
-			'query'=>Form::query('publishingstatus',Session::requiresAccess()))); ?>
+			'query'=>Form::query('publishingstatus',Session::isAccessible()))); ?>
 		<?php $any = array(
 			array('id'=>COLLECTION_ANY,'title'=>'Any collection'),
 			array('id'=>COLLECTION_NONE,'title'=>'No collection')); ?>
@@ -37,7 +37,7 @@ $controller = Application::getRouter()->getController();
 			'title'=>'Parent collection',
 			'value'=>COLLECTION_ANY,
 			'list'=>$any,
-			'query'=>Form::query('imagecollection',Session::requiresAccess()))); ?>
+			'query'=>Form::query('imagecollection',Session::isAccessible()))); ?>
 		<?php $any = array(
 			array('id'=>LANGUAGE_ANY,'title'=>'Any language')); ?>
 		<?php echo Form::select(array(
@@ -45,7 +45,7 @@ $controller = Application::getRouter()->getController();
 			'title'=>'Language',
 			'value'=>LANGUAGE_ANY,
 			'list'=>$any,
-			'query'=>Form::query('language',Session::requiresAccess()))); ?>
+			'query'=>Form::query('language',Session::isAccessible()))); ?>
 		<?php $any = array(
 			array('id'=>ACCESS_ANY,'title'=>'Any access level')); ?>
 		<?php echo Form::select(array(
@@ -53,7 +53,7 @@ $controller = Application::getRouter()->getController();
 			'title'=>'Access level',
 			'value'=>ACCESS_ANY,
 			'list'=>$any,
-			'query'=>Form::query('accesslevel',Session::requiresAccess()))); ?>
+			'query'=>Form::query('accesslevel',Session::isAccessible()))); ?>
 	</div>
 </form>
 <p id="filter-info"></p>
@@ -65,7 +65,7 @@ $controller = Application::getRouter()->getController();
 		<div class="align-middle"><strong>Language</strong></div>
 		<div class="align-middle"><strong>Access Level</strong></div>
 		<div class="text-right align-middle">
-			<a href="/admin/<?php echo $controller; ?>?action=create" class="btn btn-sm btn-success<?php echo (ImageCollectionController::canCreate() ? '' : ' disabled'); ?>" tabindex="-1"><i class="fa fa-plus fa-fw"></i></a>
+			<a href="/admin/<?php echo $controller; ?>?action=create" class="btn btn-sm btn-success<?php echo (ArticleCategoryController::canCreate() ? '' : ' disabled'); ?>" tabindex="-1"><i class="fa fa-plus fa-fw"></i></a>
 		</div>
 	</div>
 <?php
@@ -77,8 +77,8 @@ foreach($this->_data as $item) {
 		<div class="align-middle"><?php include($this->_sharedPath.'show-language.php'); ?></div>
 		<div class="align-middle"><?php include($this->_sharedPath.'show-access.php'); ?></div>
 		<div class="text-right align-middle">
-			<a href="/admin/<?php echo $controller; ?>?action=edit&id=<?php echo $item->id; ?>" class="btn btn-sm btn-warning<?php echo (ImageCollectionController::canEdit($item->author) ? '' : ' disabled'); ?>" tabindex="-1"><i class="fa fa-pencil fa-fw"></i></a>
-			<a href="/admin/<?php echo $controller; ?>?action=trash&id=<?php echo $item->id; ?>" class="btn btn-sm btn-danger<?php echo (ImageCollectionController::canPublish() ? '' : ' disabled'); ?>" tabindex="-1"><i class="fa fa-trash fa-fw"></i></a>
+			<a href="/admin/<?php echo $controller; ?>?action=edit&id=<?php echo $item->id; ?>" class="btn btn-sm btn-warning<?php echo (ArticleCategoryController::canEdit($item->author) ? '' : ' disabled'); ?>" tabindex="-1"><i class="fa fa-pencil fa-fw"></i></a>
+			<a href="/admin/<?php echo $controller; ?>?action=trash&id=<?php echo $item->id; ?>" class="btn btn-sm btn-danger<?php echo (ArticleCategoryController::canPublish() ? '' : ' disabled'); ?>" tabindex="-1"><i class="fa fa-trash fa-fw"></i></a>
 		</div>
 	</div>
 <?php
