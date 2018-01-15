@@ -3,7 +3,7 @@
  * @application    Cubo CMS
  * @type           View
  * @controller     ContactGroup
- * @method         Edit
+ * @method         Create
  * @version        1.0.0
  * @date           2018-01-15
  * @author         Dan Barto
@@ -15,21 +15,20 @@ namespace Cubo;
 defined('__CUBO__') || new \Exception("No use starting this code without an include");
 
 $root = true;
-?><h1>Edit Contact Group</h1>
-<form class="form-edit" action="" method="post">
+?><h1>Create Contact Group</h1>
+<form class="form-create" action="" method="post">
 	<div class="form-group">
 		<button class="btn btn-success" id="submit" type="submit" disabled><i class="fa fa-check"></i> Save</button>
 		<a href="/admin/<?php echo strtolower($this->_class); ?>" class="btn btn-danger" id="cancel"><i class="fa fa-times"></i> Cancel</a>
 	</div>
 	<div class="grid-columns">
-		<input type="hidden" name="id" value="<?php echo $this->_data->id; ?>" />
 		<div class="form-group grid-column-2">
 			<label for="title">Title</label>
-			<input type="text" name="-title" id="title" value="<?php echo $this->_data->title; ?>" class="form-control" placeholder="Title" required autofocus />
+			<input type="text" name="title" id="title" class="form-control" placeholder="Title" required autofocus />
 		</div>
 		<div class="form-group">
 			<label for="name">Alias</label>
-			<input type="text" name="-name" id="name" value="<?php echo $this->_data->name; ?>" class="form-control" placeholder="Alias" required />
+			<input type="text" name="name" id="name" class="form-control" placeholder="Alias" required />
 		</div>
 	</div>
 	<ul class="nav nav-tabs" id="tabs" role="tablist">
@@ -51,41 +50,34 @@ $root = true;
 			<div class="grid-columns">
 				<div class="form-group grid-column-2">
 					<label for="html">Contact Group Content</label>
-					<textarea name="-html" id="html" class="form-control text-html" placeholder="Contents" rows="12" required><?php echo $this->_data->html; ?></textarea>
+					<textarea name="html" id="html" class="form-control text-html" placeholder="Contents" rows="12" required></textarea>
 				</div>
 				<div>
 					<?php echo Form::select(array(
 						'name'=>'status',
 						'title'=>'Status',
-						'prefix'=>'-',
-						'value'=>$this->_data->status,
+						'default'=>(ContactGroupController::canPublish() ? STATUS_PUBLISHED : STATUS_UNPUBLISHED),
 						'class'=>' form-control-sm',
 						'query'=>Form::query('publishingstatus',Session::isAccessible()),
 						'readonly'=>ContactGroupController::cannotPublish())); ?>
 					<?php echo Form::select(array(
 						'name'=>'group',
 						'title'=>'Parent group',
-						'prefix'=>'-',
-						'value'=>$this->_data->group,
+						'default'=>GROUP_UNDEFINED,
 						'class'=>' form-control-sm',
-						'query'=>Form::query('contactgroup',Session::isAccessible(true,$this->_data->id)),
-						'readonly'=>ContactGroupController::cannotEdit($this->_data->author))); ?>
+						'query'=>Form::query('contactgroup',Session::isAccessible(true)))); ?>
 					<?php echo Form::select(array(
 						'name'=>'language',
 						'title'=>'Language',
-						'prefix'=>'-',
-						'value'=>$this->_data->language,
+						'default'=>LANGUAGE_UNDEFINED,
 						'class'=>' form-control-sm',
-						'query'=>Form::query('language',Session::isAccessible()),
-						'readonly'=>ContactGroupController::cannotEdit($this->_data->author))); ?>
+						'query'=>Form::query('language',Session::isAccessible()))); ?>
 					<?php echo Form::select(array(
 						'name'=>'access',
 						'title'=>'Access',
-						'prefix'=>'-',
-						'value'=>$this->_data->access,
+						'default'=>ACCESS_PUBLIC,
 						'class'=>' form-control-sm',
-						'query'=>Form::query('accesslevel',Session::isAccessible()),
-						'readonly'=>ContactGroupController::cannotEdit($this->_data->author))); ?>
+						'query'=>Form::query('accesslevel',Session::isAccessible()))); ?>
 				</div>
 			</div>
 		</div>
@@ -94,21 +86,21 @@ $root = true;
 				<div>
 					<div class="form-group">
 						<label for="description">Summary</label>
-						<textarea name="-description" id="description" class="form-control" placeholder="Summary" rows="3"><?php echo $this->_data->description; ?></textarea>
+						<textarea name="description" id="description" class="form-control" placeholder="Summary" rows="3"></textarea>
 					</div>
 					<div class="form-group">
 						<?php
 							$id = 'image';
 							$label = 'Image';
 							$prefix = '-';
-							$value = $this->_data->image;
+							$value = null;
 							include($this->_sharedPath.'select-image.php'); ?>
 					</div>
 				</div>
 				<div>
 					<div class="form-group">
 						<label for="tags">Tags</label>
-						<textarea name="-tags" id="tags" class="form-control" placeholder="Tags" rows="3"><?php echo $this->_data->tags; ?></textarea>
+						<textarea name="tags" id="tags" class="form-control" placeholder="Tags" rows="3"></textarea>
 					</div>
 					<div class="form-group">
 						<label>Image Preview</label>
@@ -126,15 +118,15 @@ $root = true;
 						'name'=>'author',
 						'title'=>'Author',
 						'prefix'=>'-',
-						'value'=>$this->_data->author,
+						'default'=>Session::getUser(),
 						'class'=>' form-control-sm',
 						'query'=>Form::query('user',Session::isAccessible()),
-						'readonly'=>ContactGroupController::cannotEdit($this->_data->author))); ?>
+						'readonly'=>true)); ?>
 					<?php echo Form::select(array(
 						'name'=>'editor',
 						'title'=>'Editor',
 						'prefix'=>'-',
-						'value'=>Session::getUser(),
+						'default'=>USER_NOBODY,
 						'class'=>' form-control-sm',
 						'query'=>Form::query('user',Session::isAccessible(true)),
 						'readonly'=>true)); ?>
@@ -142,7 +134,7 @@ $root = true;
 						'name'=>'publisher',
 						'title'=>'Publisher',
 						'prefix'=>'-',
-						'value'=>$this->_data->publisher ?? USER_NOBODY,
+						'default'=>USER_NOBODY,
 						'class'=>' form-control-sm',
 						'query'=>Form::query('user',Session::isAccessible(true)),
 						'readonly'=>true)); ?>
@@ -150,15 +142,15 @@ $root = true;
 				<div>
 					<div class="form-group">
 						<label for="created">Created Date</label>
-						<input type="datetime-local" name="-created" id="created" value="<?php echo str_replace(' ','T',$this->_data->created); ?>" class="form-control form-control-sm" readonly />
+						<input type="datetime-local" name="-created" id="created" class="form-control form-control-sm" readonly />
 					</div>
 					<div class="form-group">
 						<label for="modified">Modified Date</label>
-						<input type="datetime-local" name="-modified" id="modified" value="<?php echo str_replace(' ','T',$this->_data->modified); ?>" class="form-control form-control-sm" readonly />
+						<input type="datetime-local" name="-modified" id="modified" class="form-control form-control-sm" readonly />
 					</div>
 					<div class="form-group">
 						<label for="published">Published Date</label>
-						<input type="datetime-local" name="-published" id="published" value="<?php echo str_replace(' ','T',$this->_data->published); ?>" class="form-control form-control-sm" readonly />
+						<input type="datetime-local" name="-published" id="published" class="form-control form-control-sm" readonly />
 					</div>
 				</div>
 			</div>
@@ -194,7 +186,7 @@ $root = true;
 						'name'=>'show_group',
 						'title'=>'Show group',
 						'prefix'=>'@',
-						'value'=>$this->_attributes->group ?? SETTING_GLOBAL,
+						'value'=>$this->_attributes->show_group ?? SETTING_GLOBAL,
 						'class'=>' form-control-sm',
 						'list'=>$options)); ?>
 					<?php echo Form::select(array(

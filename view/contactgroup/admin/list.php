@@ -5,7 +5,7 @@
  * @controller     ContactGroup
  * @method         List
  * @version        1.0.0
- * @date           2018-01-11
+ * @date           2018-01-15
  * @author         Dan Barto
  * @copyright      Copyright (C) 2017 - 2018 Papiando Riba Internet. All rights reserved.
  * @license        GNU General Public License version 3 or later; see LICENSE.md
@@ -15,7 +15,7 @@ namespace Cubo;
 defined('__CUBO__') || new \Exception("No use starting this code without an include");
 
 $controller = Application::getRouter()->getController();
-?><h1>Contact Groups</h1>
+?><h1>Gontact Groups</h1>
 <form id="filter-form" class="form">
 	<div class="grid-columns">
 		<?php
