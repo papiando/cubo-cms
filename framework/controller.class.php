@@ -3,10 +3,12 @@
  * @application    Cubo CMS
  * @type           Framework
  * @class          Controller
- * @version        1.0.0
- * @date           2018-01-09
+ * @description    All controllers are based on this framework
+ *                 Each controller describes the methods of an object
+ * @version        1.1.0
+ * @date           2019-01-22
  * @author         Dan Barto
- * @copyright      Copyright (C) 2017 - 2018 Papiando Riba Internet. All rights reserved.
+ * @copyright      Copyright (C) 2017 - 2019 Papiando Riba Internet. All rights reserved.
  * @license        GNU General Public License version 3 or later; see LICENSE.md
  */
 namespace Cubo;
@@ -14,8 +16,8 @@ namespace Cubo;
 defined('__CUBO__') || new \Exception("No use starting a class without an include");
 
 class Controller {
+	protected $class;
 	protected $_attributes;
-	protected $_class;
 	protected $_data;
 	protected $_language;
 	protected $_model;
@@ -27,12 +29,12 @@ class Controller {
 	protected static $_publishers = array(ROLE_PUBLISHER,ROLE_MANAGER,ROLE_ADMINISTRATOR);
 	protected static $_managers = array(ROLE_MANAGER,ROLE_ADMINISTRATOR);
 	
-	// Standard view: list
+	// Standard method: list
 	public function list() {
 		$this->_data = $this->_model->getList("*",Session::requiresListAccess());
 	}
 	
-	// Standard view: view
+	// Standard method: view
 	public function view() {
 		// Generate output
 		if(self::getParam('id'))
@@ -43,17 +45,30 @@ class Controller {
 			$id = Configuration::getDefault(self::getParam('controller'));
 		$this->_data = $this->_model->get($id,"*",Session::requiresViewAccess());
 		if(empty($this->_data)) {
-			throw new \Exception("Article cannot be viewed at current access levels");
+			if(!Session::exists('user')) {
+				Session::setMessage(array('alert'=>'info','icon'=>'exclamation','text'=>"{$this->class} requires login credentials"));
+				Session::set('login_redirect',Application::getParam('uri'));
+				Router::redirect('/user?action=login');
+			} else {
+				Session::setMessage(array('alert'=>'error','icon'=>'exclamation','text'=>"This user has no access to {$this->class}"));
+				Session::set('login_redirect',Application::getParam('uri'));
+				Router::redirect('/user?action=noaccess');
+			}
 		}
 		if(isset($this->_data->{'@attributes'})) $this->_attributes = json_decode($this->_data->{'@attributes'});
 	}
 	
-	// Admin view: list
+	// Standard default method: directs to view
+	public function default() {
+		$this->view();
+	}
+	
+	// Admin method: list
 	public function admin_list($columns = "*",$filter = "1",$order = "`title`") {
 		$this->_data = $this->_model->getList($columns,$filter,$order);
 	}
 	
-	// Admin view: create
+	// Admin method: create
 	public function admin_create() {
 		// Save posted data
 		if($_POST) {
@@ -67,16 +82,16 @@ class Controller {
 			} else {
 				Session::setMessage("Failed to create item");
 			}
-			Router::redirect('/admin/'.strtolower($this->_class));
+			Router::redirect('/admin/'.strtolower($this->class));
 		}
 	}
 	
-	// Admin view: add
+	// Admin method: add
 	public function admin_add() {
-		admin_create();
+		$this->admin_create();
 	}
 	
-	// Admin view: edit
+	// Admin method: edit
 	public function admin_edit() {
 		// Save posted data
 		if($_POST) {
@@ -90,18 +105,18 @@ class Controller {
 			} else {
 				Session::setMessage("Failed to edit item");
 			}
-			Router::redirect('/admin/'.strtolower($this->_class));
+			Router::redirect('/admin/'.strtolower($this->class));
 		}
 		if(isset($_GET['id'])) {
 			$this->_data = $this->_model->get($_GET['id']);
 			if(isset($this->_data->{'@attributes'})) $this->_attributes = json_decode($this->_data->{'@attributes'});
 		} else {
 			Session::setMessage("This item does not exist");
-			Router::redirect('/admin/'.strtolower($this->_class));
+			Router::redirect('/admin/'.strtolower($this->class));
 		}
 	}
 	
-	// Admin view: trash
+	// Admin method: trash
 	public function admin_trash() {
 		// Remove object
 		if(isset($_GET['id'])) {
@@ -113,12 +128,17 @@ class Controller {
 		} else {
 			Session::setMessage("This item does not exist");
 		}
-		Router::redirect('/admin/'.strtolower($this->_class));
+		Router::redirect('/admin/'.strtolower($this->class));
 	}
 	
-	// Admin view: delete
+	// Admin method: delete
 	public function admin_delete() {
-		admin_trash();
+		$this->admin_trash();
+	}
+		
+	// Admin default method: directs to admin_list
+	public function admin_default() {
+		$this->admin_list();
 	}
 	
 	public function getData() {
@@ -134,7 +154,7 @@ class Controller {
 	}
 	
 	public function getDefault($param) {
-		return Configuration::getDefault($this->_params->method.$param);
+		return Configuration::getDefault($param);
 	}
 	
 	public function getParams() {
@@ -190,8 +210,8 @@ class Controller {
 	}
 	
 	public function __construct($data = array()) {
-		$this->_class = basename(str_replace('\\','/',get_called_class()),'Controller');
-		$class = __CUBO__.'\\'.$this->_class;
+		$this->class = basename(str_replace('\\','/',get_called_class()),'Controller');
+		$class = __CUBO__.'\\'.$this->class;
 		$this->_model = new $class();
 		$this->_data = $data;
 		$this->_params = Application::getRouter()->getParams();

@@ -3,10 +3,11 @@
  * @application    Cubo CMS
  * @type           Framework
  * @class          Configuration
- * @version        1.0.0
- * @date           2018-01-09
+ * @description    This framework loads initial configurations and settings for the application
+ * @version        1.1.0
+ * @date           2019-01-22
  * @author         Dan Barto
- * @copyright      Copyright (C) 2017 - 2018 Papiando Riba Internet. All rights reserved.
+ * @copyright      Copyright (C) 2017 - 2019 Papiando Riba Internet. All rights reserved.
  * @license        GNU General Public License version 3 or later; see LICENSE.md
  */
 namespace Cubo;
@@ -85,24 +86,29 @@ class Configuration {
 	protected static $_settings = null;
 	protected static $_defaults = null;
 	
-	public static function get($property) {
-		return isset(self::$_settings->$property) ? self::$_settings->$property : null;
+	// Return value for property; if empty return alternative value
+	public static function get($property,$value = null) {
+		return isset(self::$_settings->$property) ? self::$_settings->$property : $value;
 	}
 	
+	// Set a property to a given value
 	public static function set($property,$value) {
 		if(!isset(self::$_settings))
 			self::$_settings = new \stdClass();
 		self::$_settings->$property = $value;
 	}
 	
+	// Return all default properties and values
 	public static function getDefaults() {
 		return self::$_defaults;
 	}
 	
-	public static function getDefault($property) {
-		return isset(self::$_defaults->$property) ? self::$_defaults->$property : null;
+	// Return default value for property; if empty return alternative value
+	public static function getDefault($property,$value = null) {
+		return isset(self::$_defaults->$property) ? self::$_defaults->$property : $value;
 	}
 	
+	// Set a default property to a given value
 	public static function setDefault($property,$value) {
 		if(!isset(self::$_defaults))
 			self::$_defaults = new \stdClass();

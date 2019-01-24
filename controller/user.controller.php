@@ -51,6 +51,16 @@ class UserController extends Controller {
 		Router::redirect('/');
 	}
 	
+	public function noaccess() {
+		echo "<h1>Unauthorised access to this page</h1>";
+		echo "<p>You are trying to access a page that requires different authorisation. You are currently logged in as <strong>".Session::get('user')->name."</strong>. This user does not have the permissions to view this page.</p>";
+		echo "<p>Please log out and provide the proper credentials, or navigate to another page.</p>";
+		echo "<ul><li><a href=\"/user?action=logout\">Log out</a></li></ul>";
+		Session::setMessage(array('alert'=>'info','icon'=>'exclamation','text'=>"User has logged out"));
+		Session::delete('user');
+		Router::redirect('/');
+	}
+	
 	public function __construct($data = array()) {
 		parent::__construct($data);
 		$this->_model = new User();

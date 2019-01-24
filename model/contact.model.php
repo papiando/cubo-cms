@@ -14,9 +14,9 @@ class Contact extends Model {
 			return null;
 		// Update or insert message record
 		if(!$id) {
-			$query = "INSERT INTO `message` SET `name`=:name,`email`=:email,`fromname`=:fromname,`message`=:message,`title`=:title,`created`=NOW(),`creator`=1,`contact`=1";
+			$query = "INSERT INTO `message` SET `name`=:name,`email`=:email,`fromname`=:fromname,`message`=:message,`title`=:title,`created`=NOW(),`author`=1,`contact`=1";
 		} else {
-			$query = "UPDATE `message` SET `name`=:name,`email`=:email,`fromname`=:fromname,`message`=:message,`title`=:title,`created`=NOW(),`creator`=1,`contact`=1";
+			$query = "UPDATE `message` SET `name`=:name,`email`=:email,`fromname`=:fromname,`message`=:message,`title`=:title,`created`=NOW(),`author`=1,`contact`=1";
 		}
 		$list = array(':name'=>Database::seo($data['subject']),':email'=>strtolower($data['email']),':fromname'=>trim($data['name']),':message'=>trim($data['message']),':title'=>trim($data['subject']));
 		$this->_database->execute($query,$list);

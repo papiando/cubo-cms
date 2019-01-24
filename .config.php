@@ -7,17 +7,17 @@ function show(&$var) {
 	echo "</pre>";
 }
 
-Configuration::setDefault('action','view');
-Configuration::setDefault('list-action','list');
-Configuration::setDefault('controller','article');
+//Configuration::setDefault('method','view');
+Configuration::setDefault('controller','dashboard');
 Configuration::setDefault('language','en');
-Configuration::setDefault('route','index');
-Configuration::setDefault('template','papiando');
+Configuration::setDefault('template','home');
+Configuration::setDefault('theme','papiando');
 
 Configuration::setDefault('article','home');
 Configuration::setDefault('contact','contact');
+Configuration::setDefault('dashboard','home');
 
-Configuration::setDefault('admin-action','index');
+Configuration::setDefault('admin-action','default');
 Configuration::setDefault('admin-list-action','index');
 Configuration::setDefault('admin-controller','article');
 Configuration::setDefault('admin-language','en');

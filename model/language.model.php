@@ -9,8 +9,7 @@ defined('__CUBO__') || new \Exception("No use starting a class without an includ
 
 class Language extends Model {
 	public static function get($id,$columns = "*",$filter = "1") {
-		self::$_class = basename(str_replace('\\','/',get_called_class()));
-		Application::getDB()->select($columns)->from(strtolower(self::$_class));
+		Application::getDB()->select($columns)->from(strtolower(self::getClass()));
 		if(is_numeric($id)) {
 			Application::getDB()->where("`id`=:id AND {$filter}");
 		} elseif(strlen($id) == 2) {
@@ -23,8 +22,7 @@ class Language extends Model {
 	}
 	
 	public static function exists($id,$filter = "1") {
-		self::$_class = basename(str_replace('\\','/',get_called_class()));
-		Application::getDB()->select("`id`")->from(strtolower(self::$_class));
+		Application::getDB()->select("`id`")->from(strtolower(self::getClass()));
 		if(is_numeric($id)) {
 			Application::getDB()->where("`id`=:id AND {$filter}");
 		} elseif(strlen($id) == 2) {

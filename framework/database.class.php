@@ -3,10 +3,10 @@
  * @application    Cubo CMS
  * @type           Framework
  * @class          Database
- * @version        1.0.0
- * @date           2018-01-09
+ * @version        1.1.0
+ * @date           2019-01-22
  * @author         Dan Barto
- * @copyright      Copyright (C) 2017 - 2018 Papiando Riba Internet. All rights reserved.
+ * @copyright      Copyright (C) 2017 - 2019 Papiando Riba Internet. All rights reserved.
  * @license        GNU General Public License version 3 or later; see LICENSE.md
  */
 namespace Cubo;
@@ -18,7 +18,7 @@ class Database {
 	private $user;
 	private $password;
 	protected static $dbh = null;
-	private $_className = null;
+	private $className = null;
 	protected $query;
 	
 	public function __construct($options) {
@@ -64,7 +64,6 @@ class Database {
 		if(!is_string($query)) {
 			switch($this->method) {
 				case 'insert':
-				var_dump($query);
 					$query = "INSERT INTO ".self::quote($this->query->insert);
 					isset($this->query->columns) && $query .= ' ('.self::quote($this->query->columns).')';
 					isset($this->query->values) && $query .= " VALUES (".self::comma($this->query->values).')';
@@ -95,6 +94,11 @@ class Database {
 		return $query;
 	}
 	
+	// Added for debugging purposes
+	public function getQuery() {
+		return $this->query;
+	}
+	
 	public function load($query = null,$list = null) {
 		if(is_array($query)) {
 			$list = $query;
@@ -102,8 +106,8 @@ class Database {
 		}
 		$sth = self::$dbh->prepare(empty($query) ? $this->query() : $query);
 		$sth->execute($list);
-		$result = $sth->fetchAll(\PDO::FETCH_CLASS|\PDO::FETCH_PROPS_LATE,'\\'.__NAMESPACE__.'\\'.$this->_className);
-		$this->_className = null;
+		$result = $sth->fetchAll(\PDO::FETCH_CLASS|\PDO::FETCH_PROPS_LATE,'\\'.__NAMESPACE__.'\\'.$this->className);
+		$this->className = null;
 		return $result;
 	}
 	
@@ -114,9 +118,9 @@ class Database {
 		}
 		$sth = self::$dbh->prepare(empty($query) ? $this->query() : $query);
 		$sth->execute($list);
-		$sth->setFetchMode(\PDO::FETCH_CLASS|\PDO::FETCH_PROPS_LATE,'\\'.__NAMESPACE__.'\\'.$this->_className);
+		$sth->setFetchMode(\PDO::FETCH_CLASS|\PDO::FETCH_PROPS_LATE,'\\'.__NAMESPACE__.'\\'.$this->className);
 		$result = $sth->fetch();
-		$this->_className = null;
+		$this->className = null;
 		return $result;
 	}
 	
@@ -129,7 +133,7 @@ class Database {
 		$sth->execute($list);
 		$sth->setFetchMode(\PDO::FETCH_ASSOC);
 		$result = $sth->fetchAll();
-		$this->_className = null;
+		$this->className = null;
 		return $result;
 	}
 	
@@ -142,7 +146,7 @@ class Database {
 		$sth->execute($list);
 		$sth->setFetchMode(\PDO::FETCH_ASSOC);
 		$result = $sth->fetch();
-		$this->_className = null;
+		$this->className = null;
 		return $result;
 	}
 	
@@ -153,7 +157,7 @@ class Database {
 		}
 		$sth = self::$dbh->prepare(empty($query) ? $this->query() : $query);
 		$result = $sth->execute($list);
-		$this->_className = null;
+		$this->className = null;
 		return $result;
 	}
 	
@@ -173,7 +177,7 @@ class Database {
 	
 	public function from($table) {
 		$this->query->from = $table;
-		$this->_className = $table;
+		$this->className = $table;
 		return $this;
 	}
 	
