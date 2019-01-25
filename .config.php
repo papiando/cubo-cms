@@ -9,9 +9,8 @@ function show(&$var) {
 }
 
 // Application defaults
-Configuration::setDefault('action','view');
-Configuration::setDefault('list-action','list');
 Configuration::setDefault('controller','article');
+//Configuration::setDefault('method','view');
 Configuration::setDefault('language','en');
 Configuration::setDefault('route','index');
 Configuration::setDefault('template','papiando');

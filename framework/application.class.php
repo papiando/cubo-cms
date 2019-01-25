@@ -20,6 +20,7 @@ class Application {
 	protected static $_defaults;
 	protected static $_data;
 	protected static $_params;
+	protected static $_template;
 	public static $_database;
 	
 	public static function getDB() {
@@ -68,6 +69,7 @@ class Application {
 		// Declare the router
 		self::$_router = new Router($uri);
 		// Set params
+		$_params = Configuration::getParams();
 		if(!isset(self::$_params))
 			self::$_params = new \stdClass();
 		self::$_params->base_url = __BASE__;
@@ -75,9 +77,10 @@ class Application {
 		self::$_params->language = self::$_router->getLanguage();
 		self::$_params->provider_name = "Papiando Riba Internet";
 		self::$_params->provider_url = "https://papiando.com";
-		self::$_params->site_name = Configuration::getParam('site_name');
+		self::$_params->site_name = Configuration::get('site_name');
 		self::$_params->template = self::$_router->getTemplate();
-		self::$_params->title = Configuration::getParam('site_name');
+		self::$_params->theme = self::$_router->getTheme();
+		self::$_params->title = Configuration::get('site_name');
 		self::$_params->uri = self::$_params->base_url.$_SERVER['REQUEST_URI'];
 		self::$_params->url = self::$_params->base_url.current(explode('?',$_SERVER['REQUEST_URI']));
 		// Retrieve layout
@@ -85,29 +88,29 @@ class Application {
 		if($route == Configuration::get('admin_route') && !Session::exists('user')) {
 			Session::setMessage(array('alert'=>'info','icon'=>'exclamation','text'=>"This page requires login access"));
 			Session::set('login_redirect',$uri);
-			Router::redirect('/user?action=login');
+			Router::redirect('/user?method=login');
 		}
 		// Preset controller's class and method
 		$class = __CUBO__.'\\'.ucfirst(self::$_router->getController()).'Controller';
-		$method = str_replace(DS,'_',strtolower(self::$_router->getMethod().self::$_router->getAction()));
+		$method = strtolower(str_replace(DS,'_',self::$_router->getAdmin()).self::$_router->getMethod());
 		// Call the controller's method
 		self::$_controller = new $class();
 		if(method_exists($class,$method)) {
 			self::$_controller->$method();
 			self::$_data = self::$_controller->getData();
 			$view = new View();
-			if(self::$_router->getController() == 'image' && $method == 'view') {
+			if(self::$_router->getController() == 'image' && $method == 'default') {
 				$view->renderImage(self::$_controller->getData());
 				return;
 			} else {
 				$html = $view->render(self::$_controller->getData());
 			}
 		} else {
-			throw new \Exception("Class '{$class}' does not have the method '{$method}' defined");
+			throw new \Exception("Class '{$class}' does not have the '{$method}' method defined");
 		}
 		// Render template
-		$template = new Template();
-		$html = $template->render($html);
+		self::$_template = Template::get(self::$_params->template);
+		$html = self::$_template->render($html);
 		// Run plugins
 		$plugins = self::$_database->loadItems("SELECT * FROM `plugin` WHERE `status`='".STATUS_PUBLISHED."'");
 		foreach($plugins as $plugin) {

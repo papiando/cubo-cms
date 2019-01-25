@@ -42,7 +42,7 @@ class Controller {
 		elseif(self::getParam('name'))
 			$id = self::getParam('name');
 		else
-			$id = Configuration::getDefault(self::getParam('controller'));
+			$id = Application::getDefault(self::getParam('controller'));
 		$this->_data = $this->_model->get($id,"*",Session::requiresViewAccess());
 		if(empty($this->_data)) {
 			if(!Session::exists('user')) {
@@ -154,7 +154,7 @@ class Controller {
 	}
 	
 	public function getDefault($param) {
-		return Configuration::getDefault($param);
+		return Application::getDefault($param);
 	}
 	
 	public function getParams() {

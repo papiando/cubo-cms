@@ -19,7 +19,7 @@ class ImageController extends Controller {
 		elseif(self::getParam('name'))
 			$id = self::getParam('name');
 		else
-			$id = Configuration::getDefault(self::getParam('controller'));
+			$id = Application::getDefault(self::getParam('controller'));
 		$this->_data = $this->_model->get($id,"*","1");
 		if(empty($this->_data)) {
 			throw new \Exception("Article cannot be viewed at current access levels");

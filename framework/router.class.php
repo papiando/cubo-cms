@@ -20,7 +20,7 @@ class Router {
 	protected $_language;
 	
 	public function getDefault($param) {
-		return Configuration::getDefault(str_replace(DS,'-',$this->_params->admin ?? '').$param);
+		return Application::getDefault(str_replace(DS,'-',$this->_params->admin ?? '').$param);
 	}
 	
 	public function getParams() {
@@ -89,7 +89,7 @@ class Router {
 				$this->_params->method = $key;
 		}
 		// Parse que rest of the query
-		$routes = array('site'=>'',Configuration::get('admin_route','admin')=>'admin'.DS);
+		$routes = array('site'=>'',Application::getParam('admin_route','admin')=>'admin'.DS);
 		if(count($path_parts)) {
 			$part = strtolower(current($path_parts));
 			// Get route or language if given
