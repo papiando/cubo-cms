@@ -69,7 +69,7 @@ class Application {
 		// Declare the router
 		self::$_router = new Router($uri);
 		// Set params
-		$_params = Configuration::getParams();
+		self::$_params = Configuration::getParams();
 		if(!isset(self::$_params))
 			self::$_params = new \stdClass();
 		self::$_params->base_url = __BASE__;
@@ -112,7 +112,7 @@ class Application {
 		self::$_template = Template::get(self::$_params->template);
 		$html = self::$_template->render($html);
 		// Run plugins
-		$plugins = self::$_database->loadItems("SELECT * FROM `plugin` WHERE `status`='".STATUS_PUBLISHED."'");
+		$plugins = self::$_database->loadItems("SELECT * FROM `plugin` WHERE `status`='".STATUS_PUBLISHED."' ORDER BY `id` DESC");
 		foreach($plugins as $plugin) {
 			$class = __CUBO__.'\\'.ucfirst($plugin['name']).'Plugin';
 			$html = $class::run($html);
