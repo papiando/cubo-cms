@@ -3,8 +3,9 @@
  * @application    Cubo CMS
  * @type           Framework
  * @class          Application
- * @version        1.0.0
- * @date           2018-01-09
+ * @description    The application framework calls the router and runs the application using the indicated method and method defaults
+ * @version        1.1.0
+ * @date           2019-01-25
  * @author         Dan Barto
  * @copyright      Copyright (C) 2017 - 2018 Papiando Riba Internet. All rights reserved.
  * @license        GNU General Public License version 3 or later; see LICENSE.md
@@ -74,9 +75,9 @@ class Application {
 		self::$_params->language = self::$_router->getLanguage();
 		self::$_params->provider_name = "Papiando Riba Internet";
 		self::$_params->provider_url = "https://papiando.com";
-		self::$_params->site_name = Configuration::get('site_name');
+		self::$_params->site_name = Configuration::getParam('site_name');
 		self::$_params->template = self::$_router->getTemplate();
-		self::$_params->title = Configuration::get('site_name');
+		self::$_params->title = Configuration::getParam('site_name');
 		self::$_params->uri = self::$_params->base_url.$_SERVER['REQUEST_URI'];
 		self::$_params->url = self::$_params->base_url.current(explode('?',$_SERVER['REQUEST_URI']));
 		// Retrieve layout

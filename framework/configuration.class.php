@@ -3,10 +3,11 @@
  * @application    Cubo CMS
  * @type           Framework
  * @class          Configuration
- * @version        1.0.0
- * @date           2018-01-09
+ * @description    The configuration framework loads settings, parameters and defaults from .config.php and provides these to the application
+ * @version        1.1.0
+ * @date           2019-01-25
  * @author         Dan Barto
- * @copyright      Copyright (C) 2017 - 2018 Papiando Riba Internet. All rights reserved.
+ * @copyright      Copyright (C) 2017 - 2019 Papiando Riba Internet. All rights reserved.
  * @license        GNU General Public License version 3 or later; see LICENSE.md
  */
 namespace Cubo;
@@ -82,8 +83,9 @@ define('USER_NOBODY',0);
 define('USER_SYSTEM',1);
 
 class Configuration {
-	protected static $_settings = null;
-	protected static $_defaults = null;
+	protected static $_settings = null;	// Holds settings read from .config.php
+	protected static $_defaults = null;	// Holds defaults read from .config.php
+	protected static $_params = null;	// Holds parameters read from .config.php
 	
 	public static function get($property) {
 		return isset(self::$_settings->$property) ? self::$_settings->$property : null;
@@ -109,8 +111,18 @@ class Configuration {
 		self::$_defaults->$property = $value;
 	}
 	
-	public function __construct() {
-		
+	public static function getParams() {
+		return self::$_params;
+	}
+	
+	public static function getParam($property) {
+		return isset(self::$_params->$property) ? self::$_params->$property : null;
+	}
+	
+	public static function setParam($property,$value) {
+		if(!isset(self::$_params))
+			self::$_params = new \stdClass();
+		self::$_params->$property = $value;
 	}
 }
 ?>
