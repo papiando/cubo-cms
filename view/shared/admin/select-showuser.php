@@ -6,7 +6,6 @@ $items = array(
 	array('id'=>GLOBAL_SETTING,'title'=>'Global setting'),
 	array('id'=>SHOW_AUTHOR,'title'=>'Show author'),
 	array('id'=>SHOW_PUBLISHER,'title'=>'Show publisher'),
-	array('id'=>SHOW_CREATOR,'title'=>'Show creator'),
 	array('id'=>SHOW_EDITOR,'title'=>'Show editor'),
 	array('id'=>OPTION_HIDE,'title'=>'Hide')
 	);

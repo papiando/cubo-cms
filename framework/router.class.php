@@ -3,10 +3,12 @@
  * @application    Cubo CMS
  * @type           Framework
  * @class          Router
- * @version        1.0.0
- * @date           2018-01-09
+ * @description    The router analyses the URL and routes the visitor to the correct controller and action
+ *                 The router also includes language intelligence
+ * @version        1.1.0
+ * @date           2019-01-22
  * @author         Dan Barto
- * @copyright      Copyright (C) 2017 - 2018 Papiando Riba Internet. All rights reserved.
+ * @copyright      Copyright (C) 2017 - 2019 Papiando Riba Internet. All rights reserved.
  * @license        GNU General Public License version 3 or later; see LICENSE.md
  */
 namespace Cubo;
@@ -16,23 +18,17 @@ defined('__CUBO__') || new \Exception("No use starting a class without an includ
 class Router {
 	protected $_params;
 	protected $_language;
-	protected $_uri;
 	
 	public function getDefault($param) {
-		$method = str_replace(DS,'-',$this->_params->method);
-		return Configuration::getDefault($method.$param);
+		return Configuration::getDefault(str_replace(DS,'-',$this->_params->admin ?? '').$param);
 	}
 	
 	public function getParams() {
 		return $this->_params;
 	}
 	
-	public function getParam($param) {
-		if(isset($this->_params->$param)) {
-			return $this->_params->$param;
-		} else {
-			return $this->getDefault($param);
-		}
+	public function getParam($param,$value = null) {
+		return $this->_params->$param ?? $this->getDefault($param) ?? $value;
 	}
 	
 	public function setParam($param,$value) {
@@ -43,12 +39,12 @@ class Router {
 		return $this->getParam('uri');
 	}
 	
-	public function getAction() {
-		return $this->getParam('action');
+	public function getAdmin() {
+		return $this->getParam('admin','');
 	}
 	
 	public function getController() {
-		return $this->getParam('controller');
+		return $this->getParam('controller','article');
 	}
 	
 	public function getLanguage() {
@@ -56,25 +52,28 @@ class Router {
 	}
 	
 	public function getMethod() {
-		return $this->getParam('method');
+		return $this->getParam('method','default');
 	}
 	
 	public function getRoute() {
-		return $this->getParam('route');
+		return $this->getParam('route','');
 	}
 	
 	public function getTemplate() {
-		return $this->getParam('template');
+		return $this->getParam('template','default');
+	}
+	
+	public function getTheme() {
+		return $this->getParam('theme','default');
 	}
 	
 	public static function redirect($location) {
-		header("Location: {$location}");
+		exit(header("Location: {$location}"));
 	}
 	
 	public function __construct($uri) {
 		$this->_params = new \stdClass();
 		$uri = urldecode(trim($uri,'/'));
-		$this->_admin_route = Configuration::get('admin_route','admin');
 		// Split URI
 		$uri_parts = explode('?',$uri);
 		$uri_parts[] = '';
@@ -84,14 +83,19 @@ class Router {
 		// Get parameters from query string
 		parse_str($uri_parts[1],$params);
 		$this->_params = (object)$params;
-		$this->_params->method = '';
-		$routes = array('site'=>'',$this->_admin_route=>'admin'.DS);
+		// See if there is a parameter without value; assume it's a shorthand method
+		foreach($this->_params as $key=>$value) {
+			if(empty($value) && empty($this->_params->method))
+				$this->_params->method = $key;
+		}
+		// Parse que rest of the query
+		$routes = array('site'=>'',Configuration::get('admin_route','admin')=>'admin'.DS);
 		if(count($path_parts)) {
 			$part = strtolower(current($path_parts));
 			// Get route or language if given
 			if(in_array($part,array_keys($routes))) {
 				$this->_params->route = $part;
-				$this->_params->method = $routes[$part];
+				$this->_params->admin = $routes[$part];
 				array_shift($path_parts);
 				$part = strtolower(current($path_parts));
 			} elseif(Language::exists($part)) {
@@ -109,12 +113,6 @@ class Router {
 			// Remainder is optional name
 			if($part)
 				$this->_params->name = $part;
-			if(!isset($this->_params->action)) {
-				if(isset($this->_params->route) && $this->_params->route == $this->_admin_route)
-					$this->_params->action = 'list';
-				else
-					$this->_params->action = 'view';
-			}
 		}
 		// Store representable URI
 		$this->setParam('uri',$uri);

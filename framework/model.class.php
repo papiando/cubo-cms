@@ -3,10 +3,12 @@
  * @application    Cubo CMS
  * @type           Framework
  * @class          Model
- * @version        1.0.0
- * @date           2018-01-09
+ * @description    All models are based on this framework
+ *                 Each model has a database table associated to it
+ * @version        1.1.0
+ * @date           2019-01-17
  * @author         Dan Barto
- * @copyright      Copyright (C) 2017 - 2018 Papiando Riba Internet. All rights reserved.
+ * @copyright      Copyright (C) 2017 - 2019 Papiando Riba Internet. All rights reserved.
  * @license        GNU General Public License version 3 or later; see LICENSE.md
  */
 namespace Cubo;
@@ -14,40 +16,45 @@ namespace Cubo;
 defined('__CUBO__') || new \Exception("No use starting a class without an include");
 
 class Model {
-	protected static $_class;
+	protected static $class;		// Class name
 	
+	// Retrieves the class name and stores it
+	protected static function getClass() {
+		return self::$class = basename(str_replace('\\','/',get_called_class()));
+	}
+	
+	// Retrieve a single record from the model
 	public static function get($id,$columns = "*",$filter = "1") {
-		self::$_class = basename(str_replace('\\','/',get_called_class()));
-		Application::getDB()->select($columns)->from(strtolower(self::$_class));
-		if(is_numeric($id)) {
+		Application::getDB()->select($columns)->from(strtolower(self::getClass()));
+		if(is_null($id)) {
+			return null;										// Safety net if no valid $id is provided
+		} elseif(is_numeric($id)) {
 			Application::getDB()->where("`id`=:id AND {$filter}");
 		} else {
 			Application::getDB()->where("`name`=:id AND {$filter}");
+		}
+		if($filter == "666") {	// Added for debugging purposes
+			print_r(Application::getDB()->getQuery());
 		}
 		$result = Application::getDB()->loadObject(array(':id'=>$id));
-		return (is_object($result) ? $result : null);
+		return (is_object($result) ? $result : null);			// Only return the object, otherwise return nothing
 	}
 	
+	// Retrieve set of records from the model
 	public static function getList($columns = "*",$filter = "1",$order = "`title`") {
-		self::$_class = basename(str_replace('\\','/',get_called_class()));
-		Application::getDB()->select($columns)->from(strtolower(self::$_class))->where($filter)->order($order);
+		Application::getDB()->select($columns)->from(strtolower(self::getClass()))->where($filter)->order($order);
 		$result = Application::getDB()->load();
-		return (is_array($result) ? $result : null);
+		return (is_array($result) ? $result : null);			// Return an array of objects, otherwise return nothing
 	}
 	
+	// Determine if a record exists
 	public static function exists($id,$filter = "1") {
-		self::$_class = basename(str_replace('\\','/',get_called_class()));
-		Application::getDB()->select($columns)->from(strtolower(self::$_class));
-		if(is_numeric($id)) {
-			Application::getDB()->where("`id`=:id AND {$filter}");
-		} else {
-			Application::getDB()->where("`name`=:id AND {$filter}");
-		}
-		$result = Application::getDB()->loadItem(array(':id'=>$id));
-		return is_array($result);
+		return self::get($id,"`id`",$filter);					// Only return an object with the id, otherwise return nothing
 	}
 	
-	public function save($data,$id = null) {
+	// Save the object with provided data
+	// If $id is provided, update, otherwise insert
+	public static function save($data,$id = null) {
 		$set = "";
 		$binary = "";
 		$list = array();
@@ -82,20 +89,23 @@ class Model {
 		}
 		$published = isset($list[':status']) && $list[':status'] == STATUS_PUBLISHED;
 		if(!is_null($id)) {
-			$query = "UPDATE `".strtolower(self::$_class)."` SET ".$set.(empty($binary) ? "" : (empty($set) ? "" : ",").$binary).",`modified`=NOW(),`editor`=".Session::getUser().($published ? ",`published`=NOW(),`publisher`=".Session::getUser() : "")." WHERE `id`={$id}";
+			$query = "UPDATE `".strtolower(self::getClass())."` SET ".$set.(empty($binary) ? "" : (empty($set) ? "" : ",").$binary).",`modified`=NOW(),`editor`=".Session::getUser().($published ? ",`published`=NOW(),`publisher`=".Session::getUser() : "")." WHERE `id`={$id}";
 		} else {
-			$query = "INSERT INTO `".strtolower(self::$_class)."` SET ".$set.(empty($binary) ? "" : (empty($set) ? "" : ",").$binary).",`created`=NOW(),`author`=".Session::getUser().($published ? ",`published`=NOW(),`publisher`=".Session::getUser() : "");
+			$query = "INSERT INTO `".strtolower(self::getClass())."` SET ".$set.(empty($binary) ? "" : (empty($set) ? "" : ",").$binary).",`created`=NOW(),`author`=".Session::getUser().($published ? ",`published`=NOW(),`publisher`=".Session::getUser() : "");
 		}
 		return Application::getDB()->execute($query,$list);
 	}
 	
-	public function trash($id) {
-		$query = "UPDATE `".strtolower(self::$_class)."` SET `status`='".STATUS_TRASHED."',`modified`=NOW(),`editor`=".Session::getUser()." WHERE `id`={$id}";
+	// Rather than deleting, an item can be trashed
+	public static function trash($id) {
+		$query = "UPDATE `".strtolower(self::$getClass())."` SET `status`='".STATUS_TRASHED."',`modified`=NOW(),`editor`=".Session::getUser()." WHERE `id`={$id}";
 		return Application::getDB()->execute($query);
 	}
 	
-	public function __construct($id = null) {
-		self::$_class = basename(str_replace('\\','/',get_called_class()));
+	// Retrieve the class name when creating a model object
+	// If $id is provided, retrieve the item, otherwise return nothing
+	public function __construct() {
+		self::getClass();
 	}
 }
 ?>

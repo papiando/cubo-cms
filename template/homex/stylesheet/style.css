@@ -1,0 +1,112 @@
+@import url('papiando.css') screen;
+
+body.has-fixed-nav {
+	padding-top: 4rem;
+}
+nav.fixed-top {
+	min-height: 4rem;
+}
+
+
+/* ---------------------------------------------------
+    SIDEBAR STYLE
+   --------------------------------------------------- */
+
+#screen-wrapper {
+    display: flex;
+    align-items: stretch;
+}
+
+#sidebar {
+    min-width: 15rem;
+    max-width: 15rem;
+    transition: all .5s;
+}
+
+.glass {
+	position: relative;
+}
+.glass::before {
+	content: '';
+	position: absolute;
+	top: 0;
+	left: 0;
+	bottom: 0;
+	right: 0;
+	background: white;
+	overflow: hidden;
+	filter: blur(.125rem) drop-shadow(.125rem .125rem .125rem black) opacity(.5);
+}
+
+#sidebar .sidebar-header {
+    padding: 1.25rem;
+	text-align: center;
+	overflow: hidden;
+}
+
+#sidebar #sidebar-toggle {
+	min-width: 2.5rem;
+	min-height: 2.5rem;
+	white-space: nowrap;
+}
+
+#sidebar ul li a {
+	padding: 1.25rem;
+	line-height: 2.5rem;
+    text-align: left;
+}
+
+#sidebar ul.components {
+    overflow-x: hidden;
+	overflow-y: auto;
+}
+
+#sidebar ul li a {
+    padding: 1.25rem;
+    font-size: 1rem;
+    display: block;
+	white-space: nowrap;
+}
+
+#sidebar ul li a:hover {
+    background: rgba(255,255,255,.5);
+}
+
+#sidebar ul li.active>a,
+a[aria-expanded="true"] {
+    background: rgba(0,0,0,.5);
+}
+
+#sidebar ul ul li a {
+	font-size: small !important;
+	padding: .75rem 1.25rem;
+	line-height: 1.5rem;
+}
+
+a[data-toggle="collapse"] {
+    position: relative;
+}
+
+.dropdown-toggle::after {
+    display: block;
+    position: absolute;
+    top: 50%;
+    right: .5rem;
+    transform: translateY(-50%);
+}
+
+#sidebar.collapsed {
+    min-width: 5rem;
+    max-width: 5rem;
+    text-align: center;
+}
+
+#sidebar:not(.collapsed) .when-collapsed,
+#sidebar.collapsed .when-expanded {
+    display: none;
+}
+
+#sidebar:not(.collapsed) .when-expanded,
+#sidebar.collapsed .when-collapsed {
+    display: initial;
+}

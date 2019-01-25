@@ -3,10 +3,10 @@
  * @application    Cubo CMS
  * @type           Framework
  * @class          View
- * @version        1.0.0
- * @date           2018-01-09
+ * @version        1.1.0
+ * @date           2019-01-22
  * @author         Dan Barto
- * @copyright      Copyright (C) 2017 - 2018 Papiando Riba Internet. All rights reserved.
+ * @copyright      Copyright (C) 2017 - 2019 Papiando Riba Internet. All rights reserved.
  * @license        GNU General Public License version 3 or later; see LICENSE.md
  */
 namespace Cubo;
@@ -16,8 +16,8 @@ defined('__CUBO__') || new \Exception("No use starting a class without an includ
 class View {
 	protected $_data;
 	protected $_attributes;
-	protected $_path;
-	public $_sharedPath;
+	protected $path;
+	public $sharedPath;
 	protected $_router;
 	protected $_class;
 	
@@ -29,24 +29,24 @@ class View {
 		if(!$this->_router) {
 			return false;
 		}
-		$layout = $this->_router->getMethod().$this->_router->getAction().'.php';
-		return $this->_path = __ROOT__.DS.'view'.DS.$this->_class.DS.$layout;
+		$layout = $this->_router->getAdmin().$this->_router->getMethod().'.php';
+		return $this->path = __ROOT__.DS.'view'.DS.$this->_class.DS.$layout;
 	}
 	
 	public function getDefaultPath() {
 		if(!$this->_router) {
 			return false;
 		}
-		$layout = $this->_router->getMethod().$this->_router->getAction().'.php';	// TODO: Need to check default
-		return $this->_path = __ROOT__.DS.'view'.DS.$this->_class.DS.$layout;
+		$layout = $this->_router->getAdmin().$this->_router->getMethod().'.php';	// TODO: Need to check default
+		return $this->path = __ROOT__.DS.'view'.DS.$this->_class.DS.$layout;
 	}
 	
 	public function getSharedPath() {
 		if(!$this->_router) {
 			return false;
 		}
-		$layout = $this->_router->getMethod();	// TODO: Need to check default
-		return $this->_sharedPath = __ROOT__.DS.'view'.DS.'shared'.DS.$layout;
+		$layout = $this->_router->getAdmin();	// TODO: Need to check default
+		return $this->sharedPath = __ROOT__.DS.'view'.DS.'shared'.DS.$layout;
 	}
 	
 	public function render($data = array()) {
@@ -57,11 +57,11 @@ class View {
 			// Start buffering output
 			ob_start();
 			// Write output to buffer
-			include($this->_path);
+			include($this->path);
 			// Return buffered output
 			return ob_get_clean();
 		} else {
-			throw new \Exception("Template file '{$this->_path}' does not exist");
+			throw new \Exception("Template file '{$this->path}' does not exist");
 		}
 	}
 	
@@ -69,10 +69,10 @@ class View {
 		$this->_data = $data;
 		if(file_exists($this->getPath()) || file_exists($this->getDefaultPath())) {
 			// Write output to buffer
-			include($this->_path);
+			include($this->path);
 			return;
 		} else {
-			throw new \Exception("Template file '{$this->_path}' does not exist");
+			throw new \Exception("Template file '{$this->path}' does not exist");
 		}
 	}
 	

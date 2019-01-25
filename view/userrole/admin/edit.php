@@ -69,9 +69,9 @@ $root = true;
 						</select>
 					</div>
 					<div class="form-group">
-						<label for="creator">Creator</label>
-						<select name="-creator" id="creator" class="form-control form-control-sm" readonly>
-							<?php $user = 'creator'; ?>
+						<label for="author">Author</label>
+						<select name="-author" id="author" class="form-control form-control-sm" readonly>
+							<?php $user = 'author'; ?>
 							<?php include($this->_sharedPath.'select-user.php'); ?>
 						</select>
 					</div>

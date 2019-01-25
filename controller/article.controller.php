@@ -3,10 +3,11 @@
  * @application    Cubo CMS
  * @type           Controller
  * @class          ArticleController
- * @version        1.0.0
- * @date           2018-01-09
+ * @description    The controller that hold the methods for the article object
+ * @version        1.1.0
+ * @date           2019-01-22
  * @author         Dan Barto
- * @copyright      Copyright (C) 2017 - 2018 Papiando Riba Internet. All rights reserved.
+ * @copyright      Copyright (C) 2017 - 2019 Papiando Riba Internet. All rights reserved.
  * @license        GNU General Public License version 3 or later; see LICENSE.md
  */
 namespace Cubo;
