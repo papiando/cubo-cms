@@ -33,7 +33,8 @@ spl_autoload_register(function($class) {
 });
 
 // Retrieve configuration parameters
-include_once('.config.php');
+if(!defined('CONFIG_LOADED'))
+	include_once('.config.php');
 
 // Start session
 session_start();

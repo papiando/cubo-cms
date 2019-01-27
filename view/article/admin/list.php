@@ -20,7 +20,7 @@ $controller = Application::getRouter()->getController();
 	<div class="grid-columns">
 		<?php
 			$filter = array('id'=>'filter-text','label'=>'Search','prefix'=>'','value'=>'');
-			include($this->_sharedPath.'filter-text.php'); ?>
+			include($this->sharedPath.'filter-text.php'); ?>
 		<?php $any = array(
 			array('id'=>STATUS_ANY,'title'=>'Any status')); ?>
 		<?php echo Form::select(array(
@@ -71,10 +71,10 @@ $controller = Application::getRouter()->getController();
 foreach($this->_data as $item) {
 ?>	<div class="table-item d-none grid-columns row-body" data-item="<?php echo htmlentities(json_encode($item)); ?>" data-filter="none">
 		<div class="align-middle"><?php echo $item->title; ?></div>
-		<div class="align-middle"><?php include($this->_sharedPath.'show-status.php'); ?></div>
-		<div class="align-middle"><?php include($this->_sharedPath.'show-category.php'); ?></div>
-		<div class="align-middle"><?php include($this->_sharedPath.'show-language.php'); ?></div>
-		<div class="align-middle"><?php include($this->_sharedPath.'show-access.php'); ?></div>
+		<div class="align-middle"><?php include($this->sharedPath.'show-status.php'); ?></div>
+		<div class="align-middle"><?php include($this->sharedPath.'show-category.php'); ?></div>
+		<div class="align-middle"><?php include($this->sharedPath.'show-language.php'); ?></div>
+		<div class="align-middle"><?php include($this->sharedPath.'show-access.php'); ?></div>
 		<div class="text-right align-middle">
 			<a href="/admin/<?php echo $controller; ?>?action=edit&id=<?php echo $item->id; ?>" class="btn btn-sm btn-warning<?php echo (ArticleController::canEdit($item->author) ? '' : ' disabled'); ?>" tabindex="-1"><i class="fa fa-pencil fa-fw"></i></a>
 			<a href="/admin/<?php echo $controller; ?>?action=trash&id=<?php echo $item->id; ?>" class="btn btn-sm btn-danger<?php echo (ArticleController::canPublish() ? '' : ' disabled'); ?>" tabindex="-1"><i class="fa fa-trash fa-fw"></i></a>
