@@ -1,4 +1,9 @@
 <?php
+if(isset($_GET['debug'])) {
+	error(E_ALL);
+	ini_set('display_errors',1);
+}
+
 // Auto-start Cubo framework
 require_once(".autoload.php");
 
