@@ -1,4 +1,5 @@
 <?php
+// Added to allow debugging
 if(isset($_GET['debug'])) {
 	error(E_ALL);
 	ini_set('display_errors',1);
