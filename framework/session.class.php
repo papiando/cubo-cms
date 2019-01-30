@@ -114,13 +114,16 @@ class Session {
 		$newSession = !isset($_COOKIE[$session_name]);
 		// Start the session
 		$result=session_start();
+		$_SESSION['lastaccessed'] = time();
 		// Set session cookie life time
-		setcookie(session_name(),session_id(),time()+$session_lifetime);
+		setcookie(session_name(),session_id(),$_SESSION['lastaccessed']+$session_lifetime);
 		self::$lifetime = $session_lifetime;
+		$_SESSION['expires'] = time() + $session_lifetime;
 		// Retrieve and store session id
 		self::$id = session_id();
 		// Log entry if a new session was started
 		if($newSession) {
+			$_SESSION['started'] = $_SESSION['lastaccessed'];
 			new Log(array('name'=>"Session[start]",'title'=>"Start session",'description'=>"New session was started with ID '".self::$id."'"));
 		}
 	}
