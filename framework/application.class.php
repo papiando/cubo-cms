@@ -7,8 +7,8 @@
  * @version        1.1.0
  * @date           2019-01-25
  * @author         Dan Barto
- * @copyright      Copyright (C) 2017 - 2018 Papiando Riba Internet. All rights reserved.
- * @license        GNU General Public License version 3 or later; see LICENSE.md
+ * @copyright      Copyright (C) 2017 - 2019 Papiando Riba Internet
+ * @license        MIT License; see LICENSE.md
  */
 namespace Cubo;
 
@@ -64,6 +64,7 @@ class Application {
 	public static function run($uri) {
 		// Connect to database
 		self::$_database || self::$_database = new Database(Configuration::get('database'));
+		new Log(array('name'=>"Application",'title'=>"Run application",'description'=>"Provided URI was '{$uri}'"));
 		// Get application defaults
 		self::$_defaults = Configuration::getDefaults();
 		// Declare the router

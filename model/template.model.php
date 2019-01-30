@@ -5,7 +5,7 @@
  * @class          Template
  * @description    The model of the template object
  * @version        1.1.0
- * @date           2019-01-22
+ * @date           2019-01-29
  * @author         Dan Barto
  * @copyright      Copyright (C) 2017 - 2019 Papiando Riba Internet. All rights reserved.
  * @license        GNU General Public License version 3 or later; see LICENSE.md

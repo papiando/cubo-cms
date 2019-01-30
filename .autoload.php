@@ -36,6 +36,7 @@ spl_autoload_register(function($class) {
 if(!defined('CONFIG_LOADED'))
 	include_once('.config.php');
 
-// Start session
+// Start named session
+session_name(Configuration::get('session') ?? 'Cubo');
 session_start();
 ?>
