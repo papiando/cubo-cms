@@ -5,7 +5,7 @@
  * @class          Application
  * @description    The application framework calls the router and runs the application using the indicated method and method defaults
  * @version        1.1.0
- * @date           2019-01-25
+ * @date           2019-01-30
  * @author         Dan Barto
  * @copyright      Copyright (C) 2017 - 2019 Papiando Riba Internet
  * @license        MIT License; see LICENSE.md
@@ -20,6 +20,7 @@ class Application {
 	protected static $_defaults;
 	protected static $_data;
 	protected static $_params;
+	protected static $_session;
 	protected static $_template;
 	public static $_database;
 	
@@ -62,9 +63,8 @@ class Application {
 	}
 	
 	public static function run($uri) {
-		// Connect to database
-		self::$_database || self::$_database = new Database(Configuration::get('database'));
-		new Log(array('name'=>"Application",'title'=>"Run application",'description'=>"Provided URI was '{$uri}'"));
+		// Log entry that Application was started
+		new Log(array('name'=>"Application::run",'title'=>"Start application",'description'=>"Application was started with '{$uri}'"));
 		// Get application defaults
 		self::$_defaults = Configuration::getDefaults();
 		// Declare the router
@@ -120,6 +120,15 @@ class Application {
 		}
 		// Display output
 		echo $html;
+	}
+	
+	public function __construct() {
+		// Connect to database
+		self::$_database || self::$_database = new Database(Configuration::get('database'));
+		// Start named session; load from configuration or default to 'Cubo'
+		self::$_session = new Session(Configuration::get('session') ?? 'Cubo');
+		// Run the application and pass URI
+		self::run($_SERVER['REQUEST_URI']);
 	}
 }
 ?>

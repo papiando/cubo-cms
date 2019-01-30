@@ -1,4 +1,16 @@
 <?php
+/**
+ * @application    Cubo CMS
+ * @type           Protected code
+ * @class          n/a
+ * @description    The .autoload.php script presets constants, automates registration of classes, loads the configuration,
+ *                 and finally starts the application; this script is called from index.php
+ * @version        1.1.0
+ * @date           2019-01-30
+ * @author         Dan Barto
+ * @copyright      Copyright (C) 2017 - 2019 Papiando Riba Internet
+ * @license        MIT License; see LICENSE.md
+ */
 namespace Cubo;
 
 // Define global constants
@@ -36,7 +48,6 @@ spl_autoload_register(function($class) {
 if(!defined('CONFIG_LOADED'))
 	include_once('.config.php');
 
-// Start named session
-session_name(Configuration::get('session') ?? 'Cubo');
-session_start();
+// Start the application
+new Application();
 ?>

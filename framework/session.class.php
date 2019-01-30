@@ -14,6 +14,13 @@ namespace Cubo;
 defined('__CUBO__') || new \Exception("No use starting a class without an include");
 
 class Session {
+	protected static $name;		// Keep session name
+	protected static $id;		// Keep session id
+	
+	public static function id() {
+		return self::$id;
+	}
+	
 	public static function set($property,$value) {
 		$_SESSION[$property] = $value;
 	}
@@ -95,6 +102,28 @@ class Session {
 		} else {
 			return "`access` IN (".ACCESS_PUBLIC.",".ACCESS_GUEST.") AND `status`=".STATUS_PUBLISHED;
 		}
+	}
+	
+	public static function start($session_name) {
+		// Apply provided session name
+		session_name($session_name);
+		self::$name = $session_name;
+		// See if there is a session cookie
+		$newSession = !isset($_COOKIE[$session_name]);
+		// Start the session
+		$result=session_start();
+		// Retrieve session id
+		self::$id = session_id();
+		// Log entry if a new session was started
+		if($newSession) {
+			new Log(array('name'=>"Session[start]",'title'=>"Start session",'description'=>"New session was started with ID '".self::$id."'"));
+		}
+		show($newSession);
+		die("****");
+	}
+	
+	public function __construct($session_name) {
+		self::start($session_name);
 	}
 }
 ?>

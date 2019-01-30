@@ -22,7 +22,7 @@ class Log {
 			$log->title = $log->title ?? 'Unspecified';
 			$log->description = $log->description ?? 'Unspecified';
 			$log->user = Session::getUser();
-			$log->session = session_id();
+			$log->session = Session::id();
 			$query = "INSERT INTO `log` SET `name`=:name,`title`=:title,`description`=:description,`session`=:session,`author`=:user,`created`=NOW(),`access`=".ACCESS_PRIVATE;
 			$result = Application::getDB()->execute($query,array(':name'=>$log->name,':title'=>$log->title,':description'=>$log->description,':session'=>$log->session,':user'=>$log->user));
 		} else {
