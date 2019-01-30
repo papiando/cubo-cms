@@ -27,17 +27,17 @@ class Template extends Model {
 	}
 	
 	public function render($html) {
-		if(Template::exists(Application::getRouter()->getTemplate())) {
-			$_template = Template::get(Application::getRouter()->getTemplate());
-			// Replace content tag with loaded HTML
-			return preg_replace("/<cubo:content\s*\/>/i",$html,$_template->html);
-		} elseif(file_exists($this->getPath())) {
+		if(file_exists($this->getPath())) {
 			// Start buffering output
 			ob_start();
 			// Write output to buffer
 			include($this->path);
 			// Replace content tag with HTML in buffered output
 			return preg_replace("/<cubo:content\s*\/>/i",$html,ob_get_clean());
+		} elseif(Template::exists(Application::getRouter()->getTemplate())) {
+			$_template = Template::get(Application::getRouter()->getTemplate());
+			// Replace content tag with loaded HTML
+			return preg_replace("/<cubo:content\s*\/>/i",$html,$_template->html);
 		} else {
 			throw new \Exception("Template file '{$this->path}' does not exist");
 		}
