@@ -1,4 +1,5 @@
 /.htaccess
+/.config.php
 /web.config
 /php_errors.log
 /test/
