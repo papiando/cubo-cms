@@ -3,13 +3,13 @@
  * @application    Cubo CMS
  * @type           Framework
  * @class          Model
- * @description    All models are based on this framework
- *                 Each model has a database table associated to it
+ * @description    All models are based on this framework;
+ *                 each model has a database table associated to it
  * @version        1.1.0
- * @date           2019-01-17
+ * @date           2019-01-30
  * @author         Dan Barto
- * @copyright      Copyright (C) 2017 - 2019 Papiando Riba Internet. All rights reserved.
- * @license        GNU General Public License version 3 or later; see LICENSE.md
+ * @copyright      Copyright (C) 2017 - 2019 Papiando Riba Internet
+ * @license        MIT License; see LICENSE.md
  */
 namespace Cubo;
 

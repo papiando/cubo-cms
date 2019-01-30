@@ -5,7 +5,7 @@
  * @class          Configuration
  * @description    The configuration framework loads settings, parameters and defaults from .config.php and provides these to the application
  * @version        1.1.0
- * @date           2019-01-25
+ * @date           2019-01-30
  * @author         Dan Barto
  * @copyright      Copyright (C) 2017 - 2019 Papiando Riba Internet
  * @license        MIT License; see LICENSE.md

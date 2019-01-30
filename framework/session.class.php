@@ -3,6 +3,7 @@
  * @application    Cubo CMS
  * @type           Framework
  * @class          Session
+ * @description    The Session framework deals with user session data
  * @version        1.1.0
  * @date           2019-01-30
  * @author         Dan Barto
@@ -118,8 +119,6 @@ class Session {
 		if($newSession) {
 			new Log(array('name'=>"Session[start]",'title'=>"Start session",'description'=>"New session was started with ID '".self::$id."'"));
 		}
-		show($newSession);
-		die("****");
 	}
 	
 	public function __construct($session_name) {
