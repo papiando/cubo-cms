@@ -17,6 +17,7 @@ defined('__CUBO__') || new \Exception("No use starting a class without an includ
 class Session {
 	protected static $name;		// Keep session name
 	protected static $id;		// Keep session id
+	protected static $lifetime;	// Session life time
 	
 	public static function id() {
 		return self::$id;
@@ -105,7 +106,7 @@ class Session {
 		}
 	}
 	
-	public static function start($session_name) {
+	public static function start($session_name,$session_lifetime) {
 		// Apply provided session name
 		session_name($session_name);
 		self::$name = $session_name;
@@ -113,7 +114,10 @@ class Session {
 		$newSession = !isset($_COOKIE[$session_name]);
 		// Start the session
 		$result=session_start();
-		// Retrieve session id
+		// Set session cookie life time
+		setcookie(session_name(),session_id(),time()+$session_lifetime);
+		self::$lifetime = $session_lifetime;
+		// Retrieve and store session id
 		self::$id = session_id();
 		// Log entry if a new session was started
 		if($newSession) {
@@ -121,8 +125,8 @@ class Session {
 		}
 	}
 	
-	public function __construct($session_name) {
-		self::start($session_name);
+	public function __construct($session_name = 'Cubo',$session_lifetime = 3600) {
+		self::start($session_name,$session_lifetime);
 	}
 }
 ?>

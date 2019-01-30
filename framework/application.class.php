@@ -125,8 +125,8 @@ class Application {
 	public function __construct() {
 		// Connect to database
 		self::$_database || self::$_database = new Database(Configuration::get('database'));
-		// Start named session; load from configuration or default to 'Cubo'
-		self::$_session = new Session(Configuration::get('session') ?? 'Cubo');
+		// Start named session; load name and life time from configuration or default to 'Cubo' with a life time of 1 hour
+		self::$_session = new Session(Configuration::get('session_name') ?? 'Cubo',Configuration::get('session_lifetime') ?? 3600);
 		// Run the application and pass URI
 		self::run($_SERVER['REQUEST_URI']);
 	}
