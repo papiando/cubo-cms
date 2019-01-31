@@ -1,5 +1,13 @@
 {
-  "name": "papiando/cubo-cms",
-  "description": "Cubo CMS",
-  "license": "MIT"
+    "name": "papiando/cubo-cms",
+    "description": "Cubo CMS",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "papiando (HOME)",
+            "email": "info@papiando.com"
+        }
+    ],
+    "require": {}
 }
