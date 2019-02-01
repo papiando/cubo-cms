@@ -38,9 +38,14 @@ spl_autoload_register(function($class) {
 		throw new \Exception("Failed to include class '{$class}'");
 });
 
-// Retrieve configuration parameters
-include_once('.config.php');
-
-// Start the application
-new Application();
+// Detect install; if .config.php does not exist, then assume that it's a fresh install
+if(file_exists(__ROOT__.DS.'.config.php')) {
+	// Retrieve configuration parameters
+	include_once('.config.php');
+	// Start the application
+	new Application();
+} else {
+	// Run installer
+	new Installer();
+}
 ?>

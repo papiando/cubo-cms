@@ -33,11 +33,6 @@ if(isset($_GET['debug'])) {
 	}
 }
 
-// Detect install; if .config.php does not exist, then assume that it's a fresh install
-if(preg_match("/^\/install/",$_SERVER['REQUEST_URI']) || !file_exists(__ROOT__.DS.'.config.php')) {
-	exit(header('Location: /install'));
-}
-
 // Auto-start Cubo framework
 require_once('.autoload.php');
 ?>
