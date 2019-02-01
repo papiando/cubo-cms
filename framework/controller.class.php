@@ -6,7 +6,7 @@
  * @description    All controllers are based on this framework;
  *                 each controller describes the methods of an object
  * @version        1.1.0
- * @date           2019-01-30
+ * @date           2019-02-01
  * @author         Dan Barto
  * @copyright      Copyright (C) 2017 - 2019 Papiando Riba Internet
  * @license        MIT License; see LICENSE.md
@@ -48,11 +48,11 @@ class Controller {
 			if(!Session::exists('user')) {
 				Session::setMessage(array('alert'=>'info','icon'=>'exclamation','text'=>"{$this->class} requires login credentials"));
 				Session::set('login_redirect',Application::getParam('uri'));
-				Router::redirect('/user?action=login');
+				Router::redirect('/user?login');
 			} else {
 				Session::setMessage(array('alert'=>'error','icon'=>'exclamation','text'=>"This user has no access to {$this->class}"));
 				Session::set('login_redirect',Application::getParam('uri'));
-				Router::redirect('/user?action=noaccess');
+				Router::redirect('/user?noaccess');
 			}
 		}
 		if(isset($this->_data->{'@attributes'})) $this->_attributes = json_decode($this->_data->{'@attributes'});

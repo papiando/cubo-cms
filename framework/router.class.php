@@ -3,10 +3,10 @@
  * @application    Cubo CMS
  * @type           Framework
  * @class          Router
- * @description    The router analyses the URL and routes the visitor to the correct controller and action;
+ * @description    The router analyses the URL and routes the visitor to the correct controller and method;
  *                 the router also includes language intelligence
  * @version        1.1.0
- * @date           2019-01-30
+ * @date           2019-02-01
  * @author         Dan Barto
  * @copyright      Copyright (C) 2017 - 2019 Papiando Riba Internet
  * @license        MIT License; see LICENSE.md

@@ -5,7 +5,7 @@ defined('__CUBO__') || new \Exception("No use starting this code without an incl
 <?php
 if($this->_data) {
 	foreach($this->_data as $article) {
-?>	<li><a href="/article/<?php echo $article->name; ?>?action=view"><?php echo $article->title; ?></a></li>
+?>	<li><a href="/article/<?php echo $article->name; ?>"><?php echo $article->title; ?></a></li>
 <?php
 	}
 }
