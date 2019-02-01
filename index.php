@@ -10,14 +10,18 @@
  * @copyright      Copyright (C) 2017 - 2019 Papiando Riba Internet
  * @license        MIT License; see LICENSE.md
  */
+namespace Cubo;
 
 // Define global constants
 define('DS',DIRECTORY_SEPARATOR);
 define('__ROOT__',dirname(__FILE__));
+define('__CUBO__',__NAMESPACE__);
+define('__BASE__',sprintf("%s://%s",isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] != 'off' ? 'https' : 'http',$_SERVER['HTTP_HOST']));
+define('__VERSION__','1.1.0');
 
 // Added to allow debugging
 if(isset($_GET['debug'])) {
-	error(E_ALL);
+	error_reporting(E_ALL);
 	ini_set('display_errors',1);
 
 	// Shows variable
@@ -25,13 +29,13 @@ if(isset($_GET['debug'])) {
 		echo "<pre>";
 		print_r($var);
 		echo "</pre>";
-		$terminate || die("Application terminated");
+		$terminate && die("Application terminated");
 	}
 }
 
 // Detect install; if .config.php does not exist, then assume that it's a fresh install
 if(preg_match("/^\/install/",$_SERVER['REQUEST_URI']) || !file_exists(__ROOT__.DS.'.config.php')) {
-	require_once('install/index.php');
+	exit(header('Location: /install'));
 }
 
 // Auto-start Cubo framework

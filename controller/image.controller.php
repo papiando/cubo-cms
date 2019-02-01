@@ -3,7 +3,7 @@
  * @application    Cubo CMS
  * @type           Controller
  * @class          ImageController
- * @description    The controller that hold the methods for the image object
+ * @description    The controller that holds the methods for the image object
  * @version        1.1.0
  * @date           2019-01-30
  * @author         Dan Barto

@@ -13,10 +13,6 @@
  */
 namespace Cubo;
 
-// Define global constants
-define('__CUBO__',__NAMESPACE__);
-define('__BASE__',sprintf("%s://%s",isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] != 'off' ? 'https' : 'http',$_SERVER['HTTP_HOST']));
-
 // Auto-register classes
 spl_autoload_register(function($class) {
 	// Get the last part of the class (since all classes will be named Cubo\*)
@@ -43,8 +39,7 @@ spl_autoload_register(function($class) {
 });
 
 // Retrieve configuration parameters
-if(!defined('CONFIG_LOADED'))
-	include_once('.config.php');
+include_once('.config.php');
 
 // Start the application
 new Application();
