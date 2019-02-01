@@ -46,6 +46,6 @@ if(file_exists(__ROOT__.DS.'.config.php')) {
 	new Application();
 } else {
 	// Run installer
-	new Installer();
+	new Installation();
 }
 ?>

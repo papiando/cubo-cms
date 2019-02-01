@@ -1,19 +1,7 @@
-<?php
-/**
- * @application    Cubo CMS
- * @type           Default installer document
- * @class          n/a
- * @description    The index.php script is the default document. Its only purpose is to autoload the installer.
- * @version        1.1.0
- * @date           2019-02-01
- * @author         Dan Barto
- * @copyright      Copyright (C) 2017 - 2019 Papiando Riba Internet
- * @license        MIT License; see LICENSE.md
- */
-?><!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en" itemscope itemtype="https://schema.org/WebPage">
 <head>
-	<title itemprop="name headline">Welcome to Cubo CMS</title>
+	<title itemprop="name headline"><cubo:param name='site_name' /></title>
 	<base itemprop="url" href="<cubo:param name='base_url' />/admin" />
 	<meta charset="utf-8" />
 	<meta name="application_name" content="<cubo:param name='site_name' />" />
