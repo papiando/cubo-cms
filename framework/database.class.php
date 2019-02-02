@@ -19,6 +19,7 @@ class Database {
 	private $user;
 	private $password;
 	protected static $dbh = null;
+	protected static $error = 0;
 	private $className = null;
 	protected $query;
 	
@@ -40,13 +41,17 @@ class Database {
 			return null;
 		} else {
 			try {
-				!empty($this->connection) && !empty($this->user) && !empty($this->password) && self::$dbh = new \PDO($this->connection,$this->user,$this->password);
+				!empty($this->connection) && !empty($this->user) && !empty($this->password) && self::$dbh = new \PDO($this->connection,$this->user,$this->password,array(\PDO::ATTR_ERRMODE=>\PDO::ERRMODE_SILENT));
 				// TODO: $log = new Log(['result'=>"success",'message'=>"Open connection to database"]);
-			} catch(PDOException $e) {
-				die("class Database: ".$e->getMessage()."\n");
+			} catch(\PDOException $e) {
+				self::$error = $e->getMessage();
 			}
 		}
 		return $this->connected();
+	}
+	
+	public function error() {
+		return self::$error;
 	}
 	
 	public function connected() {

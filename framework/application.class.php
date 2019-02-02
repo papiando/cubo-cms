@@ -5,7 +5,7 @@
  * @class          Application
  * @description    The application framework calls the router and runs the application using the indicated method and method defaults
  * @version        1.1.0
- * @date           2019-01-30
+ * @date           2019-02-01
  * @author         Dan Barto
  * @copyright      Copyright (C) 2017 - 2019 Papiando Riba Internet
  * @license        MIT License; see LICENSE.md
@@ -22,7 +22,7 @@ class Application {
 	protected static $_params;
 	protected static $_session;
 	protected static $_template;
-	public static $_database;
+	protected static $_database;
 	
 	public static function getDB() {
 		// Connect to database

@@ -128,7 +128,7 @@ class Session {
 		}
 	}
 	
-	public function __construct($session_name = 'Cubo',$session_lifetime = 3600) {
+	public function __construct($session_name = __CUBO__,$session_lifetime = 3600) {
 		self::start($session_name,$session_lifetime);
 	}
 }
