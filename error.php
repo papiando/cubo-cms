@@ -34,6 +34,4 @@
 	<section id="message"></section>
 	<footer id="footer" class="bg-inverse fixed-bottom"></footer>
 </body>
-</html><?php
-	die();
-?>
+</html>
