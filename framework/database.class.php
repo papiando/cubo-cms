@@ -33,16 +33,19 @@ class Database {
 	}
 	
 	public function connect() {
-		if(empty($this->connection->dsn) || empty($this->connection->user) || empty($this->connection->password)) {
-			throw new \Exception("[".get_class($this)."] [001] No valid database connection string");
-			return null;
-		} else {
-			try {
-				!empty($this->connection->dsn) && !empty($this->connection->user) && !empty($this->connection->password) && $this->dbh = new \PDO($this->connection->dsn,$this->connection->user,$this->connection->password,array(\PDO::ATTR_ERRMODE=>\PDO::ERRMODE_SILENT));
-				// TODO: $log = new Log(['result'=>"success",'message'=>"Open connection to database"]);
-			} catch(\PDOException $e) {
-				$this->error = $e->getMessage();
+		try {
+			if(empty($this->connection->dsn) || empty($this->connection->user) || empty($this->connection->password)) {
+				throw new Error(array('source'=>__CLASS__,'severity'=>4,'message'=>"No valid database connection string",'description'=>"<p>Please check your configuration file.</p>"));
+			} else {
+				try {
+					$this->dbh = new \PDO($this->connection->dsn,$this->connection->user,$this->connection->password,array(\PDO::ATTR_ERRMODE=>\PDO::ERRMODE_SILENT));
+					// TODO: $log = new Log(['result'=>"success",'message'=>"Open connection to database"]);
+				} catch(\PDOException $e) {
+					throw new Error(array('source'=>__CLASS__,'severity'=>4,'message'=>"Cannot connect to database with DSN '{$this->connection->dsn}'",'description'=>"<p>Please check your configuration file.</p>"));
+				}
 			}
+		} catch(Error $_error) {
+			$_error->showMessage();
 		}
 		return $this->connected();
 	}

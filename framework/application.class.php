@@ -5,7 +5,7 @@
  * @class          Application
  * @description    The Application framework calls the router and runs the application using the indicated method and method defaults
  * @version        1.2.0
- * @date           2019-02-03
+ * @date           2019-02-04
  * @author         Dan Barto
  * @copyright      Copyright (C) 2017 - 2019 Papiando Riba Internet
  * @license        MIT License; see LICENSE.md
@@ -103,22 +103,33 @@ class Application {
 		$view = __CUBO__.'\\'.ucfirst(self::$_router->getController()).'View';
 		$format = (empty(self::$_router->getRoute()) ? strtolower(self::$_router->getFormat()) : strtolower(self::$_router->getRoute()).ucfirst(self::$_router->getFormat()));
 		// Call the controller's method
-		self::$_controller = new $controller();
-		if(method_exists($controller,$method)) {
-			self::$_controller->$method(self::$_router->getParam('name',self::$_router->getDefault(self::$_router->getController())));
-			self::$_data = self::$_controller->getData();
-			// Call the view's method
-			self::$_view = new $view();
-			if(method_exists($view,$format)) {
-				$output = self::$_view->$format(self::$_controller->getData());
-			} else {
-				throw new \Exception("Class '{$view}' does not have the '{$format}' method defined");
-			}
-		} else {
-			throw new \Exception("Class '{$controller}' does not have the '{$method}' method defined");
+		try {
+			if(method_exists($controller,$method)) {
+				self::$_controller = new $controller();
+				self::$_controller->$method(self::$_router->getParam('name',self::$_router->getDefault(self::$_router->getController())));
+				self::$_data = self::$_controller->getData();
+				// Call the view's method
+				try {
+					if(method_exists($view,$format)) {
+						self::$_view = new $view();
+						$output = self::$_view->$format(self::$_controller->getData());
+					} else
+						throw new Error("Class '{$view}' does not have the '{$format}' method defined");
+				} catch(Error $_error) {
+					$_error->showMessage();
+				}
+			} else
+				throw new Error("Class '{$controller}' does not have the '{$method}' method defined");
+		} catch(Error $_error) {
+			$_error->showMessage();
 		}
 		// Render template
-		self::$_template = Template::get(self::$_params->template);
+		try {
+			self::$_template = Template::get($template = self::$_params->template);
+			if(empty(self::$_template)) throw new Error("Template '{$template}' cannot be found");
+		} catch(Error $_error) {
+			$_error->showMessage();
+		}
 		$output = self::$_template->render($output);
 		// Run plugins
 		$plugins = self::$_database->loadItems("SELECT * FROM `plugin` WHERE `status`='".STATUS_PUBLISHED."' ORDER BY `id` DESC");
