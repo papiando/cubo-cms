@@ -17,7 +17,7 @@ define('DS',DIRECTORY_SEPARATOR);
 define('__ROOT__',dirname(__FILE__));
 define('__CUBO__',__NAMESPACE__);
 define('__BASE__',sprintf("%s://%s",isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] != 'off' ? 'https' : 'http',$_SERVER['HTTP_HOST']));
-define('__VERSION__','1.1.0');
+define('__VERSION__','1.2.0');
 
 // Added to allow debugging
 if(isset($_GET['debug'])) {
