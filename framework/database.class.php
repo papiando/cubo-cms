@@ -4,8 +4,8 @@
  * @type           Framework
  * @class          Database
  * @description    The Database framework handles and simplifies access to the database and tables
- * @version        1.1.0
- * @date           2019-01-30
+ * @version        1.2.0
+ * @date           2019-02-03
  * @author         Dan Barto
  * @copyright      Copyright (C) 2017 - 2019 Papiando Riba Internet
  * @license        MIT License; see LICENSE.md
@@ -16,18 +16,15 @@ defined('__CUBO__') || new \Exception("No use starting a class without an includ
 
 class Database {
 	private $connection;
-	private $user;
-	private $password;
-	protected static $dbh = null;
-	protected static $error = 0;
+	private $dbh = null;
 	private $className = null;
+	protected $error = 0;
 	protected $query;
+	protected $method;
 	
 	public function __construct($options) {
 		$this->query = new \stdClass();
-		if(is_array($options))
-			foreach($options as $option=>$value)
-				$this->$option = $value;
+		$this->connection = (object)$options;
 		return $this->connect();
 	}
 	
@@ -36,26 +33,26 @@ class Database {
 	}
 	
 	public function connect() {
-		if(empty($this->connection)) {
-			throw new \Exception("[".get_class($this)."] [001] No database connection string");
+		if(empty($this->connection->dsn) || empty($this->connection->user) || empty($this->connection->password)) {
+			throw new \Exception("[".get_class($this)."] [001] No valid database connection string");
 			return null;
 		} else {
 			try {
-				!empty($this->connection) && !empty($this->user) && !empty($this->password) && self::$dbh = new \PDO($this->connection,$this->user,$this->password,array(\PDO::ATTR_ERRMODE=>\PDO::ERRMODE_SILENT));
+				!empty($this->connection->dsn) && !empty($this->connection->user) && !empty($this->connection->password) && $this->dbh = new \PDO($this->connection->dsn,$this->connection->user,$this->connection->password,array(\PDO::ATTR_ERRMODE=>\PDO::ERRMODE_SILENT));
 				// TODO: $log = new Log(['result'=>"success",'message'=>"Open connection to database"]);
 			} catch(\PDOException $e) {
-				self::$error = $e->getMessage();
+				$this->error = $e->getMessage();
 			}
 		}
 		return $this->connected();
 	}
 	
 	public function error() {
-		return self::$error;
+		return $this->error;
 	}
 	
 	public function connected() {
-		return self::$dbh;
+		return $this->dbh;
 	}
 	
 	public function disconnected() {
@@ -63,7 +60,7 @@ class Database {
 	}
 	
 	public function disconnect() {
-		self::$dbh = null;
+		$this->dbh = null;
 	}
 	
 	public function query($query = null) {
@@ -87,22 +84,19 @@ class Database {
 					$query .= isset($this->query->offset) ? " OFFSET ".$this->query->offset : "";
 					break;
 				case 'update':
-					$query = "UPDATE ".self::string($this->query['update']);
+					$query = "UPDATE ".self::quote($this->query->update);
 					$query .= isset($this->query['set']) ? " SET ".self::comma($this->query['set']) : "";
+					isset($this->query->columns) && $query .= ' ('.self::quote($this->query->columns).')';
+					isset($this->query->values) && $query .= " VALUES (".self::comma($this->query->values).')';
 					$query .= isset($this->query['where']) ? " WHERE ".$this->query['where'] : "";
 					break;
 				default:
 					$query = "";
 			}
-			unset($this->method);
+			$this->method = null;
 			$this->query = new \stdClass();
 		}
 		return $query;
-	}
-	
-	// Added for debugging purposes
-	public function getQuery() {
-		return $this->query;
 	}
 	
 	public function load($query = null,$list = null) {
@@ -110,7 +104,7 @@ class Database {
 			$list = $query;
 			$query = null;
 		}
-		$sth = self::$dbh->prepare(empty($query) ? $this->query() : $query);
+		$sth = $this->dbh->prepare(empty($query) ? $this->query() : $query);
 		$sth->execute($list);
 		$result = $sth->fetchAll(\PDO::FETCH_CLASS|\PDO::FETCH_PROPS_LATE,'\\'.__NAMESPACE__.'\\'.$this->className);
 		$this->className = null;
@@ -122,7 +116,7 @@ class Database {
 			$list = $query;
 			$query = null;
 		}
-		$sth = self::$dbh->prepare(empty($query) ? $this->query() : $query);
+		$sth = $this->dbh->prepare(empty($query) ? $this->query() : $query);
 		$sth->execute($list);
 		$sth->setFetchMode(\PDO::FETCH_CLASS|\PDO::FETCH_PROPS_LATE,'\\'.__NAMESPACE__.'\\'.$this->className);
 		$result = $sth->fetch();
@@ -135,7 +129,7 @@ class Database {
 			$list = $query;
 			$query = null;
 		}
-		$sth = self::$dbh->prepare(empty($query) ? $this->query() : $query);
+		$sth = $this->dbh->prepare(empty($query) ? $this->query() : $query);
 		$sth->execute($list);
 		$sth->setFetchMode(\PDO::FETCH_ASSOC);
 		$result = $sth->fetchAll();
@@ -148,7 +142,7 @@ class Database {
 			$list = $query;
 			$query = null;
 		}
-		$sth = self::$dbh->prepare(empty($query) ? $this->query() : $query);
+		$sth = $this->dbh->prepare(empty($query) ? $this->query() : $query);
 		$sth->execute($list);
 		$sth->setFetchMode(\PDO::FETCH_ASSOC);
 		$result = $sth->fetch();
@@ -161,7 +155,7 @@ class Database {
 			$list = $query;
 			$query = null;
 		}
-		$sth = self::$dbh->prepare(empty($query) ? $this->query() : $query);
+		$sth = $this->dbh->prepare(empty($query) ? $this->query() : $query);
 		$result = $sth->execute($list);
 		$this->className = null;
 		return $result;
@@ -304,7 +298,7 @@ class Database {
 				$result .= self::string($item);
 			}
 		} else {
-			$result = self::$dbh->quote($object);
+			$result = $this->dbh->quote($object);
 		}
 		return $result;
 	}

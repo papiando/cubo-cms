@@ -3,10 +3,10 @@
  * @application    Cubo CMS
  * @type           Framework
  * @class          Router
- * @description    The router analyses the URL and routes the visitor to the correct controller and method;
- *                 the router also includes language intelligence
- * @version        1.1.0
- * @date           2019-02-01
+ * @description    The Router framework analyses the URL and routes the visitor to the correct controller
+ *                 and method; the router also includes language intelligence
+ * @version        1.2.0
+ * @date           2019-02-03
  * @author         Dan Barto
  * @copyright      Copyright (C) 2017 - 2019 Papiando Riba Internet
  * @license        MIT License; see LICENSE.md
@@ -19,16 +19,22 @@ class Router {
 	protected $_params;
 	protected $_language;
 	
+	// Constructor presets parameters and starts parsing the URI
+	public function __construct($uri) {
+		$this->_params = new \stdClass();
+		$this->parse($uri);
+	}
+	
 	public function getDefault($param) {
-		return Application::getDefault(str_replace(DS,'-',$this->_params->admin ?? '').$param);
+		return Application::getDefault($param);
 	}
 	
 	public function getParams() {
 		return $this->_params;
 	}
 	
-	public function getParam($param,$value = null) {
-		return $this->_params->$param ?? $this->getDefault($param) ?? $value;
+	public function getParam($param,$default = null) {
+		return $this->_params->$param ?? $this->getDefault($param) ?? $default;
 	}
 	
 	public function setParam($param,$value) {
@@ -39,12 +45,12 @@ class Router {
 		return $this->getParam('uri');
 	}
 	
-	public function getAdmin() {
-		return $this->getParam('admin','');
-	}
-	
 	public function getController() {
 		return $this->getParam('controller','article');
+	}
+	
+	public function getFormat() {
+		return $this->getParam('format','html');
 	}
 	
 	public function getLanguage() {
@@ -71,8 +77,8 @@ class Router {
 		exit(header("Location: {$location}"));
 	}
 	
-	public function __construct($uri) {
-		$this->_params = new \stdClass();
+	// Parse the given URI
+	public function parse($uri) {
 		$uri = urldecode(trim($uri,'/'));
 		// Split URI
 		$uri_parts = explode('?',$uri);
@@ -88,14 +94,14 @@ class Router {
 			if(empty($value) && empty($this->_params->method))
 				$this->_params->method = $key;
 		}
+		// Define accepted routes
+		$routes = Configuration::get('routes',array());
 		// Parse que rest of the query
-		$routes = array('site'=>'',Application::getParam('admin_route','admin')=>'admin'.DS);
 		if(count($path_parts)) {
 			$part = strtolower(current($path_parts));
 			// Get route or language if given
 			if(in_array($part,array_keys($routes))) {
-				$this->_params->route = $part;
-				$this->_params->admin = $routes[$part];
+				$this->_params->route = $routes[$part];
 				array_shift($path_parts);
 				$part = strtolower(current($path_parts));
 			} elseif(Language::exists($part)) {

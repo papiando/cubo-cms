@@ -4,35 +4,35 @@ defined('__CUBO__') || new \Exception("No use starting this code without an incl
 echo '<article itemProp="hasPart" itemScope itemType="https://schema.org/Article">';
 
 if($this->getAttribute('position_info') == SETTING_ABOVECONTENT) {
-	include($this->sharedPath.'show-info.php');
+	include($this->getSharedPath().'show-info.php');
 }
 
 if($this->getAttribute('position_image') == SETTING_ABOVETITLE) {
-	include($this->sharedPath.'show-image.php');
+	include($this->getSharedPath().'show-image.php');
 }
 
 if($this->getAttribute('position_info') == SETTING_ABOVETITLE) {
-	include($this->sharedPath.'show-info.php');
+	include($this->getSharedPath().'show-info.php');
 }
 
 if($this->getAttribute('show_title') == SETTING_SHOW) {
-	include($this->sharedPath.'show-title.php');
+	include($this->getSharedPath().'show-title.php');
 }
 
 if($this->getAttribute('position_image') == SETTING_BELOWTITLE) {
-	include($this->sharedPath.'show-image.php');
+	include($this->getSharedPath().'show-image.php');
 }
 
 if($this->getAttribute('position_info') == SETTING_BELOWTITLE) {
-	include($this->sharedPath.'show-info.php');
+	include($this->getSharedPath().'show-info.php');
 }
 
 echo '<div itemProp="articleBody">';
-include($this->sharedPath.'show-body.php');
+include($this->getSharedPath().'show-body.php');
 echo '</div>';
 
 if($this->getAttribute('position_info') == SETTING_BELOWCONTENT) {
-	include($this->sharedPath.'show-info.php');
+	include($this->getSharedPath().'show-info.php');
 }
 
 echo '</article>';

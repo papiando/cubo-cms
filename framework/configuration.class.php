@@ -4,8 +4,8 @@
  * @type           Framework
  * @class          Configuration
  * @description    The configuration framework loads settings, parameters and defaults from .config.php and provides these to the application
- * @version        1.1.0
- * @date           2019-01-30
+ * @version        1.2.0
+ * @date           2019-02-03
  * @author         Dan Barto
  * @copyright      Copyright (C) 2017 - 2019 Papiando Riba Internet
  * @license        MIT License; see LICENSE.md
@@ -95,6 +95,7 @@ class Configuration {
 		if(!isset(self::$_settings))
 			self::$_settings = new \stdClass();
 		self::$_settings->$property = $value;
+		return $value;
 	}
 	
 	public static function getDefaults() {

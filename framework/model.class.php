@@ -3,10 +3,10 @@
  * @application    Cubo CMS
  * @type           Framework
  * @class          Model
- * @description    All models are based on this framework;
- *                 each model has a database table associated to it
- * @version        1.1.0
- * @date           2019-01-30
+ * @description    All models are based on this framework; each model has
+ *                 a database table associated to it
+ * @version        1.2.0
+ * @date           2019-02-03
  * @author         Dan Barto
  * @copyright      Copyright (C) 2017 - 2019 Papiando Riba Internet
  * @license        MIT License; see LICENSE.md
@@ -18,33 +18,40 @@ defined('__CUBO__') || new \Exception("No use starting a class without an includ
 class Model {
 	protected static $class;		// Class name
 	
-	// Retrieves the class name and stores it
-	protected static function getClass() {
-		return self::$class = basename(str_replace('\\','/',get_called_class()));
+	// Retrieve the class name when creating a model object
+	public function __construct() {
+		self::$class = self::getClass();
 	}
 	
 	// Retrieve a single record from the model
 	public static function get($id,$columns = "*",$filter = "1") {
 		Application::getDB()->select($columns)->from(strtolower(self::getClass()));
-		if(is_null($id)) {
-			return null;										// Safety net if no valid $id is provided
+		if(empty($id)) {
+			Application::getDB()->where("{$filter}");			// Safety net if no valid $id is provided
 		} elseif(is_numeric($id)) {
 			Application::getDB()->where("`id`=:id AND {$filter}");
 		} else {
 			Application::getDB()->where("`name`=:id AND {$filter}");
-		}
-		if($filter == "666") {	// Added for debugging purposes
-			print_r(Application::getDB()->getQuery());
 		}
 		$result = Application::getDB()->loadObject(array(':id'=>$id));
 		return (is_object($result) ? $result : null);			// Only return the object, otherwise return nothing
 	}
 	
 	// Retrieve set of records from the model
-	public static function getList($columns = "*",$filter = "1",$order = "`title`") {
+	public static function getAll($columns = "*",$filter = "1",$order = "`title`") {
 		Application::getDB()->select($columns)->from(strtolower(self::getClass()))->where($filter)->order($order);
 		$result = Application::getDB()->load();
 		return (is_array($result) ? $result : null);			// Return an array of objects, otherwise return nothing
+	}
+	
+	// Retrieves the class name and stores it
+	protected static function getClass() {
+		return basename(str_replace('\\','/',get_called_class()));
+	}
+	
+	// Retrieve set of records from the model
+	public static function getList($columns = "*",$filter = "1",$order = "`title`") {
+		return self::getAll($columns,$filter,$order);			// Return an array of objects, otherwise return nothing
 	}
 	
 	// Determine if a record exists
@@ -100,12 +107,6 @@ class Model {
 	public static function trash($id) {
 		$query = "UPDATE `".strtolower(self::$getClass())."` SET `status`='".STATUS_TRASHED."',`modified`=NOW(),`editor`=".Session::getUser()." WHERE `id`={$id}";
 		return Application::getDB()->execute($query);
-	}
-	
-	// Retrieve the class name when creating a model object
-	// If $id is provided, retrieve the item, otherwise return nothing
-	public function __construct() {
-		self::getClass();
 	}
 }
 ?>

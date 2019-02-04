@@ -4,8 +4,8 @@
  * @type           Default document
  * @class          n/a
  * @description    The index.php script is the default document. Its only purpose is to autoload the application.
- * @version        1.1.0
- * @date           2019-01-30
+ * @version        1.2.0
+ * @date           2019-02-03
  * @author         Dan Barto
  * @copyright      Copyright (C) 2017 - 2019 Papiando Riba Internet
  * @license        MIT License; see LICENSE.md

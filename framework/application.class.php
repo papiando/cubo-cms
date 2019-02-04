@@ -3,9 +3,9 @@
  * @application    Cubo CMS
  * @type           Framework
  * @class          Application
- * @description    The application framework calls the router and runs the application using the indicated method and method defaults
- * @version        1.1.0
- * @date           2019-02-01
+ * @description    The Application framework calls the router and runs the application using the indicated method and method defaults
+ * @version        1.2.0
+ * @date           2019-02-03
  * @author         Dan Barto
  * @copyright      Copyright (C) 2017 - 2019 Papiando Riba Internet
  * @license        MIT License; see LICENSE.md
@@ -17,12 +17,23 @@ defined('__CUBO__') || new \Exception("No use starting a class without an includ
 class Application {
 	protected static $_router;
 	protected static $_controller;
+	protected static $_view;
 	protected static $_defaults;
 	protected static $_data;
 	protected static $_params;
 	protected static $_session;
 	protected static $_template;
 	protected static $_database;
+	
+	// Constructor initiates database connection, starts session and runs the application
+	public function __construct() {
+		// Connect to database
+		self::$_database || self::$_database = new Database(Configuration::get('database'));
+		// Start named session; load name and life time from configuration or default to 'Cubo' with a life time of 1 hour
+		self::$_session = new Session(Configuration::get('session_name') ?? __CUBO__,Configuration::get('session_lifetime') ?? 3600);
+		// Run the application and pass URI
+		self::run($_SERVER['REQUEST_URI']);
+	}
 	
 	public static function getDB() {
 		// Connect to database
@@ -75,6 +86,7 @@ class Application {
 			self::$_params = new \stdClass();
 		self::$_params->base_url = __BASE__;
 		self::$_params->generator = "Cubo CMS by Papiando";
+		self::$_params->generator_url = "https://cubo-cms.com";
 		self::$_params->language = self::$_router->getLanguage();
 		self::$_params->provider_name = "Papiando Riba Internet";
 		self::$_params->provider_url = "https://papiando.com";
@@ -84,51 +96,38 @@ class Application {
 		self::$_params->title = Configuration::get('site_name');
 		self::$_params->uri = self::$_params->base_url.$_SERVER['REQUEST_URI'];
 		self::$_params->url = self::$_params->base_url.current(explode('?',$_SERVER['REQUEST_URI']));
-		// Retrieve layout
-		$route = self::$_router->getRoute();
-		if($route == Configuration::get('admin_route') && !Session::exists('user')) {
-			Session::setMessage(array('alert'=>'info','icon'=>'exclamation','text'=>"This page requires login access"));
-			Session::set('login_redirect',$uri);
-			Router::redirect('/user?method=login');
-		}
 		// Preset controller's class and method
-		$class = __CUBO__.'\\'.ucfirst(self::$_router->getController()).'Controller';
-		$method = strtolower(str_replace(DS,'_',self::$_router->getAdmin()).self::$_router->getMethod());
+		$controller = __CUBO__.'\\'.ucfirst(self::$_router->getController()).'Controller';
+		$method = (empty(self::$_router->getRoute()) ? strtolower(self::$_router->getMethod()) : strtolower(self::$_router->getRoute()).ucfirst(self::$_router->getMethod()));
+		// Preset view's class and method
+		$view = __CUBO__.'\\'.ucfirst(self::$_router->getController()).'View';
+		$format = (empty(self::$_router->getRoute()) ? strtolower(self::$_router->getFormat()) : strtolower(self::$_router->getRoute()).ucfirst(self::$_router->getFormat()));
 		// Call the controller's method
-		self::$_controller = new $class();
-		if(method_exists($class,$method)) {
-			self::$_controller->$method();
+		self::$_controller = new $controller();
+		if(method_exists($controller,$method)) {
+			self::$_controller->$method(self::$_router->getParam('name',self::$_router->getDefault(self::$_router->getController())));
 			self::$_data = self::$_controller->getData();
-			$view = new View();
-			if(self::$_router->getController() == 'image' && $method == 'default') {
-				$view->renderImage(self::$_controller->getData());
-				return;
+			// Call the view's method
+			self::$_view = new $view();
+			if(method_exists($view,$format)) {
+				$output = self::$_view->$format(self::$_controller->getData());
 			} else {
-				$html = $view->render(self::$_controller->getData());
+				throw new \Exception("Class '{$view}' does not have the '{$format}' method defined");
 			}
 		} else {
-			throw new \Exception("Class '{$class}' does not have the '{$method}' method defined");
+			throw new \Exception("Class '{$controller}' does not have the '{$method}' method defined");
 		}
 		// Render template
 		self::$_template = Template::get(self::$_params->template);
-		$html = self::$_template->render($html);
+		$output = self::$_template->render($output);
 		// Run plugins
 		$plugins = self::$_database->loadItems("SELECT * FROM `plugin` WHERE `status`='".STATUS_PUBLISHED."' ORDER BY `id` DESC");
 		foreach($plugins as $plugin) {
-			$class = __CUBO__.'\\'.ucfirst($plugin['name']).'Plugin';
-			$html = $class::run($html);
+			$plugin = __CUBO__.'\\'.ucfirst($plugin['name']).'Plugin';
+			$output = $plugin::run($output);
 		}
 		// Display output
-		echo $html;
-	}
-	
-	public function __construct() {
-		// Connect to database
-		self::$_database || self::$_database = new Database(Configuration::get('database'));
-		// Start named session; load name and life time from configuration or default to 'Cubo' with a life time of 1 hour
-		self::$_session = new Session(Configuration::get('session_name') ?? __CUBO__,Configuration::get('session_lifetime') ?? 3600);
-		// Run the application and pass URI
-		self::run($_SERVER['REQUEST_URI']);
+		echo $output;
 	}
 }
 ?>

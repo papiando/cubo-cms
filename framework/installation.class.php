@@ -58,13 +58,15 @@ class Installation {
 				$_SESSION['setup']->database_user = $_POST['database_user'] ?? $_SESSION['setup']->database_user ?? '';
 				$_SESSION['setup']->database_password = $_POST['database_password'] ?? $_SESSION['setup']->database_password ?? '';
 				Configuration::set('database',array('connection'=>"{$_SESSION['setup']->dbo_driver}:host={$_SESSION['setup']->host_name};dbname={$_SESSION['setup']->database_name}",'user'=>$_SESSION['setup']->database_user,'password'=>$_SESSION['setup']->database_password));
+				// Retrieve list of all countries and select detected country as default
+				$listOptions = Locale::getOptions(Locale::getCountryList(),'CW');
+				//$detectedCountry = Locale::getDetectedCountry();
 				if(self::$_database = self::getDB()) {
 					$html = "<h1>Regional Settings</h1>";
-					show($_SESSION,false);
 					$html .= "<p>Preset the defaults for your region. You can add languages later if you want your site to be multilingual.</p>";
 					$html .= "<form name=\"form-step3\" action=\"\" method=\"post\">";
-					$html .= "<input name=\"next_step\" type=\"hidden\" value=\"3\" />";
-					$html .= "<div class=\"form-group\"><label for=\"site-name\">Host Name</label><input name=\"host_name\" id=\"host-name\" class=\"form-control\" type=\"text\" placeholder=\"Host Name\" value=\"".($_SESSION['setup']->host_name ?? 'localhost')."\" autofocus required /></div>";
+					$html .= "<input name=\"next_step\" type=\"hidden\" value=\"4\" />";
+					$html .= "<div class=\"form-group\"><label for=\"country-name\">Country Name</label><select name=\"country_name\" id=\"country-name\" class=\"form-control\" value=\"".($_SESSION['setup']->country_name ?? 'US')."\" autofocus />".$listOptions."</select></div>";
 					$html .= "<div class=\"form-group\"><a class=\"btn btn-info\" href=\"/?debug&next_step=2\">Back</a><button class=\"btn btn-primary\" type=\"submit\">Next</button></div>";
 					$html .= "</form>";
 					break;
