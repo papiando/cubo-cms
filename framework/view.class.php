@@ -47,22 +47,27 @@ class View {
 	protected $_data;
 	protected $_router;
 	protected $path;
-	public $sharedPath;
+	public $sharedPath;		// ************** Can be removed later
 	protected $class;
 	
+	// Constructor declaring router and passing application data
 	public function __construct() {
 		$this->_router = Application::getRouter();
 		$this->class = $this->_router->getController();
+		$this->_data = Application::getData();
 	}
 	
+	// Get attribute
 	public function getAttribute($attribute) {
 		return (isset($this->_attributes->$attribute) ? $this->_attributes->$attribute : null);
 	}
 	
+	// Retrieve custom path
 	public function getCustomPath() {
 		return $this->path = __ROOT__.DS.trim(Application::get('custom_path','custom'),DS).DS.'view'.DS.$this->class.DS.(empty($this->_router->getRoute()) ? '' : $this->_router->getRoute().DS).$this->_router->getMethod().'.php';
 	}
 	
+	// Retrieve default path *********** This function can be removed later
 	public function getDefaultPath() {
 		if(!$this->_router) {
 			return false;
@@ -70,6 +75,7 @@ class View {
 		return $this->path = __ROOT__.DS.'view'.DS.$this->class.DS.(empty($this->_router->getRoute()) ? '' : $this->_router->getRoute().DS).$this->_router->getMethod().'.php';
 	}
 	
+	// Retrieve shared path *********** This function can be removed later
 	public function getSharedPath() {
 		if(!$this->_router) {
 			return false;
@@ -77,10 +83,12 @@ class View {
 		return $this->sharedPath = __ROOT__.DS.'view'.DS.'shared'.DS.(empty($this->_router->getRoute()) ? '' : $this->_router->getRoute().DS);
 	}
 	
+	// Shared function to show body in uniform way
 	public function showBody() {
 		return $this->_data->html;
 	}
 	
+	// Shared function to show image in uniform way
 	public function showImage() {
 		$html = '';
 		$image = Application::getDB()->loadItem("SELECT `name`,`title` FROM `image` WHERE `id`='{$this->_data->image}' LIMIT 1");
@@ -90,6 +98,7 @@ class View {
 		return $html;
 	}
 	
+	// Shared function to show object info in uniform way
 	public function showInfo() {
 		$html = '<div class="info text-muted">';
 		$html .= $this->showUser('author');
@@ -123,10 +132,9 @@ class View {
 	}
 	
 	// Format HTML
-	public function html($data = array()) {
-		$this->_data = $data;
+	public function html() {
 		// Convert attributes JSON to object
-		if(isset($data->{'@attributes'})) $this->_attributes = json_decode($data->{'@attributes'});
+		if(isset($this->_data->{'@attributes'})) $this->_attributes = json_decode($this->_data->{'@attributes'});
 		// Predetermine route and method
 		$method = (empty($this->_router->getRoute()) ? strtolower($this->_router->getMethod()) : strtolower($this->_router->getRoute()).ucfirst($this->_router->getMethod()));
 		try {
@@ -151,20 +159,20 @@ class View {
 	}
 	
 	// Format HTML for API route
-	public function apiHtml($data = array('output'=>"No data")) {
-		return "<pre>".json_encode($data,JSON_PRETTY_PRINT)."</pre>";
+	public function apiHtml() {
+		return "<pre>".json_encode($this->_data,JSON_PRETTY_PRINT)."</pre>";
 	}
 	
 	// Format JSON for API route
-	public function apiJson($data = array('output'=>"No data")) {
+	public function apiJson() {
 		header("Content-Type: application/json");
-		return json_encode($data);
+		return json_encode($this->_data);
 	}
 	
 	// Format XML for API route
-	public function apiXml($data = array('output'=>"No data")) {
+	public function apiXml() {
 		header("Content-Type: application/xml");
-		return xml_encode($data,$this->class);
+		return xml_encode($this->_data,$this->class);
 	}
 }
 ?>

@@ -106,13 +106,13 @@ class Application {
 		try {
 			if(method_exists($controller,$method)) {
 				self::$_controller = new $controller();
-				self::$_controller->$method(self::$_router->getParam('name',self::$_router->getDefault(self::$_router->getController())));
+				self::$_controller->$method();
 				self::$_data = self::$_controller->getData();
 				// Call the view's method
 				try {
 					if(method_exists($view,$format)) {
 						self::$_view = new $view();
-						$output = self::$_view->$format(self::$_controller->getData());
+						$output = self::$_view->$format();
 					} else
 						throw new Error(array('source'=>__CLASS__,'severity'=>3,'response'=>405,'message'=>"View '{$view}' does not have the '{$format}' format defined"));
 				} catch(Error $_error) {

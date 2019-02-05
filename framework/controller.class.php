@@ -53,19 +53,19 @@ class Controller {
 			if(!Session::exists('user')) {
 				Session::setMessage(array('alert'=>'info','icon'=>'exclamation','text'=>"{$this->class} requires login credentials"));
 				Session::set('login_redirect',Application::getParam('uri'));
-				Router::redirect('/user?login');
+				Router::redirect('/user?login',401);
 			} else {
 				Session::setMessage(array('alert'=>'error','icon'=>'exclamation','text'=>"This user has no access to {$this->class}"));
 				Session::set('login_redirect',Application::getParam('uri'));
-				Router::redirect('/user?noaccess');
+				Router::redirect('/user?noaccess',403);
 			}
 		}
 		if(isset($this->_data->{'@attributes'})) $this->_attributes = json_decode($this->_data->{'@attributes'});
 	}
 	
 	// Standard method: get
-	public function get($id) {
-		$this->_data = $this->_model->get($id,$this->columns);
+	public function get() {
+		$this->view();
 	}
 	
 	// Standard method: list
@@ -79,14 +79,9 @@ class Controller {
 	}
 	
 	// Standard default method
-	public function default($id) {
-		if(is_null($id)) {
-			// No name provided: retrieve all objects
-			$this->getAll();
-		} else {
-			// Name provided: retrieve this object
-			$this->get($id);
-		}
+	public function default() {
+		// Name provided: retrieve this object
+		$this->view();
 	}
 	
 	// API default method

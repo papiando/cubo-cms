@@ -73,8 +73,8 @@ class Router {
 		return $this->getParam('theme','default');
 	}
 	
-	public static function redirect($location) {
-		exit(header("Location: {$location}"));
+	public static function redirect($location,$response = null) {
+		exit(header("Location: {$location}",false,$response ? $response : 301));
 	}
 	
 	// Parse the given URI
