@@ -32,8 +32,7 @@ class Error extends \Exception {
 	}
 	
 	public function showMessage() {
-		if(!isset($this->_error->response))
-			http_response_code($this->_error->response);
+		empty($this->_error->response) || http_response_code($this->_error->response);
 		include('error.php');
 		die();
 	}

@@ -15,14 +15,6 @@ namespace Cubo;
 defined('__CUBO__') || new \Exception("No use starting a class without an include");
 
 class ArticleView extends View {
-	// Method all: redirect to list
-	public function all() {
-		return $this->list();
-	}
-	// Method default: redirect to view
-	public function default() {
-		return $this->view();
-	}
 	// Method list
 	public function list() {
 		$html = '<h1 itemProp="name headline">'.htmlspecialchars(Text::plural('article'),ENT_QUOTES|ENT_HTML5).'</h1><ul>';

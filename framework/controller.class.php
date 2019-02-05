@@ -53,11 +53,11 @@ class Controller {
 			if(!Session::exists('user')) {
 				Session::setMessage(array('alert'=>'info','icon'=>'exclamation','text'=>"{$this->class} requires login credentials"));
 				Session::set('login_redirect',Application::getParam('uri'));
-				Router::redirect('/user?login',401);
+				Router::redirect('/user?login',302);
 			} else {
 				Session::setMessage(array('alert'=>'error','icon'=>'exclamation','text'=>"This user has no access to {$this->class}"));
 				Session::set('login_redirect',Application::getParam('uri'));
-				Router::redirect('/user?noaccess',403);
+				Router::redirect('/user?noaccess',302);
 			}
 		}
 		if(isset($this->_data->{'@attributes'})) $this->_attributes = json_decode($this->_data->{'@attributes'});

@@ -83,11 +83,48 @@ class View {
 		return $this->sharedPath = __ROOT__.DS.'view'.DS.'shared'.DS.(empty($this->_router->getRoute()) ? '' : $this->_router->getRoute().DS);
 	}
 	
+	//
+	// Standard section
+	//   Generic aliases and standard functions
+	//
+	
+	// Method all: redirect to list
+	public function all() {
+		return $this->list();
+	}
+	// Method default: redirect to view
+	public function default() {
+		return $this->view();
+	}
+	// Standard method list (can be overridden)
+	public function list() {
+		$html = '<h1 itemProp="name headline">'.htmlspecialchars(Text::plural($this->class),ENT_QUOTES|ENT_HTML5).'</h1><ul>';
+		if($this->_data) {
+			foreach($this->_data as $object) {
+				$html .= '<li><a href="/'.$this->class.'/'.urlencode($object->name).'">'.htmlspecialchars($object->title,ENT_QUOTES|ENT_HTML5).'</a></li>';
+			}
+		}
+		$html .= '</ul>';
+		return $html;
+	}
+	// Standard method view (can be overridden)
+	public function view() {
+		$html = '<article itemProp="hasPart" itemScope itemType="https://schema.org/Article">';
+		if($this->getAttribute('show_title') == SETTING_SHOW) $html .= $this->showTitle();
+		$html .= '<div itemProp="articleBody">'.$this->showBody().'</div>';
+		$html .= '</article>';
+		return $html;
+	}
+	
+	//
+	// Generic functions section
+	//   Generic functions that render parts of the output
+	//
+	
 	// Shared function to show body in uniform way
 	public function showBody() {
 		return $this->_data->html;
 	}
-	
 	// Shared function to show image in uniform way
 	public function showImage() {
 		$html = '';
@@ -97,7 +134,6 @@ class View {
 		}
 		return $html;
 	}
-	
 	// Shared function to show object info in uniform way
 	public function showInfo() {
 		$html = '<div class="info text-muted">';
@@ -107,12 +143,10 @@ class View {
 		$html .= '</div>';
 		return $html;
 	}
-	
 	// Shared function to show title in uniform way
 	public function showTitle() {
 		return '<h1 itemProp="name headline">'.htmlspecialchars($this->_data->title,ENT_QUOTES|ENT_HTML5).'</h1>';
 	}
-	
 	// Shared function to show user in uniform way
 	public function showUser($person) {
 		$user = Application::getDB()->loadItem("SELECT `name`,`contact`,`title` FROM `user` WHERE `id`='{$this->_data->$person}' LIMIT 1");
@@ -130,6 +164,11 @@ class View {
 		}
 		return $html;
 	}
+	
+	//
+	// Format section
+	//   All functions that generate the output in different formats
+	//
 	
 	// Format HTML
 	public function html() {

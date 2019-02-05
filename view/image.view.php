@@ -2,8 +2,8 @@
 /**
  * @application    Cubo CMS
  * @type           View
- * @class          ArticleView
- * @description    The view that generates and prepares the output in different formats for the article object
+ * @class          ImageView
+ * @description    The view that generates and prepares the output in different formats for the image object
  * @version        1.2.0
  * @date           2019-02-03
  * @author         Dan Barto

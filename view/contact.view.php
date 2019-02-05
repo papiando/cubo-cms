@@ -3,7 +3,7 @@
  * @application    Cubo CMS
  * @type           View
  * @class          ContactView
- * @description    The view that generates and prepares the output in different formats for the article object
+ * @description    The view that generates and prepares the output in different formats for the contact object
  * @version        1.2.0
  * @date           2019-02-04
  * @author         Dan Barto
