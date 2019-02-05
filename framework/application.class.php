@@ -114,12 +114,12 @@ class Application {
 						self::$_view = new $view();
 						$output = self::$_view->$format(self::$_controller->getData());
 					} else
-						throw new Error("Class '{$view}' does not have the '{$format}' method defined");
+						throw new Error(array('source'=>__CLASS__,'severity'=>3,'response'=>405,'message'=>"View '{$view}' does not have the '{$format}' format defined"));
 				} catch(Error $_error) {
 					$_error->showMessage();
 				}
 			} else
-				throw new Error("Class '{$controller}' does not have the '{$method}' method defined");
+				throw new Error(array('source'=>__CLASS__,'severity'=>3,'response'=>405,'message'=>"Controller '{$controller}' does not have the '{$method}' method defined"));
 		} catch(Error $_error) {
 			$_error->showMessage();
 		}

@@ -6,7 +6,7 @@
  * @description    The View framework generates the output based on a given format and prepares it
  *                 for rendering
  * @version        1.2.0
- * @date           2019-02-03
+ * @date           2019-02-04
  * @author         Dan Barto
  * @copyright      Copyright (C) 2017 - 2019 Papiando Riba Internet
  * @license        MIT License; see LICENSE.md
@@ -59,11 +59,8 @@ class View {
 		return (isset($this->_attributes->$attribute) ? $this->_attributes->$attribute : null);
 	}
 	
-	public function getPath() {
-		if(!$this->_router) {
-			return false;
-		}
-		return $this->path = __ROOT__.DS.'view'.DS.$this->class.DS.(empty($this->_router->getRoute()) ? '' : $this->_router->getRoute().DS).$this->_router->getMethod().'.php';
+	public function getCustomPath() {
+		return $this->path = __ROOT__.DS.trim(Application::get('custom_path','custom'),DS).DS.'view'.DS.$this->class.DS.(empty($this->_router->getRoute()) ? '' : $this->_router->getRoute().DS).$this->_router->getMethod().'.php';
 	}
 	
 	public function getDefaultPath() {
@@ -80,30 +77,91 @@ class View {
 		return $this->sharedPath = __ROOT__.DS.'view'.DS.'shared'.DS.(empty($this->_router->getRoute()) ? '' : $this->_router->getRoute().DS);
 	}
 	
+	public function showBody() {
+		return $this->_data->html;
+	}
+	
+	public function showImage() {
+		$html = '';
+		$image = Application::getDB()->loadItem("SELECT `name`,`title` FROM `image` WHERE `id`='{$this->_data->image}' LIMIT 1");
+		if($image && $this->getAttribute('show_image')) {
+			$html = '<figure class="img-container" itemProp="image" itemscope itemtype="https://schema.org/ImageObject"><img class="img-fluid" src="'.__BASE__.'/image/'.urlencode($image['name']).'" alt="'.htmlspecialchars($image['title'],ENT_QUOTES|ENT_HTML5).'" /><meta itemProp="url" content="'.__BASE__.'/image/'.urlencode($image['name']).'" /></figure>';
+		}
+		return $html;
+	}
+	
+	public function showInfo() {
+		$html = '<div class="info text-muted">';
+		$html .= $this->showUser('author');
+		$html .= $this->showUser('editor');
+		$html .= $this->showUser('publisher');
+		$html .= '</div>';
+		return $html;
+	}
+	
+	// Shared function to show title in uniform way
+	public function showTitle() {
+		return '<h1 itemProp="name headline">'.htmlspecialchars($this->_data->title,ENT_QUOTES|ENT_HTML5).'</h1>';
+	}
+	
+	// Shared function to show user in uniform way
+	public function showUser($person) {
+		$user = Application::getDB()->loadItem("SELECT `name`,`contact`,`title` FROM `user` WHERE `id`='{$this->_data->$person}' LIMIT 1");
+		if($user && $this->getAttribute('show_'.$person)) {
+			$html = '<span class="text-nowrap" itemProp="'.$person.'" itemScope itemType="https://schema.org/Person"><i class="fa fa-user"></i> ';
+			if(!empty($user['contact'])) {
+				$contact = Application::getDB()->loadItem("SELECT `name` FROM `contact` WHERE `id`='{$user['contact']}' LIMIT 1");
+				$html .= '<a class="info-link" itemProp="name" href="/contact/'.urlencode($contact['name']).'">'.htmlspecialchars($user['title'],ENT_QUOTES|ENT_HTML5).'</a>';
+			} else {
+				$html .= '<span itemProp="name">'.htmlspecialchars($user['title'],ENT_QUOTES|ENT_HTML5).'</span>';
+			}
+			$html .= '</span>';
+		} elseif($user) {
+			$html = '<meta itemProp="'.$person.'" content="'.htmlspecialchars($user['title'],ENT_QUOTES|ENT_HTML5).'" />';
+		}
+		return $html;
+	}
+	
+	// Format HTML
 	public function html($data = array()) {
 		$this->_data = $data;
+		// Convert attributes JSON to object
 		if(isset($data->{'@attributes'})) $this->_attributes = json_decode($data->{'@attributes'});
-		if(file_exists($this->getPath()) || file_exists($this->getDefaultPath())) {
-			// Start buffering output
-			ob_start();
-			// Write output to buffer
-			include($this->path);
-			// Return buffered output
-			return ob_get_clean();
-		} else {
-			throw new \Exception("Template file '{$this->path}' does not exist");
+		// Predetermine route and method
+		$method = (empty($this->_router->getRoute()) ? strtolower($this->_router->getMethod()) : strtolower($this->_router->getRoute()).ucfirst($this->_router->getMethod()));
+		try {
+			// Look for custom code ************ getDefaultPath can disappear in the future
+			if(file_exists($this->getCustomPath()) || file_exists($this->getDefaultPath())) {
+				// Start buffering output
+				ob_start();
+				// Write output to buffer
+				include($this->path);
+				// Return buffered output
+				return ob_get_clean();
+			} elseif(method_exists($this,$method)) {
+				// No custom code; run method
+				return $this->$method();
+			} else {
+				// Could not find method
+				throw new Error(array('source'=>__CLASS__,'severity'=>3,'response'=>405,'message'=>"View '{$this->class}' does not have the '{$method}' method defined"));
+			}
+		} catch(Error $_error) {
+			$_error->showMessage();
 		}
 	}
 	
+	// Format HTML for API route
 	public function apiHtml($data = array('output'=>"No data")) {
 		return "<pre>".json_encode($data,JSON_PRETTY_PRINT)."</pre>";
 	}
 	
+	// Format JSON for API route
 	public function apiJson($data = array('output'=>"No data")) {
 		header("Content-Type: application/json");
 		return json_encode($data);
 	}
 	
+	// Format XML for API route
 	public function apiXml($data = array('output'=>"No data")) {
 		header("Content-Type: application/xml");
 		return xml_encode($data,$this->class);

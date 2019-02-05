@@ -28,10 +28,12 @@ class Error extends \Exception {
 	
 	// custom string representation of object
 	public function __toString() {
-		$this->showMessage();
+		return $this->_error->message;
 	}
 	
 	public function showMessage() {
+		if(!isset($this->_error->response))
+			http_response_code($this->_error->response);
 		include('error.php');
 		die();
 	}
