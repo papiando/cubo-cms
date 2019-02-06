@@ -1,0 +1,12 @@
+/* Customizations */
+
+body.has-fixed-nav {
+	margin-top: 5rem;
+}
+.navbar.fixed-top {
+	height: 5rem;
+}
+.navbar-brand img {
+	display: inline-block;
+	max-height: 2.5rem;
+}

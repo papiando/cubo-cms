@@ -7,16 +7,16 @@
 	<meta name="application_name" content="<cubo:param name='site_name' />" />
 	<meta name="generator" content="<cubo:param name='generator' />" />
 	<meta name="viewport" content="width=device-width,initial-scale=1,shrink-to-fit=no" />
-	<link href="/vendor/bootswatch/4.0.0-beta.2/cosmo/bootstrap.min.css" rel="stylesheet" />
 	<link href="/vendor/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" />
-	<link rel="stylesheet" href="/template/<cubo:param name='template' />/css/style.css" />
+	<link rel="stylesheet" href="/vendor/cubo-cms/theme/cubo-cms.css" />
+	<link rel="stylesheet" href="/vendor/cubo-cms/template/cubo-cms.css" />
 	<link rel="icon" type="image/png" href="/vendor/cubo-cms/cubo-b192.png" />
 	<script src="/vendor/jquery/3.2.1/js/jquery.min.js"></script>
 	<script src="/vendor/popper.js/1.12.3/js/popper.min.js"></script>
 	<script src="/vendor/tether/1.3.3/js/tether.min.js"></script>
     <script src="/vendor/bootstrap/4.0.0-alpha.6/js/bootstrap.min.js"></script>
 </head>
-<body>
+<body class="has-fixed-nav">
 	<nav id="navigation" class="navbar navbar-toggleable-md navbar-dark bg-primary fixed-top">
 		<div class="container d-flex flex-nowrap">
 			<button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#menu" aria-controls="menu" aria-expanded="false" aria-label="Toggle navigation"><i class="fa fa-bars"></i></button>
