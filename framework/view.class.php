@@ -6,7 +6,7 @@
  * @description    The View framework generates the output based on a given format and prepares it
  *                 for rendering
  * @version        1.2.0
- * @date           2019-02-04
+ * @date           2019-02-05
  * @author         Dan Barto
  * @copyright      Copyright (C) 2017 - 2019 Papiando Riba Internet
  * @license        MIT License; see LICENSE.md
@@ -195,6 +195,44 @@ class View {
 		} catch(Error $_error) {
 			$_error->showMessage();
 		}
+	}
+	
+	//
+	// Admin functions section
+	//   Administration functions that render parts of the output
+	//
+	
+	// Show access level
+	public function showAccess($item) {
+		$records = array(
+			ACCESS_NONE=>'Protected',
+			ACCESS_PUBLIC=>'Public',
+			ACCESS_REGISTERED=>'Registered',
+			ACCESS_GUEST=>'Guest',
+			ACCESS_PRIVATE=>'Private'
+		);
+		return $records[$item->access];
+	}
+	// Show category
+	public function showCategory($item) {
+		$query = "SELECT `id`,`title` FROM `articlecategory` WHERE `id`='{$item->category}' LIMIT 1";
+		$record = Application::getDB()->loadItem($query);
+		return $record['title'];
+	}
+	// Show language
+	public function showLanguage($item) {
+		$query = "SELECT `id`,`title` FROM `language` WHERE `id`='{$item->language}' LIMIT 1";
+		$record = Application::getDB()->loadItem($query);
+		return $record['title'];
+	}
+	// Show status
+	public function showStatus($item) {
+		$records = array(
+			STATUS_PUBLISHED=>'Published',
+			STATUS_UNPUBLISHED=>'Unpublished',
+			STATUS_TRASHED=>'Trashed'
+		);
+		return $records[$item->status];
 	}
 	
 	// Format HTML for API route

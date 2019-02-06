@@ -4,8 +4,8 @@
  * @type           Framework
  * @class          Session
  * @description    The Session framework deals with user session data
- * @version        1.1.0
- * @date           2019-01-30
+ * @version        1.2.0
+ * @date           2019-02-05
  * @author         Dan Barto
  * @copyright      Copyright (C) 2017 - 2019 Papiando Riba Internet
  * @license        MIT License; see LICENSE.md

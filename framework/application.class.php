@@ -5,7 +5,7 @@
  * @class          Application
  * @description    The Application framework calls the router and runs the application using the indicated method and method defaults
  * @version        1.2.0
- * @date           2019-02-04
+ * @date           2019-02-05
  * @author         Dan Barto
  * @copyright      Copyright (C) 2017 - 2019 Papiando Riba Internet
  * @license        MIT License; see LICENSE.md
@@ -100,7 +100,7 @@ class Application {
 		$controller = __CUBO__.'\\'.ucfirst(self::$_router->getController()).'Controller';
 		$method = (empty(self::$_router->getRoute()) ? strtolower(self::$_router->getMethod()) : strtolower(self::$_router->getRoute()).ucfirst(self::$_router->getMethod()));
 		// Preset view's class and method
-		$view = __CUBO__.'\\'.ucfirst(self::$_router->getController()).'View';
+		$view = __CUBO__.'\\'.ucfirst(self::$_router->getController()).ucfirst(self::$_router->getRoute()).'View';
 		$format = (empty(self::$_router->getRoute()) ? strtolower(self::$_router->getFormat()) : strtolower(self::$_router->getRoute()).ucfirst(self::$_router->getFormat()));
 		// Call the controller's method
 		try {

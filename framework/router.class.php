@@ -6,7 +6,7 @@
  * @description    The Router framework analyses the URL and routes the visitor to the correct controller
  *                 and method; the router also includes language intelligence
  * @version        1.2.0
- * @date           2019-02-03
+ * @date           2019-02-05
  * @author         Dan Barto
  * @copyright      Copyright (C) 2017 - 2019 Papiando Riba Internet
  * @license        MIT License; see LICENSE.md

@@ -5,7 +5,7 @@
  * @class          UserView
  * @description    The view that generates and prepares the output in different formats for the user object
  * @version        1.2.0
- * @date           2019-02-04
+ * @date           2019-02-05
  * @author         Dan Barto
  * @copyright      Copyright (C) 2017 - 2019 Papiando Riba Internet
  * @license        MIT License; see LICENSE.md

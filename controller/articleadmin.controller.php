@@ -2,8 +2,8 @@
 /**
  * @application    Cubo CMS
  * @type           Controller
- * @class          ArticleController
- * @description    The controller that holds the methods for the article object
+ * @class          ArticleAdminController
+ * @description    The controller that holds the admin methods for the article object
  * @version        1.2.0
  * @date           2019-02-05
  * @author         Dan Barto
@@ -14,7 +14,12 @@ namespace Cubo;
 
 defined('__CUBO__') || new \Exception("No use starting a class without an include");
 
-class ArticleController extends Controller {
+class ArticleAdminController extends Controller {
 	protected $columns = "`id`,`name`,`access`,`author`,`category`,`description`,`language`,`status`,`tags`,`title`";
+	
+	// Admin view: list
+	public function adminList($columns = "*",$filter = "`access`<>'".ACCESS_NONE."'",$order = "`title`") {
+		parent::adminList($this->list_columns,$filter,$order);
+	}
 }
 ?>
