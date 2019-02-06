@@ -50,8 +50,8 @@ class Controller {
 			$id = Application::getDefault(self::getParam('controller'));
 		$this->_data = $this->_model->get($id,"*",Session::requiresViewAccess());
 		if(empty($this->_data)) {
-			if(!Session::exists('user')) {
-				Session::setMessage(array('alert'=>'info','icon'=>'exclamation','text'=>"{$this->class} requires login credentials"));
+			if(Session::isGuest()) {
+				Session::setMessage(array('alert'=>'info','icon'=>'exclamation','text'=>"{$this->class} requires user access"));
 				Session::set('login_redirect',Application::getParam('uri'));
 				Router::redirect('/user?login',302);
 			} else {
@@ -97,24 +97,44 @@ class Controller {
 	
 	// Admin method: list
 	public function adminList($columns = "*",$filter = "1",$order = "`title`") {
-		$this->_data = $this->_model->getList($columns,$filter,$order);
+		if(Session::isAdmin()) {				// Of course this requires admin access
+			$this->_data = $this->_model->getList($columns,$filter,$order);
+		} elseif(Session::isGuest()) {			// Redirect if not logged in
+			Session::setMessage(array('alert'=>'info','icon'=>'exclamation','text'=>"{$this->class} requires user access"));
+			Session::set('login_redirect',Application::getParam('uri'));
+			Router::redirect('/user?login',302);
+		} else {								// Logged in, so this user does not have required privileges
+			Session::setMessage(array('alert'=>'error','icon'=>'exclamation','text'=>"This user has no access to {$this->class}"));
+			Session::set('login_redirect',Application::getParam('uri'));
+			Router::redirect('/user?noaccess',302);
+		}
 	}
 	
 	// Admin method: create
 	public function adminCreate() {
-		// Save posted data
-		if($_POST) {
-			if(isset($_FILES)) {
-				foreach($_FILES as $file=>$data) {
-					$_POST['$'.$file] = $data;
+		if(Session::isAdmin()) {				// Of course this requires admin access
+			// Save posted data
+			if($_POST) {
+				if(isset($_FILES)) {
+					foreach($_FILES as $file=>$data) {
+						$_POST['$'.$file] = $data;
+					}
 				}
+				if($this->_model->save($_POST)) {
+					Session::setMessage("Item was created");
+				} else {
+					Session::setMessage("Failed to create item");
+				}
+				Router::redirect('/admin/'.strtolower($this->class));
 			}
-			if($this->_model->save($_POST)) {
-				Session::setMessage("Item was created");
-			} else {
-				Session::setMessage("Failed to create item");
-			}
-			Router::redirect('/admin/'.strtolower($this->class));
+		} elseif(Session::isGuest()) {			// Redirect if not logged in
+			Session::setMessage(array('alert'=>'info','icon'=>'exclamation','text'=>"{$this->class} requires user access"));
+			Session::set('login_redirect',Application::getParam('uri'));
+			Router::redirect('/user?login',302);
+		} else {								// Logged in, so this user does not have required privileges
+			Session::setMessage(array('alert'=>'error','icon'=>'exclamation','text'=>"This user has no access to {$this->class}"));
+			Session::set('login_redirect',Application::getParam('uri'));
+			Router::redirect('/user?noaccess',302);
 		}
 	}
 	
@@ -125,42 +145,62 @@ class Controller {
 	
 	// Admin method: edit
 	public function adminEdit() {
-		// Save posted data
-		if($_POST) {
-			if(isset($_FILES)) {
-				foreach($_FILES as $file=>$data) {
-					$_POST['$'.$file] = $data;
+		if(Session::isAdmin()) {				// Of course this requires admin access
+			// Save posted data
+			if($_POST) {
+				if(isset($_FILES)) {
+					foreach($_FILES as $file=>$data) {
+						$_POST['$'.$file] = $data;
+					}
 				}
+				if($this->_model->save($_POST,$_POST['id'])) {
+					Session::setMessage("Item was edited");
+				} else {
+					Session::setMessage("Failed to edit item");
+				}
+				Router::redirect('/admin/'.strtolower($this->class));
 			}
-			if($this->_model->save($_POST,$_POST['id'])) {
-				Session::setMessage("Item was edited");
+			if(isset($_GET['id'])) {
+				$this->_data = $this->_model->get($_GET['id']);
+				if(isset($this->_data->{'@attributes'})) $this->_attributes = json_decode($this->_data->{'@attributes'});
 			} else {
-				Session::setMessage("Failed to edit item");
+				Session::setMessage("This item does not exist");
+				Router::redirect('/admin/'.strtolower($this->class));
 			}
-			Router::redirect('/admin/'.strtolower($this->class));
-		}
-		if(isset($_GET['id'])) {
-			$this->_data = $this->_model->get($_GET['id']);
-			if(isset($this->_data->{'@attributes'})) $this->_attributes = json_decode($this->_data->{'@attributes'});
-		} else {
-			Session::setMessage("This item does not exist");
-			Router::redirect('/admin/'.strtolower($this->class));
+		} elseif(Session::isGuest()) {			// Redirect if not logged in
+			Session::setMessage(array('alert'=>'info','icon'=>'exclamation','text'=>"{$this->class} requires user access"));
+			Session::set('login_redirect',Application::getParam('uri'));
+			Router::redirect('/user?login',302);
+		} else {								// Logged in, so this user does not have required privileges
+			Session::setMessage(array('alert'=>'error','icon'=>'exclamation','text'=>"This user has no access to {$this->class}"));
+			Session::set('login_redirect',Application::getParam('uri'));
+			Router::redirect('/user?noaccess',302);
 		}
 	}
 	
 	// Admin method: trash
 	public function adminTrash() {
-		// Remove object
-		if(isset($_GET['id'])) {
-			if($this->_model->trash($_GET['id'])) {
-				Session::setMessage("Item was trashed");
+		if(Session::isAdmin()) {				// Of course this requires admin access
+			// Remove object
+			if(isset($_GET['id'])) {
+				if($this->_model->trash($_GET['id'])) {
+					Session::setMessage("Item was trashed");
+				} else {
+					Session::setMessage("Failed to trash item");
+				}
 			} else {
-				Session::setMessage("Failed to trash item");
+				Session::setMessage("This item does not exist");
 			}
-		} else {
-			Session::setMessage("This item does not exist");
+			Router::redirect('/admin/'.strtolower($this->class));
+		} elseif(Session::isGuest()) {			// Redirect if not logged in
+			Session::setMessage(array('alert'=>'info','icon'=>'exclamation','text'=>"{$this->class} requires user access"));
+			Session::set('login_redirect',Application::getParam('uri'));
+			Router::redirect('/user?login',302);
+		} else {								// Logged in, so this user does not have required privileges
+			Session::setMessage(array('alert'=>'error','icon'=>'exclamation','text'=>"This user has no access to {$this->class}"));
+			Session::set('login_redirect',Application::getParam('uri'));
+			Router::redirect('/user?noaccess',302);
 		}
-		Router::redirect('/admin/'.strtolower($this->class));
 	}
 	
 	// Admin method: delete

@@ -86,6 +86,10 @@ class Session {
 		}
 	}
 	
+	public static function isAdmin() {
+		return self::isRegistered() && in_array(self::getRole(),array(ROLE_AUTHOR,ROLE_EDITOR,ROLE_PUBLISHER,ROLE_MANAGER,ROLE_ADMINISTRATOR));
+	}
+	
 	public static function isAccessible($includeNone = false,$excludeSelf = false) {
 		return "`status`=".STATUS_PUBLISHED.($excludeSelf ? " AND `id`<>".$excludeSelf : "").($includeNone ? " OR `access`=".ACCESS_NONE : " AND `access`<>".ACCESS_NONE);
 	}
