@@ -6,7 +6,7 @@
  * @description    All models are based on this framework; each model has
  *                 a database table associated to it
  * @version        1.2.0
- * @date           2019-02-03
+ * @date           2019-02-06
  * @author         Dan Barto
  * @copyright      Copyright (C) 2017 - 2019 Papiando Riba Internet
  * @license        MIT License; see LICENSE.md
@@ -69,6 +69,8 @@ class Model {
 		foreach($data as $property=>$value) {
 			if(substr($property,0,1) == '-' || substr($property,0,2) == '$-') {
 				// This field has not been changed, thus can be ignored
+			} elseif(substr($property,0,7) == 'filter-') {
+				// This is a filter selection, thus can be ignored
 			} elseif(substr($property,0,1) == '@') {
 				// This is an attribute, hence should be treated differently
 				$property = substr($property,1);

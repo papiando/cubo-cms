@@ -4,8 +4,8 @@
  * @type           Controller
  * @class          ImageController
  * @description    The controller that holds the methods for the image object
- * @version        1.1.0
- * @date           2019-01-30
+ * @version        1.2.0
+ * @date           2019-02-06
  * @author         Dan Barto
  * @copyright      Copyright (C) 2017 - 2019 Papiando Riba Internet
  * @license        MIT License; see LICENSE.md
@@ -20,6 +20,11 @@ class ImageController extends Controller {
 	// Admin view: list
 	public function admin_list($columns = "*",$filter = "`access`<>'".ACCESS_NONE."'",$order = "`title`") {
 		parent::admin_list($this->list_columns,$filter,$order);
+	}
+	
+	// Thumbnail method
+	public function thumbnail() {
+		$this->view();
 	}
 	
 	// Standard view: view

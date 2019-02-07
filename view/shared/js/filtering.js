@@ -213,4 +213,15 @@ $(document).ready(function() {
 		//$('#filter-language').trigger('change');
 		//$('#filter-access').trigger('change');
 	});
+	$('.img-selectable').click(function() {
+		$($(this).data('target')).val($(this).data('image').id).attr('name',$($(this).data('target')).attr('name').replace(/^-/,''));
+		$($(this).data('preview')).attr('src','/image?id='+$(this).data('image').id+'&cache=no');
+		$($(this).data('dismiss')).hide();
+	});
+	$('.img-selectable').each(function() {
+		//$('#filter-text').trigger('change');
+		$('#filter-status').trigger('change');
+		//$('#filter-collection').trigger('change');
+		//$('#filter-language').trigger('change');
+	});
 });

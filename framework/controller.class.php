@@ -6,7 +6,7 @@
  * @description    All controllers are based on this framework;
  *                 each controller describes the methods of an object
  * @version        1.2.0
- * @date           2019-02-05
+ * @date           2019-02-06
  * @author         Dan Barto
  * @copyright      Copyright (C) 2017 - 2019 Papiando Riba Internet
  * @license        MIT License; see LICENSE.md
@@ -104,7 +104,7 @@ class Controller {
 			Session::set('login_redirect',Application::getParam('uri'));
 			Router::redirect('/user?login',302);
 		} else {								// Logged in, so this user does not have required privileges
-			Session::setMessage(array('alert'=>'error','icon'=>'exclamation','text'=>"This user has no access to {$this->class}"));
+			Session::setMessage(array('alert'=>'danger','icon'=>'exclamation','text'=>"This user has no access to {$this->class}"));
 			Session::set('login_redirect',Application::getParam('uri'));
 			Router::redirect('/user?noaccess',302);
 		}
@@ -121,9 +121,9 @@ class Controller {
 					}
 				}
 				if($this->_model->save($_POST)) {
-					Session::setMessage("Item was created");
+					Session::setMessage(array('alert'=>'success','icon'=>'check','text'=>"Item was created"));
 				} else {
-					Session::setMessage("Failed to create item");
+					Session::setMessage(array('alert'=>'danger','icon'=>'exclamation','text'=>"Failed to create item"));
 				}
 				Router::redirect('/admin/'.strtolower($this->class));
 			}
@@ -132,7 +132,7 @@ class Controller {
 			Session::set('login_redirect',Application::getParam('uri'));
 			Router::redirect('/user?login',302);
 		} else {								// Logged in, so this user does not have required privileges
-			Session::setMessage(array('alert'=>'error','icon'=>'exclamation','text'=>"This user has no access to {$this->class}"));
+			Session::setMessage(array('alert'=>'danger','icon'=>'exclamation','text'=>"This user has no access to {$this->class}"));
 			Session::set('login_redirect',Application::getParam('uri'));
 			Router::redirect('/user?noaccess',302);
 		}
@@ -154,9 +154,9 @@ class Controller {
 					}
 				}
 				if($this->_model->save($_POST,$_POST['id'])) {
-					Session::setMessage("Item was edited");
+					Session::setMessage(array('alert'=>'success','icon'=>'check','text'=>"Item was edited"));
 				} else {
-					Session::setMessage("Failed to edit item");
+					Session::setMessage(array('alert'=>'danger','icon'=>'exclamation','text'=>"Failed to edit item"));
 				}
 				Router::redirect('/admin/'.strtolower($this->class));
 			}
@@ -172,7 +172,7 @@ class Controller {
 			Session::set('login_redirect',Application::getParam('uri'));
 			Router::redirect('/user?login',302);
 		} else {								// Logged in, so this user does not have required privileges
-			Session::setMessage(array('alert'=>'error','icon'=>'exclamation','text'=>"This user has no access to {$this->class}"));
+			Session::setMessage(array('alert'=>'danger','icon'=>'exclamation','text'=>"This user has no access to {$this->class}"));
 			Session::set('login_redirect',Application::getParam('uri'));
 			Router::redirect('/user?noaccess',302);
 		}
