@@ -1,7 +1,7 @@
-<?php http_response_code(405); ?><!DOCTYPE html>
+<?php http_response_code(503); ?><!DOCTYPE html>
 <html lang="en" itemscope itemtype="https://schema.org/WebPage">
 <head>
-	<title itemprop="name headline">Error</title>
+	<title itemprop="name headline">Maintenance</title>
 	<base itemprop="url" href="http://cubo-cms.local/admin" />
 	<meta charset="utf-8" />
 	<meta name="application_name" content="Cubo CMS" />
@@ -28,7 +28,7 @@
 	<main id="main">
 		<div class="container">
 			<section id="main-content" role="main">
-				<article itemProp="hasPart" itemScope itemType="https://schema.org/Article"><h1>Error</h1><h3><?php echo $_error->message ?? "Unknown error"; ?></h3><div itemProp="articleBody"><p><?php echo $_error->description ?? "Sorry for the inconvenience. Please be patient while this is resolved."; ?></p></div></article>
+				<article itemProp="hasPart" itemScope itemType="https://schema.org/Article"><h1>Maintenance</h1><h3>This site is under maintenance</h3><div itemProp="articleBody"><p>Sorry for the inconvenience. We are currently implementing some improvements to give you a better experience. Please come back later.</p></div></article>
 			</section>
 		</div>
 	</main>

@@ -5,7 +5,7 @@
  * @class          Error
  * @description    Custom exception error handler to display fancy looking error page
  * @version        1.2.0
- * @date           2019-02-04
+ * @date           2019-02-07
  * @author         Dan Barto
  * @copyright      Copyright (C) 2017 - 2019 Papiando Riba Internet
  * @license        MIT License; see LICENSE.md
@@ -35,6 +35,7 @@ class Error extends \Exception {
 	
 	// Display error template
 	public function showMessage() {
+		$_error = $this->_error;
 		empty($this->_error->response) || http_response_code($this->_error->response);
 		include('error.php');
 		die();
