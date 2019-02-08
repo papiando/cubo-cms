@@ -5,8 +5,8 @@
  * @class          Installation
  * @description    The installation framework runs when the site is still not configured;
  *                 It will request the information through a wizard to configure the site
- * @version        1.1.0
- * @date           2019-02-01
+ * @version        1.2.0
+ * @date           2019-02-08
  * @author         Dan Barto
  * @copyright      Copyright (C) 2017 - 2019 Papiando Riba Internet
  * @license        MIT License; see LICENSE.md
@@ -18,8 +18,17 @@ defined('__CUBO__') || new \Exception("No use starting a class without an includ
 class Installation {
 	protected static $path;
 	protected static $template = 'cubo-cms';
-	protected static $_params = array('site_name'=>'Cubo CMS Installer','base_url'=>__BASE__,'generator'=>"Cubo CMS by Papiando",'template'=>'cubo-cms');
+	protected static $_params = array('site_name'=>'Cubo CMS Installer','base_url'=>__BASE__,'generator'=>"Cubo CMS by Papiando",'template'=>'cubo-cms','brand_logo'=>'/vendor/cubo-cms/cubo-w192.png','brand_name'=>'<strong>Cubo</strong> <em>CMS</em> Installation');
 	protected static $_database;
+	
+	public function __construct() {
+		// Apply provided session name
+		session_name(__CUBO__);
+		// Start the session
+		session_start();
+		// Run the installer and pass URI
+		self::run($_SERVER['REQUEST_URI']);
+	}
 	
 	public static function getDB() {
 		// Connect to database
@@ -32,19 +41,23 @@ class Installation {
 	}
 	
 	protected static function getPath() {
-		return self::$path = __ROOT__.DS.'template'.DS.self::$template.DS.'index.php';
+		return self::$path = __ROOT__.DS.'vendor'.DS.self::$template.DS.'index.php';
 	}
 	
 	protected static function render($html) {
-		if(file_exists(self::getPath())) {
-			// Start buffering output
-			ob_start();
-			// Write output to buffer
-			include(self::getPath());
-			// Replace content tag with HTML in buffered output
-			return preg_replace("/<cubo:content\s*\/>/i",$html,ob_get_clean());
-		} else {
-			throw new \Exception("Installer template file does not exist");
+		try {
+			if(file_exists(self::getPath())) {
+				// Start buffering output
+				ob_start();
+				// Write output to buffer
+				include(self::getPath());
+				// Replace content tag with HTML in buffered output
+				return preg_replace("/<cubo:content\s*\/>/i",$html,ob_get_clean());
+			} else {
+				throw new Error(array('source'=>__CLASS__,'severity'=>4,'response'=>405,'message'=>"Installer template file does not exist"));
+			}
+		} catch(Error $_error) {
+			$_error->showMessage();
 		}
 	}
 	
@@ -57,12 +70,13 @@ class Installation {
 				$_SESSION['setup']->database_name = $_POST['database_name'] ?? $_SESSION['setup']->database_name ?? 'cubo-cms';
 				$_SESSION['setup']->database_user = $_POST['database_user'] ?? $_SESSION['setup']->database_user ?? '';
 				$_SESSION['setup']->database_password = $_POST['database_password'] ?? $_SESSION['setup']->database_password ?? '';
-				Configuration::set('database',array('connection'=>"{$_SESSION['setup']->dbo_driver}:host={$_SESSION['setup']->host_name};dbname={$_SESSION['setup']->database_name}",'user'=>$_SESSION['setup']->database_user,'password'=>$_SESSION['setup']->database_password));
+				Configuration::set('database',array('dsn'=>"{$_SESSION['setup']->dbo_driver}:host={$_SESSION['setup']->host_name};dbname={$_SESSION['setup']->database_name}",'user'=>$_SESSION['setup']->database_user,'password'=>$_SESSION['setup']->database_password,'ignore_errors'=>true));
+				self::$_database || self::$_database = new Database(Configuration::get('database'));
 				// Retrieve list of all countries and select detected country as default
 				$listOptions = Locale::getOptions(Locale::getCountryList(),'CW');
 				//$detectedCountry = Locale::getDetectedCountry();
-				if(self::$_database = self::getDB()) {
-					$html = "<h1>Regional Settings</h1>";
+				if(self::$_database->connected()) {
+					$html = '<h1>Installation</h1><h4 class="text-info">Configure your Regional Settings</h4>';
 					$html .= "<p>Preset the defaults for your region. You can add languages later if you want your site to be multilingual.</p>";
 					$html .= "<form name=\"form-step3\" action=\"\" method=\"post\">";
 					$html .= "<input name=\"next_step\" type=\"hidden\" value=\"4\" />";
@@ -77,7 +91,7 @@ class Installation {
 				$_SESSION['setup']->site_name = $_POST['site_name'] ?? $_SESSION['setup']->site_name ?? '';
 				$_SESSION['setup']->domain_name = $_POST['domain_name'] ?? $_SESSION['setup']->domain_name ?? '';
 				$_SESSION['setup']->site_email = $_POST['site_email'] ?? $_SESSION['setup']->site_email ?? '';
-				$html = "<h1>Database Connection</h1>";
+				$html = '<h1>Installation</h1><h4 class="text-info">Configure your Database Connection</h4>';
 				$html .= "<p><em>Cubo CMS</em> uses DBO to connect to the database. We expect you to create the database and a user with minimal permissions of SELECT, UPDATE, and INSERT. Please provide this information in the form below and turn to the next page.</p>";
 				$html .= "<form name=\"form-step2\" action=\"\" method=\"post\">";
 				$html .= "<input name=\"next_step\" type=\"hidden\" value=\"3\" />";
@@ -90,7 +104,7 @@ class Installation {
 				$html .= "</form>";
 				break;
 			case '1':
-				$html = "<h1>Configure your site</h1>";
+				$html = '<h1>Installation</h1><h4 class="text-info">Configure your Site</h4>';
 				$html .= "<p>It looks like you just installed <em>Cubo CMS</em> on your server. On behalf of the staff of <em>Cubo CMS</em>, we like to thank you for your support in using this Content Management System.</p>";
 				$html .= "<p>This installer will help you configure your web site to suit your needs. First, we need to acquire some general information about your site. Please fill in the form below and turn to the next page.</p>";
 				$html .= "<form name=\"form-step1\" action=\"\" method=\"post\">";
@@ -103,16 +117,8 @@ class Installation {
 		}
 		$html = self::render($html);
 		$html = preg_replace_callback("/<cubo:param\s+name\s*=\s*[\'\"]([^\'\"]+)[\'\"]\s*\/>/i",function($matches) { return self::getParam($matches[1]); },$html);
+		$html = MessagePlugin::run($html);
 		// Do nothing
 		echo $html;
-	}
-	
-	public function __construct() {
-		// Apply provided session name
-		session_name(__CUBO__);
-		// Start the session
-		session_start();
-		// Run the installer and pass URI
-		self::run($_SERVER['REQUEST_URI']);
 	}
 }

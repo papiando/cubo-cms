@@ -38,6 +38,12 @@ h1, h2, h3, h4, h5, h6 {
 
 /* Minor stylistic adjustments */
 
+.navbar-dark a {
+	color: rgba(255,255,255,.75);
+}
+.navbar-dark a:hover,.navbar-dark a:focus {
+	color: white;
+}
 label {
 	margin: 0;
 	font-family: 'Roboto Condensed',sans-serif;

@@ -17,20 +17,20 @@
     <script src="/vendor/bootstrap/4.0.0-alpha.6/js/bootstrap.min.js"></script>
 </head>
 <body class="has-fixed-nav">
-	<nav id="navigation" class="navbar navbar-toggleable-md navbar-dark bg-primary fixed-top">
+	<nav id="navigation" class="navbar navbar-toggleable-md navbar-dark bg-primary text-inverse fixed-top">
 		<div class="container d-flex flex-nowrap">
 			<button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#menu" aria-controls="menu" aria-expanded="false" aria-label="Toggle navigation"><i class="fa fa-bars"></i></button>
-			<a class="navbar-brand" href="/"><img src="/vendor/cubo-cms/cubo-w192.png" /></a>
-			<div class="collapse navbar-collapse" id="menu" role="menubar">
-				<ul class="navbar-nav">
-					<li class="nav-item"><a class="nav-link" href="/">Home</a></li>
-				</ul>
-			</div>
+			<a class="navbar-brand" href="/"><img class="brand-logo" src="<cubo:param name='brand_logo' />" /><span class="brand-name"><cubo:param name='brand_name' /></span></a>
 		</div>
 	</nav>
 	<header id="header">
-		
+		<cubo:module name="header" />
 	</header>
+	<section id="message">
+		<div class="container">
+			<cubo:message />
+		</div>
+	</section>
 	<main id="main">
 		<div class="container">
 			<section id="main-content" role="main">
@@ -38,11 +38,8 @@
 			</section>
 		</div>
 	</main>
-	<section id="message">
-		<cubo:message />
-	</section>
 	<footer id="footer" class="bg-inverse fixed-bottom">
-		
+		<cubo:module name="footer" />
 	</footer>
 </body>
 </html>

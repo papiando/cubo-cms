@@ -1,0 +1,43 @@
+<?php
+/**
+ * @application    Cubo CMS
+ * @type           Protected code (generated upon install)
+ * @class          n/a
+ * @description    The .config.php script presets defaults, parameters and other configuration settings needed for the application;
+ *                 this script is called from .autoload.php; it is contained in a separate file, as this is data that is generated
+ * @version        1.2.0
+ * @date           2019-02-04
+ * @author         Dan Barto
+ * @copyright      Copyright (C) 2017 - 2019 Papiando Riba Internet
+ * @license        MIT License; see LICENSE.md
+ */
+namespace Cubo;
+
+// Application defaults
+Configuration::setDefault('controller','article');
+//Configuration::setDefault('method','view');
+Configuration::setDefault('language','en');
+Configuration::setDefault('template','cubo-cms');
+Configuration::setDefault('theme','cubo-cms');
+
+Configuration::setDefault('article','home');
+Configuration::setDefault('contact','contact');
+
+Configuration::setDefault('admin-action','index');
+Configuration::setDefault('admin-list-action','index');
+Configuration::setDefault('admin-controller','article');
+Configuration::setDefault('admin-language','en');
+Configuration::setDefault('admin-route','index');
+Configuration::setDefault('admin-template','cubo-cms');
+Configuration::setDefault('admin-theme','cubo-cms');
+
+// Application parameters (these are accessible using <cubo:param> tags)
+Configuration::set('site_name','Cubo CMS');
+Configuration::set('brand_logo','/vendor/cubo-cms/cubo-w192.png');
+Configuration::set('brand_name','<strong>Cubo</strong> <em>CMS</em>');
+
+// Application settings
+Configuration::set('routes',array(Configuration::set('admin_route','admin')=>'admin',Configuration::set('api_route','api')=>'api'));
+
+Configuration::set('database',array('dsn'=>"mysql:host=localhost;dbname=cube",'user'=>"papiando",'password'=>"$3c,Pap;!"));
+?>
