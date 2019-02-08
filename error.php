@@ -1,4 +1,4 @@
-<?php http_response_code(405); ?><!DOCTYPE html>
+<?php if(http_response_code() == 200) http_response_code(500); ?><!DOCTYPE html>
 <html lang="en" itemscope itemtype="https://schema.org/WebPage">
 <head>
 	<title itemprop="name headline">Error</title>
@@ -21,14 +21,14 @@
 	<nav id="navigation" class="navbar navbar-toggleable-md navbar-dark bg-primary fixed-top">
 		<div class="container d-flex flex-nowrap">
 			<button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#menu" aria-controls="menu" aria-expanded="false" aria-label="Toggle navigation"><i class="fa fa-bars"></i></button>
-			<a class="navbar-brand" href="/"><img src="/vendor/cubo-cms/cubo-w192.png" /><span class="brand-name"><strong>Cubo</strong> CMS</span></a>
+			<a class="navbar-brand" href="/"><img class="brand-logo" src="/vendor/cubo-cms/cubo-w192.png" /><span class="brand-name"><strong>Cubo</strong> <em>CMS</em></span></a>
 		</div>
 	</nav>
 	<header id="header"></header>
 	<main id="main">
 		<div class="container">
 			<section id="main-content" role="main">
-				<article itemProp="hasPart" itemScope itemType="https://schema.org/Article"><h1>Error</h1><h3><?php echo $_error->message ?? "Unknown error"; ?></h3><div itemProp="articleBody"><p><?php echo $_error->description ?? "Sorry for the inconvenience. Please be patient while this is resolved."; ?></p></div></article>
+				<article itemProp="hasPart" itemScope itemType="https://schema.org/Article"><h1>Error</h1><h4 class="text-danger"><?php echo $_error->message ?? "Unknown error"; ?></h4><div itemProp="articleBody"><p><?php echo $_error->description ?? "Sorry for the inconvenience. Please be patient while this is resolved."; ?></p></div></article>
 			</section>
 		</div>
 	</main>

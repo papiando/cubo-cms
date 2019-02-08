@@ -6,7 +6,7 @@
  * @description    The View framework generates the output based on a given format and prepares it
  *                 for rendering
  * @version        1.2.0
- * @date           2019-02-05
+ * @date           2019-02-07
  * @author         Dan Barto
  * @copyright      Copyright (C) 2017 - 2019 Papiando Riba Internet
  * @license        MIT License; see LICENSE.md
@@ -217,9 +217,8 @@ class View {
 			$url = '/vendor/cubo-cms/no-image.png';
 		}
 		$html = '<label for="'.$params->id.'"><?php echo $label; ?></label><div class="input-group"><input name="'.$params->prefix.$params->id.'" id="'.$params->id.'" type="hidden" value="'.$params->value.'" /><input name="-'.$params->id.'-placeholder" type="text" class="form-control" value="'.$filename.'" readonly tabindex="-1" /><button type="button" class="btn btn-primary" data-toggle="modal" data-target="#select-image"><i class="fa fa-search"></i></button></div>';
-		$html .= '<div class="modal fade" id="select-image"><div class="modal-dialog modal-lg" role="dialog"><div class="modal-content"><div class="modal-header"><h2 class="modal-title">Select Image</h2><button type="button" class="close text-danger" data-dismiss="modal" aria-label="close"><i class="fa fa-times"></i></button></div><div class="modal-body"><form class="form"><div class="form-row d-flex justify-content-between flex-nowrap"><div class="col-3">';
+		$html .= '<div class="modal fade" id="select-image"><div class="modal-dialog modal-lg" role="dialog"><div class="modal-content"><div class="modal-header"><h2 class="modal-title">Select Image</h2><button type="button" class="close text-danger" data-dismiss="modal" aria-label="close"><i class="fa fa-times"></i></button></div><div class="modal-body"><form class="form"><div class="grid-columns">';
 		$html .= Form::textFilter(array('id'=>'filter-text','label'=>'Search','prefix'=>'','value'=>''));
-		$html .= '</div><div>';
 		$html .= Form::select(array(
 			'name'=>'filter-status',
 			'title'=>'Status',
@@ -238,12 +237,12 @@ class View {
 			'default'=>LANGUAGE_ANY,
 			'class'=>' form-control-sm',
 			'query'=>Form::query('language',Session::isAccessible())));
-		$html .= '</div><p id="filter-info"></p><div class="d-flex justify-space-evenly flex-wrap">';
+		$html .= '</div></form><p id="filter-info"></p><div class="grid-wrap-8">';
 		$query = "SELECT `id`,`name`,`collection`,`description`,`language`,`status`,`tags`,`title` FROM `image` WHERE 1 ORDER BY `title`";
 		$images = Application::getDB()->loadItems($query);
 		foreach($images as $image) {
 			$image = (object)$image;
-			$html .= '<figure class="img-thumbnail img-selectable d-none" data-image="'.htmlentities(json_encode($image)).'" data-target="#image" data-preview="#image-preview" data-dismiss="modal" data-filter="none"><img class="img-thumbnail" src="/image?thumbnail&id='.$image->id.'&cache=no" /><figcaption>'.$image->title.'</figcaption></figure>';
+			$html .= '<figure class="img-thumbnail img-selectable table-item d-none" data-item="'.htmlentities(json_encode($image)).'" data-target="#image" data-preview="#image-preview" data-dismiss="modal" data-filter="none"><img class="img-thumbnail" src="/image?thumbnail&id='.$image->id.'&cache=no" /><figcaption>'.$image->title.'</figcaption></figure>';
 		}
 		$html .= '</div></div><div class="modal-footer"><button type="button" class="btn btn-danger" data-dismiss="modal" aria-label="close">Cancel</button></div></div></div></div><script src="/view/shared/js/filtering.js"></script>';
 		return $html;

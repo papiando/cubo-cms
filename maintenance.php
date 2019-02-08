@@ -21,14 +21,14 @@
 	<nav id="navigation" class="navbar navbar-toggleable-md navbar-dark bg-primary fixed-top">
 		<div class="container d-flex flex-nowrap">
 			<button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#menu" aria-controls="menu" aria-expanded="false" aria-label="Toggle navigation"><i class="fa fa-bars"></i></button>
-			<a class="navbar-brand" href="/"><img src="/vendor/cubo-cms/cubo-w192.png" /><span class="brand-name"><strong>Cubo</strong> CMS</span></a>
+			<a class="navbar-brand" href="/"><img src="/vendor/cubo-cms/cubo-w192.png" /><span class="brand-name"><strong>Cubo</strong> <em>CMS</em></span></a>
 		</div>
 	</nav>
 	<header id="header"></header>
 	<main id="main">
 		<div class="container">
 			<section id="main-content" role="main">
-				<article itemProp="hasPart" itemScope itemType="https://schema.org/Article"><h1>Maintenance</h1><h3>This site is under maintenance</h3><div itemProp="articleBody"><p>Sorry for the inconvenience. We are currently implementing some improvements to give you a better experience. Please come back later.</p></div></article>
+				<article itemProp="hasPart" itemScope itemType="https://schema.org/Article"><h1>Maintenance</h1><h4 class="text-info">This site is down for maintenance</h4><div itemProp="articleBody"><p>Sorry for the inconvenience. We are currently implementing some improvements to give you a better experience. Please come back later.</p></div></article>
 			</section>
 		</div>
 	</main>

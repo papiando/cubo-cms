@@ -1,12 +1,148 @@
+@import url('https://fonts.googleapis.com/css?family=Lora|Montserrat|Titillium+Web');
+
 /* Customizations */
 
+body {
+	font-family: 'Montserrat',sans-serif;
+}
+
 body.has-fixed-nav {
-	margin-top: 5rem;
+	margin-top: 4rem;
 }
 .navbar.fixed-top {
-	height: 5rem;
+	height: 4rem;
 }
-.navbar-brand img {
+.navbar-brand .brand-logo {
 	display: inline-block;
-	max-height: 2.5rem;
+	max-height: 3rem;
+}
+.navbar-brand .brand-name {
+	padding-left: .5rem;
+	vertical-align: middle;
+	font-size: 1.5rem;
+}
+
+h1, h2, h3, h4, h5, h6 {
+	font-family: 'Lora',serif;
+}
+
+/* Minor stylistic adjustments */
+
+label {
+	margin: 0;
+	font-size: small;
+	font-style: italic;
+}
+textarea {
+	padding-top: calc(.375rem + 1px);
+}
+textarea.text-html {
+	font-family: monospace;
+}
+button {
+	cursor: pointer;
+}
+figure {
+	margin: .125rem;
+}
+figcaption {
+	font-size: smaller;
+	font-style: italic;
+	text-align: center;
+}
+select.form-control-sm {
+	height: calc(1.8125rem + 2px) !important;
+}
+.custom-file-control:before {
+	content: "\f002" !important;
+	font-family: FontAwesome !important;
+	font-size: 1rem;
+	font-style: normal;
+	background: #ff7518;
+	border: none;
+}
+
+.img-selectable img {
+	opacity: .75;
+	-webkit-opacity: .75;
+}
+.img-selectable:hover {
+	cursor: pointer;
+}
+.img-selectable:hover img {
+	opacity: 1;
+	-webkit-opacity: 1;
+}
+
+.navbar {
+	flex-wrap: nowrap;
+}
+.navbar .navbar-brand img {
+	max-width: 2rem;
+}
+@media(min-width: 992px) {
+	.navbar-toggleable-md .navbar-collapse {
+		display: -webkit-box!important;
+		display: -webkit-flex!important;
+		display: -ms-flexbox!important;
+		display: flex!important;
+		width: 100%;
+	}
+	.navbar-toggleable-md .navbar-toggler {
+		display: none;
+	}
+}
+
+[data-toggle=collapse] {
+	text-decoration: none;
+	display: flex;
+}
+[data-toggle=collapse][aria-expanded=false]:after {
+	content: '\25BC';
+	font-size: .5rem;
+	margin: 0 0 0 auto;
+	line-height: 1.4rem;
+}
+[data-toggle=collapse][aria-expanded=true]:after {
+	content: '\25B2';
+	font-size: .5rem;
+	margin: 0 0 0 auto;
+	line-height: 1.4rem;
+}
+
+.align-middle {
+	align-self: center;
+}
+.btn-sm, .btn-group-sm > .btn {
+	margin: 0 .25rem;
+}
+.grid-columns {
+	display: grid;
+	grid-auto-columns: 1fr;
+	grid-auto-flow: column;
+	grid-column-gap: .5rem;
+}
+.grid-wrap-8 {
+	display: grid;
+	grid-template-columns: repeat(8,1fr);
+}
+.grid-column-2 {
+	grid-column: span 2;
+}
+.row-header {
+	border-top: solid 1px silver;
+	border-bottom: solid 1px silver;
+	padding-top: .5rem;
+	padding-bottom: .5rem;
+}
+.row-body {
+	border-bottom: solid 1px silver;
+	padding-top: .5rem;
+	padding-bottom: .5rem;
+}
+.grid-rows {
+	display: grid;
+	grid-auto-rows: auto;
+	grid-auto-flow: row;
+	grid-column-gap: .5rem;
 }

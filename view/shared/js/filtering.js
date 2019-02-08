@@ -214,8 +214,8 @@ $(document).ready(function() {
 		//$('#filter-access').trigger('change');
 	});
 	$('.img-selectable').click(function() {
-		$($(this).data('target')).val($(this).data('image').id).attr('name',$($(this).data('target')).attr('name').replace(/^-/,''));
-		$($(this).data('preview')).attr('src','/image?id='+$(this).data('image').id+'&cache=no');
+		$($(this).data('target')).val($(this).data('item').id).attr('name',$($(this).data('target')).attr('name').replace(/^-/,''));
+		$($(this).data('preview')).attr('src','/image?id='+$(this).data('item').id+'&cache=no');
 		$($(this).data('dismiss')).hide();
 	});
 	$('.img-selectable').each(function() {

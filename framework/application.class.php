@@ -5,7 +5,7 @@
  * @class          Application
  * @description    The Application framework calls the router and runs the application using the indicated method and method defaults
  * @version        1.2.0
- * @date           2019-02-05
+ * @date           2019-02-07
  * @author         Dan Barto
  * @copyright      Copyright (C) 2017 - 2019 Papiando Riba Internet
  * @license        MIT License; see LICENSE.md
@@ -27,12 +27,16 @@ class Application {
 	
 	// Constructor initiates database connection, starts session and runs the application
 	public function __construct() {
-		// Connect to database
-		self::$_database || self::$_database = new Database(Configuration::get('database'));
-		// Start named session; load name and life time from configuration or default to 'Cubo' with a life time of 1 hour
-		self::$_session = new Session(Configuration::get('session_name') ?? __CUBO__,Configuration::get('session_lifetime') ?? 3600);
-		// Run the application and pass URI
-		self::run($_SERVER['REQUEST_URI']);
+		if(file_exists(__ROOT__.DS.'maintenance')) {
+			include(__ROOT__.DS.'maintenance.php');
+		} else {
+			// Connect to database
+			self::$_database || self::$_database = new Database(Configuration::get('database'));
+			// Start named session; load name and life time from configuration or default to 'Cubo' with a life time of 1 hour
+			self::$_session = new Session(Configuration::get('session_name') ?? __CUBO__,Configuration::get('session_lifetime') ?? 3600);
+			// Run the application and pass URI
+			self::run($_SERVER['REQUEST_URI']);
+		}
 	}
 	
 	public static function getDB() {

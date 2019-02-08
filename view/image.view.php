@@ -15,6 +15,9 @@ namespace Cubo;
 defined('__CUBO__') || new \Exception("No use starting a class without an include");
 
 class ImageView extends View {
+	public function thumbnail() {
+		$this->view();
+	}
 	public function view() {
 		$source = imagecreatefromstring($this->_data->lob);
 		imagealphablending($source,false);
