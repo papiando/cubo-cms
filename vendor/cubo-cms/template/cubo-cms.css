@@ -9,12 +9,21 @@ body {
 body.has-fixed-nav {
 	margin-top: 4rem;
 }
+.navbar {
+	flex-wrap: nowrap;
+}
 .navbar.fixed-top {
 	height: 4rem;
 }
 .navbar-brand .brand-logo {
 	display: inline-block;
 	max-height: 3rem;
+	-webkit-transition: -webkit-transform .5s ease-in-out;
+	transition: transform .5s ease-in-out;
+}
+.navbar-brand:hover .brand-logo {
+	-webkit-transform: rotate(360deg);
+	transform: rotate(360deg);
 }
 .navbar-brand .brand-name {
 	font-family: 'Exo','Roboto',sans-serif;
@@ -76,12 +85,6 @@ select.form-control-sm {
 	-webkit-opacity: 1;
 }
 
-.navbar {
-	flex-wrap: nowrap;
-}
-.navbar .navbar-brand img {
-	max-width: 2rem;
-}
 @media(min-width: 992px) {
 	.navbar-toggleable-md .navbar-collapse {
 		display: -webkit-box!important;
