@@ -1,9 +1,9 @@
-@import url('https://fonts.googleapis.com/css?family=Lora|Montserrat|Titillium+Web');
+@import url('https://fonts.googleapis.com/css?family=Roboto|Roboto+Slab|Roboto+Condensed|Exo');
 
 /* Customizations */
 
 body {
-	font-family: 'Montserrat',sans-serif;
+	font-family: 'Roboto',sans-serif;
 }
 
 body.has-fixed-nav {
@@ -17,19 +17,21 @@ body.has-fixed-nav {
 	max-height: 3rem;
 }
 .navbar-brand .brand-name {
+	font-family: 'Exo','Roboto',sans-serif;
 	padding-left: .5rem;
 	vertical-align: middle;
 	font-size: 1.5rem;
 }
 
 h1, h2, h3, h4, h5, h6 {
-	font-family: 'Lora',serif;
+	font-family: 'Roboto Slab',serif;
 }
 
 /* Minor stylistic adjustments */
 
 label {
 	margin: 0;
+	font-family: 'Roboto Condensed',sans-serif;
 	font-size: small;
 	font-style: italic;
 }
