@@ -6,7 +6,7 @@
  * @description    All controllers are based on this framework;
  *                 each controller describes the methods of an object
  * @version        1.2.0
- * @date           2019-02-06
+ * @date           2019-02-10
  * @author         Dan Barto
  * @copyright      Copyright (C) 2017 - 2019 Papiando Riba Internet
  * @license        MIT License; see LICENSE.md
@@ -50,7 +50,7 @@ class Controller {
 			$id = Application::getDefault(self::getParam('controller'));
 		$this->_data = $this->_model->get($id,"*",Session::requiresViewAccess());
 		if(empty($this->_data)) {
-			if(Session::isGuest()) {
+			if(Session::isGuest()) {   // This causes login screen even when item does not exist
 				Session::setMessage(array('alert'=>'info','icon'=>'exclamation','text'=>"{$this->class} requires user access"));
 				Session::set('login_redirect',Application::getParam('uri'));
 				Router::redirect('/user?login',403);
@@ -75,7 +75,7 @@ class Controller {
 	
 	// Standard method: getAll
 	public function getAll() {
-		$this->_data = $this->_model->getAll($this->columns);
+		$this->_data = $this->_model->getAll($this->columns,Session::requiresListAccess());
 	}
 	
 	// Standard default method
@@ -248,43 +248,43 @@ class Controller {
 	}
 	
 	// Returns true if current user has permitted role to create an item
-	public static function canCreate() {
+	public function canCreate() {
 		return in_array(Session::getRole(),self::$_authors);
 	}
 	
 	// Returns true if current user does not have permitted role to create an item
-	public static function cannotCreate() {
-		return !self::canCreate($author);
+	public function cannotCreate() {
+		return !$this->canCreate($author);
 	}
 	
 	// Returns true if current user is the author or has permitted role to edit an item
-	public static function canEdit($author = 0) {
+	public function canEdit($author = 0) {
 		return in_array(Session::getRole(),self::$_editors) || Session::getUser() == $author;
 	}
 	
 	// Returns true if current user is not the author and does not have permitted role to edit an item
-	public static function cannotEdit($author = 0) {
-		return !self::canEdit($author);
+	public function cannotEdit($author = 0) {
+		return !$this->canEdit($author);
 	}
 	
 	// Returns true if current user is the author or has permitted role to publish an item
-	public static function canPublish() {
+	public function canPublish() {
 		return in_array(Session::getRole(),self::$_publishers);
 	}
 	
 	// Returns true if current user is not the author and does not have permitted role to publish an item
-	public static function cannotPublish() {
-		return !self::canPublish();
+	public function cannotPublish() {
+		return !$this->canPublish();
 	}
 	
 	// Returns true if current user is the author or has permitted role to publish an item
-	public static function canManage() {
+	public function canManage() {
 		return in_array(Session::getRole(),self::$_publishers);
 	}
 	
 	// Returns true if current user is not the author and does not have permitted role to publish an item
-	public static function cannotManage() {
-		return !self::canManage();
+	public function cannotManage() {
+		return !$this->canManage();
 	}
 }
 ?>

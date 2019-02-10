@@ -5,7 +5,7 @@
  * @class          UserController
  * @description    The controller that holds the methods for the user object
  * @version        1.2.0
- * @date           2019-02-07
+ * @date           2019-02-10
  * @author         Dan Barto
  * @copyright      Copyright (C) 2017 - 2019 Papiando Riba Internet
  * @license        MIT License; see LICENSE.md
@@ -67,8 +67,7 @@ class UserController extends Controller {
 			http_response_code(Session::get('http_response'));
 			Session::delete('http_response');
 		}
-		Session::setMessage(array('alert'=>'info','icon'=>'exclamation','text'=>"User has logged out"));
-		Session::delete('user');
+		Session::setMessage(array('alert'=>'info','icon'=>'exclamation','text'=>"User does not have access"));
 		echo "<h1>Unauthorised access to this page</h1>";
 		echo "<p>You are trying to access a page that requires different authorisation. You are currently logged in as <strong>".Session::get('user')->name."</strong>. This user does not have the permissions to view this page.</p>";
 		echo "<p>Please log out and provide the proper credentials, or navigate to another page.</p>";

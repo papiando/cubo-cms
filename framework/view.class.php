@@ -6,7 +6,7 @@
  * @description    The View framework generates the output based on a given format and prepares it
  *                 for rendering
  * @version        1.2.0
- * @date           2019-02-07
+ * @date           2019-02-09
  * @author         Dan Barto
  * @copyright      Copyright (C) 2017 - 2019 Papiando Riba Internet
  * @license        MIT License; see LICENSE.md
@@ -53,13 +53,13 @@ class View {
 	// Constructor declaring router and passing application data
 	public function __construct() {
 		$this->_router = Application::getRouter();
-		$this->class = $this->_router->getController();
+		$this->class = strtolower($this->_router->getController());
 		$this->_data = Application::getData();
 	}
 	
 	// Get attribute
 	public function getAttribute($attribute) {
-		return (isset($this->_attributes->$attribute) ? $this->_attributes->$attribute : null);
+		return $this->_attributes->$attribute ?? null;
 	}
 	
 	// Retrieve custom path
@@ -98,18 +98,21 @@ class View {
 	}
 	// Standard method list (can be overridden)
 	public function list() {
-		$html = '<h1 itemProp="name headline">'.htmlspecialchars(Text::plural($this->class),ENT_QUOTES|ENT_HTML5).'</h1><ul>';
+		$html = '<article itemProp="hasPart" itemScope itemType="https://schema.org/Article">';
+		$html .= '<h1 itemProp="name headline">'.htmlspecialchars(Text::plural($this->class),ENT_QUOTES|ENT_HTML5).'</h1>';
+		$html .= '<div itemProp="isPartOf hasPart" itemScope itemType="https://schema.org/ItemList"><ul>';
 		if($this->_data) {
 			foreach($this->_data as $object) {
-				$html .= '<li><a href="/'.$this->class.'/'.urlencode($object->name).'">'.htmlspecialchars($object->title,ENT_QUOTES|ENT_HTML5).'</a></li>';
+				$html .= '<li itemProp="isPartOf" itemScope itemType="https://schema.org/ListItem"><a href="/'.$this->class.'/'.urlencode($object->name).'">'.htmlspecialchars($object->title,ENT_QUOTES|ENT_HTML5).'</a></li>';
 			}
 		}
-		$html .= '</ul>';
+		$html .= '</ul></div>';
+		$html .= '</article>';
 		return $html;
 	}
 	// Standard method view (can be overridden)
 	public function view() {
-		$html = '<article itemProp="hasPart" itemScope itemType="https://schema.org/Article">';
+		$html = '<article itemScope itemType="https://schema.org/Article">';
 		if($this->getAttribute('show_title') == SETTING_SHOW) $html .= $this->showTitle();
 		$html .= '<div itemProp="articleBody">'.$this->showBody().'</div>';
 		$html .= '</article>';
@@ -121,9 +124,20 @@ class View {
 	//   Generic functions that render parts of the output
 	//
 	
-	// Shared function to show body in uniform way
+	// Shared function to show body in a uniform way
 	public function showBody() {
 		return $this->_data->html;
+	}
+	// Shared function to show list of items in a uniform way
+	public function showItems($_data,$class) {
+		$html = '<div itemProp="isPartOf hasPart" itemScope itemType="https://schema.org/ItemList"><ul>';
+		if($_data) {
+			foreach($_data as $object) {
+				$html .= '<li itemProp="isPartOf" itemScope itemType="https://schema.org/ListItem"><a href="/'.$class.'/'.urlencode($object->name).'">'.htmlspecialchars($object->title,ENT_QUOTES|ENT_HTML5).'</a></li>';
+			}
+		}
+		$html .= '</ul></div>';
+		return $html;
 	}
 	// Shared function to show image in uniform way
 	public function showImage() {

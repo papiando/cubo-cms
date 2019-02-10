@@ -5,7 +5,7 @@
  * @class          Application
  * @description    The Application framework calls the router and runs the application using the indicated method and method defaults
  * @version        1.2.0
- * @date           2019-02-07
+ * @date           2019-02-10
  * @author         Dan Barto
  * @copyright      Copyright (C) 2017 - 2019 Papiando Riba Internet
  * @license        MIT License; see LICENSE.md
@@ -51,6 +51,10 @@ class Application {
 	
 	public static function getController() {
 		return self::$_controller;
+	}
+	
+	public static function getView() {
+		return self::$_view;
 	}
 	
 	public static function get($property,$default = null) {

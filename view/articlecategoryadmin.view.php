@@ -14,7 +14,7 @@ namespace Cubo;
 
 defined('__CUBO__') || new \Exception("No use starting a class without an include");
 
-class ArticleAdminView extends View {
+class ArticleCategoryAdminView extends View {
 	// Method create
 	public function adminCreate() {
 		$url = '';
@@ -39,7 +39,7 @@ class ArticleAdminView extends View {
 			'readonly'=>Application::getController()->cannotPublish()));
 		$html .= Form::select(array(
 			'name'=>'category',
-			'title'=>'Category',
+			'title'=>'Parent Category',
 			'default'=>CATEGORY_UNDEFINED,
 			'class'=>' form-control-sm',
 			'query'=>Form::query('articlecategory',Session::isAccessible())));
@@ -222,7 +222,7 @@ class ArticleAdminView extends View {
 			'readonly'=>Application::getController()->cannotPublish()));
 		$html .= Form::select(array(
 			'name'=>'category',
-			'title'=>'Category',
+			'title'=>'Parent Category',
 			'prefix'=>'-',
 			'value'=>$this->_data->category,
 			'class'=>' form-control-sm',
@@ -405,7 +405,7 @@ class ArticleAdminView extends View {
 		$any = array(array('id'=>CATEGORY_ANY,'title'=>'Any category'),array('id'=>CATEGORY_NONE,'title'=>'No category'));
 		$html .= Form::select(array(
 			'name'=>'filter-category',
-			'title'=>'Category',
+			'title'=>'Parent Category',
 			'value'=>CATEGORY_ANY,
 			'list'=>$any,
 			'query'=>Form::query('articlecategory',Session::isAccessible())));
@@ -429,7 +429,7 @@ class ArticleAdminView extends View {
 		$html .= '<div class="grid-rows"><div class="grid-columns row-header">';
 		$html .= '<div class="align-middle"><strong>Title</strong></div>';
 		$html .= '<div class="align-middle"><strong>Status</strong></div>';
-		$html .= '<div class="align-middle"><strong>Category</strong></div>';
+		$html .= '<div class="align-middle"><strong>Parent Category</strong></div>';
 		$html .= '<div class="align-middle"><strong>Language</strong></div>';
 		$html .= '<div class="align-middle"><strong>Access Level</strong></div>';
 		$html .= '<div class="text-right align-middle"><a href="/admin/'.$this->class.'?method=create" class="btn btn-sm btn-success'.(Application::getController()->canCreate() ? '' : ' disabled').'" tabindex="-1"><i class="fa fa-plus fa-fw"></i></a></div>';

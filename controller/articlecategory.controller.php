@@ -3,9 +3,9 @@
  * @application    Cubo CMS
  * @type           Controller
  * @class          ArticleCategoryController
- * @description    The controller that hold the methods for the article category object
- * @version        1.1.0
- * @date           2019-01-30
+ * @description    The controller that holds the methods for the article category object
+ * @version        1.2.0
+ * @date           2019-02-09
  * @author         Dan Barto
  * @copyright      Copyright (C) 2017 - 2019 Papiando Riba Internet
  * @license        MIT License; see LICENSE.md

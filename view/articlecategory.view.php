@@ -2,8 +2,8 @@
 /**
  * @application    Cubo CMS
  * @type           View
- * @class          ArticleView
- * @description    The view that generates and prepares the output in different formats for the article object
+ * @class          ArticleCategoryView
+ * @description    The view that generates and prepares the output in different formats for the article category object
  * @version        1.2.0
  * @date           2019-02-09
  * @author         Dan Barto
@@ -14,10 +14,13 @@ namespace Cubo;
 
 defined('__CUBO__') || new \Exception("No use starting a class without an include");
 
-class ArticleView extends View {
+class ArticleCategoryView extends View {
 	// Method view
 	public function view() {
-		$html = '<article itemScope itemType="https://schema.org/Article">';
+		$itemClass = 'article';
+		Application::getDB()->select("*")->from($itemClass)->where("`category`=:category")->order("`title`");
+		$items = Application::getDB()->load(array(':category'=>$this->_data->id));
+		$html = '<article itemProp="hasPart" itemScope itemType="https://schema.org/Article">';
 		if($this->getAttribute('position_info') == SETTING_ABOVECONTENT) $html .= $this->showInfo();
 		if($this->getAttribute('position_image') == SETTING_ABOVETITLE) $html .= $this->showImage();
 		if($this->getAttribute('position_info') == SETTING_ABOVETITLE) $html .= $this->showInfo();
@@ -25,6 +28,7 @@ class ArticleView extends View {
 		if($this->getAttribute('position_image') == SETTING_BELOWTITLE) $html .= $this->showImage();
 		if($this->getAttribute('position_info') == SETTING_BELOWTITLE) $html .= $this->showInfo();
 		$html .= '<div itemProp="articleBody">'.$this->showBody().'</div>';
+		$html .= $this->showItems($items,$itemClass);
 		if($this->getAttribute('position_info') == SETTING_BELOWCONTENT) $html .= $this->showInfo();
 		$html .= '</article>';
 		return $html;

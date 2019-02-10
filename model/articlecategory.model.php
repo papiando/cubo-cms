@@ -1,8 +1,15 @@
 <?php
-/**************************************************************************************************************
- Class ArticleCategory
-			The ArticleCategory class contains all article categories.
- **************************************************************************************************************/
+/**
+ * @application    Cubo CMS
+ * @type           Model
+ * @class          Article
+ * @description    The model of the article category object
+ * @version        1.2.0
+ * @date           2019-02-10
+ * @author         Dan Barto
+ * @copyright      Copyright (C) 2017 - 2019 Papiando Riba Internet. All rights reserved.
+ * @license        GNU General Public License version 3 or later; see LICENSE.md
+ */
 namespace Cubo;
 
 defined('__CUBO__') || new \Exception("No use starting a class without an include");
